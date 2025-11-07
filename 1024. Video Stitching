@@ -1,0 +1,29 @@
+public class Solution {
+    public int VideoStitching(int[][] clips, int time) {
+        Array.Sort(clips, (a,b) => a[0]==b[0]?b[1]-a[1]:a[0]-b[0]);
+
+        int ans = 1;
+        int start = clips[0][0];
+        int end = clips[0][1];
+        if(start!=0) return -1;
+        for(int i = 1;i<clips.Length;)
+        {
+            if(end>=time) return ans;
+            if(clips[i][0]> end) return -1;
+            int maxEnd = end;
+            while(i<clips.Length && clips[i][0]<=end)
+            {
+                if(clips[i][1]>maxEnd)
+                {
+                    start = clips[i][0];
+                    maxEnd = clips[i][1];
+                }
+                i++;
+            }
+            ans++;
+            end = maxEnd;
+        }
+
+        return end>=time?ans:-1;
+    }
+}
