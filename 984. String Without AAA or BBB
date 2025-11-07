@@ -1,0 +1,63 @@
+public class Solution {
+    public string StrWithout3a3b(int a, int b) {
+        char[] res = new char[a+b];
+        int indexRes = 0;
+
+        int biggerCount = 0;
+        int lessCount = 0;
+
+        char biggerChar = ' ';
+        char lessChar = ' ';
+
+        int diff = 0;
+
+        if (b > a)
+        {
+            biggerCount = b;
+            biggerChar = 'b';
+
+            lessCount = a;
+            lessChar = 'a';
+        }
+        else
+        {
+            biggerCount = a;
+            biggerChar = 'a';
+
+            lessCount = b;
+            lessChar = 'b';
+        }
+        diff = biggerCount - lessCount;
+
+        while (diff > lessCount)
+        {  
+            res[indexRes++] = biggerChar;
+            --diff;
+        }
+
+        while (diff > 0)
+        {
+            res[indexRes++] = lessChar;
+            --lessCount;
+
+            res[indexRes++] = biggerChar;
+            res[indexRes++] = biggerChar;
+            biggerCount -= 2;
+
+            --diff;
+        }
+
+        while (lessCount > 0)
+        {
+            res[indexRes++] = lessChar;
+            --lessCount;
+
+            res[indexRes++] = biggerChar;
+            --biggerCount;
+
+            --diff;
+        }
+
+        return new string(res);
+    }
+}
