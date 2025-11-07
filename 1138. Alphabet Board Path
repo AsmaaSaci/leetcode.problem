@@ -1,0 +1,47 @@
+public class Solution {
+    public string AlphabetBoardPath(string target) {
+        (int, int)[] sample = new (int, int)[26];
+        for(int i = 0; i < 26; i++)
+        {
+            int newX = i/5, newY = i%5;
+            sample[i] = (newX, newY);
+        }
+
+        int x = 0, y = 0, len = target.Length;
+        string res = "";
+        for(int i = 0; i < len; i++)
+        {
+            int id = target[i]-'a';
+            int nextX = sample[id].Item1, nextY = sample[id].Item2;
+            int diffX = nextX-x, diffY = nextY-y;
+            if(diffX>= 0 && diffY >= 0)
+            {
+                res += new string('R', diffY);
+                res += new string('D', diffX);
+            }
+            else if(diffX < 0 && diffY < 0)
+            {
+                res += new string('U', Math.Abs(diffX));
+                res += new string('L', Math.Abs(diffY));
+            }
+            else
+            {
+                char lr = diffY > 0 ? 'R' : 'L';
+                char ud = diffX > 0 ? 'D' : 'U';
+                string p1 = new string(lr, Math.Abs(diffY));
+                string p2 = new string(ud, Math.Abs(diffX));
+                if(diffX < 0)
+                    res += p2+p1;
+                else
+                    res += p1+p2;
+            }
+            
+            res += "!";
+
+            x = nextX;
+            y = nextY;
+        }
+
+        return res;
+    }
+}
