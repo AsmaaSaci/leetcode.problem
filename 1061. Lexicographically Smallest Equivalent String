@@ -1,0 +1,49 @@
+class Solution {
+public:
+    // Find with path compression
+    int find(int parent[], int x) {
+        if (parent[x] != x) {
+            parent[x] = find(parent, parent[x]);  // Path compression
+        }
+        return parent[x];
+    }
+    
+    // Union by lexicographical order
+    void unionSets(int parent[], int x, int y) {
+        int rootX = find(parent, x);
+        int rootY = find(parent, y);
+        
+        if (rootX != rootY) {
+            // Always connect to the smaller character
+            if (rootX < rootY) {
+                parent[rootY] = rootX;
+            } else {
+                parent[rootX] = rootY;
+            }
+        }
+    }
+    
+    string smallestEquivalentString(string s1, string s2, string baseStr) {
+        // Initialize Union-Find structure
+        int parent[26];
+        for (int i = 0; i < 26; i++) {
+            parent[i] = i;
+        }
+        
+        // Process all equivalences
+        for (int i = 0; i < s1.length(); i++) {
+            int char1 = s1[i] - 'a';
+            int char2 = s2[i] - 'a';
+            unionSets(parent, char1, char2);
+        }
+        
+        // Build result string
+        string result = "";
+        for (char c : baseStr) {
+            int root = find(parent, c - 'a');
+            result += (char)(root + 'a');
+        }
+        
+        return result;
+    }
+};
