@@ -1,0 +1,20 @@
+public class Solution {
+    public IList<int> CircularPermutation(int n, int start) {
+        
+        List<int> nums = new List<int>();
+
+        for(int i = 0; i < Math.Pow(2,n) ; i++)
+        {
+            int num = i ^ (i >> 1);
+            nums.Add(num);
+        }
+
+        while(nums[0] != start)
+        {
+            nums.Add(nums[0]);
+            nums.RemoveAt(0);
+        }
+
+        return nums;
+    }
+}
