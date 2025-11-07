@@ -1,0 +1,40 @@
+public class Solution {
+    private bool IsValid(int[] freq, int uplimit)
+    {
+        for(int i = uplimit; i > 0; i--)
+        {
+            int cnt = freq[i];
+            if(cnt == 0)
+                continue;
+
+            if(i % 2 == 1)
+                return false;
+
+            int half = i/2;
+            freq[half] -= cnt;
+            if(freq[half] < 0)
+                return false;
+        }
+
+        return true;
+    }
+    public bool CanReorderDoubled(int[] arr) {
+        int size = (int)Math.Pow(10, 5)+1, pMax = 0, nMax = 0;
+        int[] pFreq = new int[size], nFreq = new int[size];
+        foreach(int n in arr)
+        {
+            if(n > 0)
+            {
+                pFreq[n]++;
+                pMax = Math.Max(pMax, n);
+            }
+            else if(n < 0)
+            {
+                nFreq[-n]++;
+                nMax = Math.Max(nMax, -n);
+            }
+        }
+
+        return IsValid(pFreq, pMax) && IsValid(nFreq, nMax);
+    }
+}
