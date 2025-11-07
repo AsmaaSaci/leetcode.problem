@@ -1,0 +1,17 @@
+public class Solution {
+    public double NthPersonGetsNthSeat(int n) {
+        double first = 1.0/(double)n;
+        if(n <= 2)
+            return first;
+
+        double pre = 1/(double)(n), res = pre;
+
+        for(int i = n-1; i >= 2; i--)
+        {
+            pre *= (double)(i-1)/(double)i;
+            res += pre;
+        }
+
+        return res;
+    }
+}
