@@ -1,0 +1,45 @@
+public class Solution {
+    public IList<int> PathInZigZagTree(int label) {
+        int layers = (int)Math.Log2(label)+1;
+
+        int[] res = new int[layers];
+        res[0] = 1;
+        res[layers-1] = label;
+        
+        if(layers < 3)
+            return res.ToList();
+
+        int idx = -1;
+        if(layers %2 == 0)
+        {
+            int layerMax = (int)Math.Pow(2, layers)-1;
+            idx = layerMax-label;
+        }
+        else
+        {
+            int layerMin = (int)Math.Pow(2, layers-1);
+            idx = label - layerMin;
+        }
+
+        int curLayer = layers-1;
+        idx /=2;
+        while(curLayer > 1)
+        {
+            if(curLayer %2 == 1)
+            {
+                int minV = (int)Math.Pow(2, curLayer-1);
+                res[curLayer-1] = minV+idx;
+            }
+            else
+            {
+                int maxV = (int)Math.Pow(2, curLayer)-1;
+                res[curLayer-1] = maxV - idx;
+            }
+
+            idx /= 2;
+            curLayer--;
+        }
+
+        return res.ToList();
+    }
+}
