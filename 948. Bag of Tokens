@@ -1,0 +1,23 @@
+public class Solution {
+    public int BagOfTokensScore(int[] tokens, int power) {
+        Array.Sort(tokens);
+        int low = 0;
+        int high = tokens.Length - 1;
+        int score = 0;
+
+        while (low <= high) {
+            if (power >= tokens[low]) {
+                power -= tokens[low];
+                score += 1;
+                low++;
+            } else if (score > 0 && low != high) {
+                power += tokens[high];
+                score -= 1;
+                high--;
+            } else {
+                return score;
+            }
+        }
+        return score;
+    }
+}
