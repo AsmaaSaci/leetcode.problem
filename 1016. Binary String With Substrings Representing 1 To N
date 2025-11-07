@@ -1,0 +1,15 @@
+using System;
+public class Solution 
+{
+    public bool QueryString(string s, int n) 
+    {
+        for (int i = n; i > 0; i--)
+        {
+            if (!s.Contains(Convert.ToString(i, 2)))
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+}
