@@ -1,0 +1,28 @@
+public class Solution {
+    public int LongestStrChain(string[] words) {
+        // Sort the words based on their length
+        Array.Sort(words, (a, b) => a.Length - b.Length);
+
+        Dictionary<string, int> wordChainLengths = new Dictionary<string, int>();
+        int longestChain = 1;
+
+        foreach (var word in words) {
+            wordChainLengths[word] = 1; // Default chain length for each word is 1
+
+            // Find predecessors of the current word
+            for (int i = 0; i < word.Length; i++) {
+                StringBuilder pred = new StringBuilder(word);
+                pred.Remove(i, 1);
+                string predecessor = pred.ToString();
+
+                // Check if the predecessor exists in the dictionary
+                if (wordChainLengths.ContainsKey(predecessor)) {
+                    wordChainLengths[word] = Math.Max(wordChainLengths[word], wordChainLengths[predecessor] + 1);
+                    longestChain = Math.Max(longestChain, wordChainLengths[word]);
+                }
+            }
+        }
+
+        return longestChain;
+    }
+}
