@@ -1,0 +1,19 @@
+public class Solution {
+    public int[] BeautifulArray(int n) {
+        List<int> ans = new List<int>();
+        ans.Add(1);
+        while(ans.Count < n) {
+            List<int> temp = new List<int>();
+            foreach(int ele in ans) {
+                if(ele * 2 - 1 <= n)
+                    temp.Add(ele * 2 - 1);
+            }
+            foreach(int ele in ans) {
+                if(ele * 2 <= n)
+                    temp.Add(ele * 2);
+            }
+            ans = temp;
+        }
+        return ans.ToArray();
+    }
+}
