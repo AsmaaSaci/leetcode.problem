@@ -1,0 +1,5 @@
+public class Solution
+{
+    public int[] MaxDepthAfterSplit(string seq) =>
+        seq.Select((c, i) => (c + i) % 2).ToArray();
+}
