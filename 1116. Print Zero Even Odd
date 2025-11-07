@@ -1,0 +1,78 @@
+using System.Threading;
+public class ZeroEvenOdd {
+     private AutoResetEvent _gateZero = new AutoResetEvent(true);
+ private AutoResetEvent _gateEven = new AutoResetEvent(false);
+ private AutoResetEvent _gateOdd = new AutoResetEvent(false);
+
+ private int n;
+ private int current = 0;
+    
+    public ZeroEvenOdd(int n) {
+        this.n = n;
+    }
+
+    // printNumber(x) outputs "x", where x is an integer.
+    public void Zero(Action<int> printNumber)
+ {
+     while (true)
+     {
+         _gateZero.WaitOne();
+
+         current++;
+         if (current <= n)
+         {
+             printNumber(0);
+
+             var gate =
+                 (current % 2) == 0
+                 ? _gateEven
+                 : _gateOdd;
+
+             gate.Set();
+         }
+         else
+         {
+             _gateEven.Set();
+             _gateOdd.Set();
+
+             break;
+         }
+     }
+ }
+
+ public void Even(Action<int> printNumber)
+ {
+     while (true)
+     {
+         _gateEven.WaitOne();
+
+         if (current <= n)
+         {
+             printNumber(current);
+             _gateZero.Set();
+         }
+         else
+         {
+             break;
+         }
+     }
+ }
+
+ public void Odd(Action<int> printNumber)
+ {
+     while (true)
+     {
+         _gateOdd.WaitOne();
+
+         if (current <= n)
+         {
+             printNumber(current);
+             _gateZero.Set();
+         }
+         else
+         {
+             break;
+         }
+     }
+ }
+}
