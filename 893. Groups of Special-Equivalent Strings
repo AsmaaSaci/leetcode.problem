@@ -1,0 +1,35 @@
+public class Solution {
+    private string UnifyStr(string s)
+    {
+        int len = s.Length;
+        int[,] freq = new int[2,26];
+        for(int i = 0; i < len; i+=2)
+        {
+            freq[0, s[i]-'a']++;
+
+            if(i < len-1)
+                freq[1, s[i+1]-'a']++;
+        }
+
+        string res1 = "", res2 = "";
+        for(int i = 0; i < 26; i++)
+        {
+            if(freq[0, i] > 0)
+                res1 += (char)(i+'a') + freq[0, i];
+
+            if(freq[1, i] > 0)
+                res2 += (char)(i+'a') + freq[1, i];
+        }
+
+        return res1 + res2;
+    }
+    public int NumSpecialEquivGroups(string[] words) {
+        HashSet<string> dist = new();
+        foreach(string s in words)
+        {
+            dist.Add(UnifyStr(s));
+        }
+
+        return dist.Count;
+    }
+}
