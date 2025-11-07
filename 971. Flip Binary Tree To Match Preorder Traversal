@@ -1,0 +1,50 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     public int val;
+ *     public TreeNode left;
+ *     public TreeNode right;
+ *     public TreeNode(int val=0, TreeNode left=null, TreeNode right=null) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+public class Solution {
+    public IList<int> FlipMatchVoyage(TreeNode root, int[] voyage) {
+        // If not in preoder-> flip left and right, if still not match return empty list
+
+        Stack<TreeNode> stk = new();
+        TreeNode cur = root;
+        List<int> invalid = new List<int>([-1]), res = new();
+        int idx = 0;
+        if(root.val != voyage[0])
+            return invalid;
+
+        while(cur != null || stk.Count > 0)
+        {
+            if(cur == null)
+                cur = stk.Pop();
+
+            if(cur.val != voyage[idx++])
+                return invalid;
+         
+            if(cur.left != null && cur.left.val != voyage[idx]) // should flip left sub and right sub
+            {
+                res.Add(cur.val);
+                stk.Push(cur.left);
+                cur = cur.right;
+            }
+            else
+            {
+                if(cur.right != null)
+                    stk.Push(cur.right);
+
+                cur = cur.left;
+            }
+        }
+
+        return res;
+    }
+}
