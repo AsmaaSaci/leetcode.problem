@@ -1,0 +1,30 @@
+public class Solution {
+    public int LargestValsFromLabels(int[] values, int[] labels, int numWanted, int useLimit) {
+        List<int> result = new List<int>();
+        Dictionary<int, int> labelCounts = new Dictionary<int, int>();
+
+        var pairs = values
+            .Select((value, index) => new { Value = value, Label = labels[index] })
+            .OrderByDescending(pair => pair.Value)
+            .ToArray();
+
+        foreach (var pair in pairs)
+        {
+            int count = 0;
+            labelCounts.TryGetValue(pair.Label, out count);
+
+            if (count < useLimit)
+            {
+                result.Add(pair.Value);
+                labelCounts[pair.Label] = count + 1;
+            }
+
+            if (result.Count == numWanted)
+            {
+                break;
+            }
+        }
+
+        return result.Sum();
+    }
+}
