@@ -1,0 +1,74 @@
+public class Solution {    
+    public string LargestTimeFromDigits(int[] arr) 
+    {
+        var best = new List<int>();
+        var path = new List<int>();
+        var visited = new bool[arr.Length];
+        
+        void Backtrack() 
+        {            
+            if (path.Count == arr.Length)
+            {                
+                if (best.Count == 0 || IsGreaterThan(path, best))
+                {
+                    best = new List<int>(path);
+                }
+                return;
+            }
+            
+            for (int i = 0; i < arr.Length; i++)
+            {
+                if (visited[i]) continue;
+
+                if (!IsValid(path)) break;
+
+                path.Add(arr[i]);
+                visited[i] = true;
+                Backtrack();
+                path.RemoveAt(path.Count - 1);
+                visited[i] = false;
+            }                        
+        }
+
+        Backtrack();
+
+        if (best.Count == 0) return "";
+            
+        var sb = new StringBuilder()
+            .Append(best[0])
+            .Append(best[1])
+            .Append(':')
+            .Append(best[2])
+            .Append(best[3]);
+        
+        return sb.ToString();
+    }
+
+    private bool IsValid(List<int> path)
+    {
+        if (path.Count == 0) return true;
+
+        if (path[0] > 2) return false; // (0_:__ - 2_:__)
+        
+        if (path.Count >= 2 && path[0] == 2 && path[1] > 3) return false; // (20:__ -> 23:__)
+        
+        if (path.Count >= 3 && path[2] > 5) return false; // (__:00 -> __:59)
+        
+        return true;
+    }
+    
+    private bool IsGreaterThan(List<int> x, List<int> y)
+    {
+        var xHour = (x[0] * 10) + x[1];
+        var yHour = (y[0] * 10) + y[1];
+
+        var xMin = (x[2] * 10) + x[3];
+        var yMin = (y[2] * 10) + y[3];
+
+        if (xHour > yHour) return true;
+
+        if (xHour == yHour && xMin >= yMin) return true;
+
+        return false;
+    }
+}
