@@ -1,0 +1,21 @@
+public class Solution {
+    public int MctFromLeafValues(int[] arr) {
+        int sum = 0;
+        Stack<int> stack = new Stack<int>();
+        stack.Push(int.MaxValue);
+
+        foreach (int value in arr) {
+            while (stack.Peek() <= value) {
+                int mid = stack.Pop();
+                sum += mid * Math.Min(stack.Peek(), value);
+            }
+            stack.Push(value);
+        }
+
+        while (stack.Count > 2) {
+            sum += stack.Pop() * stack.Peek();
+        }
+
+        return sum;
+    }
+}
