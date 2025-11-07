@@ -1,0 +1,22 @@
+public class Solution {
+    public int Flipgame(int[] fronts, int[] backs) 
+    {
+        var n = fronts.Length;
+
+        var cnt = new Dictionary<int, int>();
+
+        void IncreaseCount(int d, int val) => 
+            cnt[d] = val + (cnt.TryGetValue(d, out var c) ? c : 0);
+
+        for(var i=0; i < n; i++)    
+        {
+            IncreaseCount(fronts[i], 1 + (fronts[i] == backs[i] ? n : 0));
+            IncreaseCount(backs[i], 1);
+        }
+
+        return cnt.Where(_ => _.Value <= n)
+            .Select(_ => _.Key)
+            .DefaultIfEmpty(0)
+            .Min();
+    }
+}
