@@ -1,0 +1,29 @@
+public class Solution {
+    public int[] SumEvenAfterQueries(int[] nums, int[][] queries) {
+        int len = nums.Length, sumEven = 0, qLen = queries.Length;
+        foreach(int cur in nums)
+        {
+            sumEven += (cur%2 == 0 ? cur : 0);
+        }
+
+        int[] res = new int[qLen];
+        for(int i = 0; i < qLen; i++)
+        {
+            int val = queries[i][0], idx = queries[i][1];
+            int orig = nums[idx];
+            int d1 = Math.Abs(orig)%2, d2 = Math.Abs(val)%2;
+            nums[idx] += val;
+
+            if(d1 == 0 && d2 == 0)
+                sumEven += val;
+            else if(d1 == 0 && d2 == 1)
+                sumEven -= orig;
+            else if(d1 == 1 && d2 == 1)
+                sumEven += (orig + val);
+
+            res[i] = sumEven;
+        }
+
+        return res;
+    }
+}
