@@ -1,0 +1,16 @@
+public class Solution {
+    public int Clumsy(int n) {
+        int ans = 0;
+        while(n>0)
+        {
+            int a = n--;
+            int b = Math.Max(n--, 1);
+            int c = Math.Max(n--, 1);
+            int d = Math.Max(n--, 0);
+            int temp = a*b/c;
+            ans = ans==0?temp+d:ans-temp+d;
+        }
+
+        return ans;
+    }
+}
