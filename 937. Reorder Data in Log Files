@@ -1,0 +1,33 @@
+public class Solution
+{
+    public string[] ReorderLogFiles(string[] logs)
+    {
+        return logs.Where(IsLetterLog).OrderBy(GetContent).ThenBy(GetIdentifer).Concat(logs.Where(IsDigitLog)).ToArray();
+
+        bool IsLetterLog(string log)
+        {
+            int indexOfSpace = log.IndexOf(' ');
+            char characterAfterSpace = log[indexOfSpace + 1];
+            return char.IsLetter(characterAfterSpace);
+        }
+
+        bool IsDigitLog(string log)
+        {
+            int indexOfSpace = log.IndexOf(' ');
+            char characterAfterSpace = log[indexOfSpace + 1];
+            return char.IsDigit(characterAfterSpace);
+        }
+
+        string GetContent(string log)
+        {
+            int indexOfSpace = log.IndexOf(' ');
+            return log[(indexOfSpace + 1)..];
+        }
+
+        string GetIdentifer(string log)
+        {
+            int indexOfSpace = log.IndexOf(' ');
+            return log[..indexOfSpace];
+        }
+    }
+}
