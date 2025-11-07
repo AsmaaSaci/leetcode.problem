@@ -1,0 +1,33 @@
+public class Solution {
+    public int[] NextLargerNodes(ListNode head) {
+        var stack = new Stack<ListNode>();
+
+        var curr = head;
+        while(curr != null) {
+
+          while(stack.Count > 0 && stack.Peek().val < curr.val) {
+            var node = stack.Pop();
+            node.val = curr.val;
+          }
+
+          if(stack.Count == 0 || stack.Peek().val >= curr.val) {
+            stack.Push(curr);
+          }
+
+          curr = curr.next;
+        }
+
+        while(stack.Count > 0) {
+          var node = stack.Pop();
+          node.val = 0;
+        }
+        
+        var answer = new List<int>();
+        while(head != null) {
+          answer.Add(head.val);
+          head = head.next;
+        }
+
+        return answer.ToArray();
+    }
+}
