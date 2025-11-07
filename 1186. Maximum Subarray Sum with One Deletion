@@ -1,0 +1,29 @@
+public class Solution {
+    public int MaximumSum(int[] arr) {
+        int n = arr.Length;
+        
+        // Edge case: If the array length is 1, return the only element.
+        if (n == 1) return arr[0];
+        
+        // Arrays to store the maximum sums
+        int[] dpNoDeletion = new int[n];
+        int[] dpOneDeletion = new int[n];
+        
+        // Initialize the arrays
+        dpNoDeletion[0] = arr[0];
+        dpOneDeletion[0] = 0; // Cannot delete the only element to start with
+        
+        int maxSum = arr[0];
+        
+        for (int i = 1; i < n; i++) {
+            // Maximum sum ending at index i without deletion
+            dpNoDeletion[i] = Math.Max(dpNoDeletion[i - 1] + arr[i], arr[i]);
+            // Maximum sum ending at index i with one deletion
+            dpOneDeletion[i] = Math.Max(dpNoDeletion[i - 1], dpOneDeletion[i - 1] + arr[i]);
+            // Update the overall maximum sum
+            maxSum = Math.Max(maxSum, Math.Max(dpNoDeletion[i], dpOneDeletion[i]));
+        }
+        
+        return maxSum;
+    }
+}
