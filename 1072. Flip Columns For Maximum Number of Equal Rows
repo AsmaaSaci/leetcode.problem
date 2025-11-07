@@ -1,0 +1,29 @@
+public class Solution {
+    public int MaxEqualRowsAfterFlips(int[][] matrix) {
+        Dictionary<string, int> patternCount = new Dictionary<string, int>();
+
+        foreach (var row in matrix) {
+            char[] normalizedPattern = new char[row.Length];
+            int firstElement = row[0];
+
+            for (int j = 0; j < row.Length; j++) {
+                normalizedPattern[j] = row[j] == firstElement ? '0' : '1';
+            }
+
+            string key = new string(normalizedPattern);
+
+            if (patternCount.ContainsKey(key)) {
+                patternCount[key]++;
+            } else {
+                patternCount[key] = 1;
+            }
+        }
+
+        int maxRows = 0;
+        foreach (var count in patternCount.Values) {
+            maxRows = Math.Max(maxRows, count);
+        }
+
+        return maxRows;
+    }
+} 
