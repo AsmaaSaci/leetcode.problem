@@ -1,0 +1,36 @@
+public class Solution {
+    public int[] RearrangeBarcodes(int[] barcodes) {
+        Dictionary<int, int> freq = new();
+        int len = barcodes.Length;
+        foreach(int b in barcodes)
+        {
+            if(!freq.ContainsKey(b))
+                freq.Add(b, 0);
+
+            freq[b]++;
+        }
+
+        // PriorityQueue:
+        PriorityQueue<int, int> pq = new();
+        foreach(var kvp in freq)
+        {
+            pq.Enqueue(kvp.Key, -kvp.Value);
+        }
+
+        int idx = 0;
+
+        while(pq.TryDequeue(out int val, out int f))
+        {
+            while(f < 0)
+            {
+                barcodes[idx] = val;
+                f++;
+                idx += 2;
+                if(idx >= len)
+                    idx = 1;
+            }
+        }
+
+        return barcodes;
+    }
+}
