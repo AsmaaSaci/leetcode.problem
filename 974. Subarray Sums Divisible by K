@@ -1,0 +1,22 @@
+public class Solution {
+    public int SubarraysDivByK(int[] nums, int k) {
+        int count = 0;
+        int prefixSum = 0;
+        Dictionary<int, int> remainderCounts = new Dictionary<int, int>();
+        remainderCounts[0] = 1; // To account for the prefix sum itself being divisible by k
+        
+        foreach (int num in nums) {
+            prefixSum += num;
+            int mod = ((prefixSum % k) + k) % k; // Ensure non-negative mod value
+            
+            if (remainderCounts.ContainsKey(mod)) {
+                count += remainderCounts[mod];
+                remainderCounts[mod]++;
+            } else {
+                remainderCounts[mod] = 1;
+            }
+        }
+        
+        return count;
+    }
+}
