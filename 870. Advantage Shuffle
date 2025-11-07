@@ -1,0 +1,26 @@
+public class Solution {
+    public int[] AdvantageCount(int[] nums1, int[] nums2) {
+        int len = nums1.Length;
+        int[] res = new int[len];
+        Array.Sort(nums1);
+        int[][] orderedB = new int[len][];
+        for(int i = 0; i < len; i++)
+        {
+            orderedB[i] = [nums2[i], i];
+        }
+
+        orderedB = orderedB.OrderByDescending(x=>x[0]).ToArray();
+
+        int low = 0, high = len-1, idx = 0;
+        while(low <= high)
+        {
+            int bVal = orderedB[idx][0], bId = orderedB[idx++][1];
+            if(nums1[high] > bVal)
+                res[bId] = nums1[high--];
+            else
+                res[bId] = nums1[low++];
+        }
+
+        return res;
+    }
+}
