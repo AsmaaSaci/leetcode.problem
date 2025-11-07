@@ -1,0 +1,22 @@
+/
+public class Solution {
+    public TreeNode SufficientSubset(TreeNode root, int limit) {
+        
+        if(root == null)return null;
+        bool isLeaf=false;
+        if(root.left==null && root.right == null)isLeaf=true;
+        limit-=root.val;
+        root.left = SufficientSubset(root.left,limit);
+        root.right = SufficientSubset(root.right,limit);
+
+        if(root.left ==null && root.right == null)
+        {
+            if(limit>0 || !isLeaf)return null;
+            
+        }
+        return root;
+
+    }
+
+       
+}
