@@ -1,0 +1,23 @@
+public class Solution {
+    public string BaseNeg2(int n) {
+        if(n == 0)
+            return "0";
+
+        string res = "";
+        int b = -2;
+        while(n != 0)
+        {
+            int rem = n % b;
+            n /= b;
+            if(rem < 0)
+            {
+                rem += 2;
+                n++;
+            }
+
+            res = rem.ToString()+res;
+        }
+
+        return res;
+    }
+}
