@@ -1,0 +1,30 @@
+public class Solution {
+    public int RotatedDigits(int n) {
+        int count = 0;
+        for(int i = 1; i <= n; i++)
+        {
+            bool invalid = false;
+            bool valid = false;
+            int num = i;
+            while(num > 0)
+            {
+                int target = num % 10;
+                if(target == 3 || target == 4 || target == 7)
+                {
+                    invalid = true;
+                    break;
+                }
+                if(target == 2 || target == 5 || target == 6 || target == 9)
+                {
+                    valid = true;
+                }
+                num /= 10;
+            }
+            if(valid && !invalid)
+            {
+                count++;
+            }
+        }
+        return count;
+    }
+}
