@@ -1,0 +1,71 @@
+public class Solution {
+      public class DisJoint
+  {
+      public int[] par;
+      public int[] rank;
+
+      public int FindPar(int x)
+      {
+          while (par[x] != x)
+          {
+              x = par[x];
+          }
+
+          return par[x];
+      }
+
+      public DisJoint(int n)
+      {
+          par = Enumerable.Range(0, n).ToArray();
+          rank = new int[n];
+      }
+
+      public void Union(int x, int y)
+      {
+          int parX = FindPar(x), parY = FindPar(y);
+          if (parX == parY)
+              return;
+
+          if (rank[parX] < rank[parY])
+          {
+              par[parX] = parY;
+          }
+          else if (rank[parX] > rank[parY])
+          {
+              par[parY] = parX;
+          }
+          else
+          {
+              par[parY] = parX;
+              rank[parX]++;
+          }
+
+      }
+  }
+  public bool EquationsPossible(string[] equations)
+  {
+      DisJoint ds = new DisJoint(26);
+      List<int[]> diff = new List<int[]>();
+
+      foreach (string s in equations)
+      {
+          int c1 = s[0] - 'a', c2 = s[3] - 'a';
+          if (s[1] == '=')
+          {
+              ds.Union(c1, c2);
+          }
+          else
+              diff.Add([c1, c2]);
+      }
+
+      foreach (int[] id in diff)
+      {
+          int c1 = id[0], c2 = id[1];
+          int p1 = ds.FindPar(c1), p2 = ds.FindPar(c2);
+          if (p1 == p2)
+              return false;
+      }
+
+      return true;
+  }
+}
