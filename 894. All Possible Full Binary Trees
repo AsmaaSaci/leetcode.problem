@@ -1,0 +1,47 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     public int val;
+ *     public TreeNode left;
+ *     public TreeNode right;
+ *     public TreeNode(int val=0, TreeNode left=null, TreeNode right=null) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+public class Solution {
+    public IList<TreeNode> AllPossibleFBT(int n) {
+        IList<TreeNode> result = new List<TreeNode>();
+        
+        // Base case: n must be odd and 1 for a full binary tree to be possible
+        if (n == 1) {
+            result.Add(new TreeNode(0));
+            return result;
+        }
+        
+        // n must be odd for a full binary tree to be possible
+        if (n % 2 == 0) {
+            return result;
+        }
+        
+        // Try all possible combinations of left and right subtrees for each node
+        for (int i = 1; i < n; i += 2) {
+            IList<TreeNode> leftSubtrees = AllPossibleFBT(i);
+            IList<TreeNode> rightSubtrees = AllPossibleFBT(n - i - 1);
+            
+            // Generate all possible trees by combining left and right subtrees
+            foreach (TreeNode left in leftSubtrees) {
+                foreach (TreeNode right in rightSubtrees) {
+                    TreeNode root = new TreeNode(0);
+                    root.left = left;
+                    root.right = right;
+                    result.Add(root);
+                }
+            }
+        }
+        
+        return result;
+    }
+}
