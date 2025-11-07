@@ -1,0 +1,20 @@
+public class Solution {
+    public IList<int> NumOfBurgers(int tomatoSlices, int cheeseSlices) {
+        // x + y = cheeseSlices;
+        // 4*x+2y = tomatoSlices;
+        List<int> res = new();
+        int tBurger = tomatoSlices-2*cheeseSlices;
+
+        if(tBurger < 0 || tBurger%2 == 1)
+            return res;
+
+        int cBurger = tomatoSlices - 2*tBurger;
+        if(cBurger < 0 || cBurger %2 == 1)
+            return res;
+
+        res.Add(tBurger/2);
+        res.Add(cBurger/2);
+
+        return res;
+    }
+}
