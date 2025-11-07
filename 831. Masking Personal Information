@@ -1,0 +1,38 @@
+public class Solution {
+    public string MaskPII(string s) {
+        int idx = s.IndexOf('@');
+        string res = "";
+
+        if(idx >= 0)
+        {
+            s = s.ToLower();
+            res = s[0] + "*****" + s[idx-1];
+            res += s.Substring(idx);
+        }
+        else
+        {
+            int len = s.Length;
+            int numb = 0;
+            for(int i = len-1; i >= 0; i--)
+            {
+                char c = s[i];
+                if(c >= '0' && c <= '9')
+                {
+                    numb++;
+                    if(res.Length < 4)
+                        res = c + res;
+                }
+            }
+
+            int cN = numb - 10;
+            res = "***-***-" + res;
+
+            if(cN > 0)
+            {
+                res = "+" + (new string('*', cN)) + "-" + res;
+            }
+        }
+
+        return res;
+    }
+}
