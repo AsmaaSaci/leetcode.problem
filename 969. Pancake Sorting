@@ -1,0 +1,64 @@
+public class Solution {
+    public IList<int> PancakeSort(int[] arr) {
+			List<int> res = new();
+			int len = arr.Length, maxV = 0;
+			int[] freq = new int[101];
+
+			foreach (int n in arr)
+			{
+				freq[n]++;
+				maxV = Math.Max(maxV, n);
+			}
+
+			int maxIdx = maxV;
+			for (int i = len - 1; i > 0; i--)
+			{
+				int cur = arr[i];
+
+				if (cur == maxIdx)
+				{
+					freq[maxIdx]--;
+				}
+				else
+				{
+					int end = i - 1;
+					while (end >= 0 && arr[end] != maxIdx)
+					{
+						end--;
+					}
+					freq[maxIdx]--;
+					int low = 0, high = end;
+					if (end > 0)
+					{
+						res.Add(end + 1);
+						
+						while (low < high)
+						{
+							int tmp = arr[low];
+							arr[low++] = arr[high];
+							arr[high--] = tmp;
+						}
+					}
+
+					res.Add(i + 1);
+
+					low = 0;
+					high = i;
+					while (low < high)
+					{
+						int tmp = arr[low];
+						arr[low++] = arr[high];
+						arr[high--] = tmp;
+					}
+				}
+
+				while (maxIdx >= 0 && freq[maxIdx] == 0)
+				{
+					maxIdx--;
+				}
+			}
+
+			return res;
+
+    }
+}
