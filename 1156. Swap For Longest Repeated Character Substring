@@ -1,0 +1,38 @@
+public class Solution {
+    public int MaxRepOpt1(string text) {
+        int n = text.Length;
+        var freq = new Dictionary<char, int>();
+        foreach (char c in text) {
+            if (!freq.ContainsKey(c)) freq[c] = 0;
+            freq[c]++;
+        }
+
+        var groups = new List<(char c, int start, int end)>();
+        int i = 0;
+        while (i < n) {
+            int j = i;
+            while (j < n && text[j] == text[i]) j++;
+            groups.Add((text[i], i, j - 1));
+            i = j;
+        }
+
+        int res = 0;
+        for (int k = 0; k < groups.Count; k++) {
+            var (c, start, end) = groups[k];
+            int len = end - start + 1;
+            if (freq[c] > len) res = Math.Max(res, len + 1);
+            else res = Math.Max(res, len);
+
+            // Try to merge with next group if separated by one char
+            if (k + 2 < groups.Count && groups[k + 1].end == groups[k + 1].start &&
+                groups[k].c == groups[k + 2].c) {
+                int merged = (groups[k].end - groups[k].start + 1) +
+                             (groups[k + 2].end - groups[k + 2].start + 1);
+                if (freq[c] > merged) merged++;
+                res = Math.Max(res, merged);
+            }
+        }
+
+        return res;
+    }
+}
