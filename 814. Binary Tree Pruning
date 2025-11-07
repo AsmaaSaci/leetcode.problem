@@ -1,0 +1,37 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     public int val;
+ *     public TreeNode left;
+ *     public TreeNode right;
+ *     public TreeNode(int val=0, TreeNode left=null, TreeNode right=null) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+public class Solution {
+    private TreeNode DFS(TreeNode root)
+    {
+        if(root == null)
+            return null;
+
+        TreeNode left = DFS(root.left), right = DFS(root.right);
+
+        root.left = left;
+        root.right = right;
+
+        if(root.left == null && root.right == null)
+            return root.val == 0 ? null : root;
+
+        return root;
+    }
+
+    public TreeNode PruneTree(TreeNode root) {
+        if(root == null)
+            return root;
+
+        return DFS(root);
+    }
+}
