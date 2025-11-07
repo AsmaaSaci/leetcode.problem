@@ -1,0 +1,42 @@
+public class RLEIterator {
+    private List<int> sample;
+    private int idx = 0;
+    public RLEIterator(int[] encoding) {
+        int len = encoding.Length;
+        sample = new List<int>();
+        for(int i = 0; i < len; i+=2)
+        {
+            int f = encoding[i];
+            if(f > 0)
+            {
+                sample.Add(f);
+                sample.Add(encoding[i+1]);
+            }
+        }
+    }
+    
+    public int Next(int n) {
+        int cnt = n;
+        int res = -1;
+        while(idx < sample.Count && cnt > 0)
+        {
+            int rem = Math.Min(cnt, sample[idx]);
+            sample[idx] -= rem;
+            cnt -= rem;
+            if(cnt == 0)
+            {
+                res = sample[idx+1];
+                break;
+            }
+            idx += 2;
+        }
+
+        return idx >= sample.Count ? -1 : sample[idx+1];
+    }
+}
+
+/**
+ * Your RLEIterator object will be instantiated and called as such:
+ * RLEIterator obj = new RLEIterator(encoding);
+ * int param_1 = obj.Next(n);
+ */
