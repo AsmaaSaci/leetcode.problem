@@ -1,0 +1,57 @@
+public class Solution {
+    // Distance between two points
+    private double Dist(int[] p1, int[] p2)
+    {
+        return Math.Sqrt(((double)(p1[0] - p2[0]) * (p1[0] - p2[0]) +(double)(p1[1] - p2[1]) * (p1[1] - p2[1])));
+    } 
+
+    // Calculate area of Rectangle
+    private double CalRecArea((int[], int[]) d1, (int[], int[]) d2)
+    {
+        int[] p1 = d1.Item1, p2 = d1.Item2, p3 = d2.Item1, p4 = d2.Item2;
+        double dist1 = Dist(p1, p3), dist2 = Dist(p1, p4);
+
+        return Math.Round(dist1 * dist2, 5);
+    }
+
+    public double MinAreaFreeRect(int[][] points) {
+        Dictionary<(double, double, double), List<(int[], int[])>> centers = new();
+        int len = points.Length;
+
+        for (int i = 0; i < len - 1; i++)
+        {
+            for (int j = i + 1; j < len; j++)
+            {
+                int[] p1 = points[i], p2 = points[j];
+                double midX = (p1[0] + p2[0]) / 2.0, midY = (p1[1] + p2[1]) / 2.0;
+                double dist = Dist(p1, p2);
+                var key = (midX, midY, dist);
+                
+                if (!centers.ContainsKey(key))
+                    centers.Add(key, new List<(int[], int[])>());
+
+                centers[key].Add((p1, p2));
+            }
+        }
+
+        double best = double.MaxValue;
+
+        foreach (var cur in centers.Values)
+        {
+            int gLen = cur.Count;
+
+            for (int i = 0; i < gLen - 1; i++)
+            {
+                for (int j = i + 1; j < gLen; j++)
+                {
+                    double area = CalRecArea(cur[i], cur[j]);
+
+                    if (area > 0)
+                        best = Math.Min(best, area);
+                }
+            }
+        }
+
+        return best == double.MaxValue ? 0 : best;
+    }
+}
