@@ -1,0 +1,65 @@
+public class Solution {
+    private List<(char, int)> BuildCh(string s)
+    {
+        int len = s.Length;
+        List<(char, int)> res = new();
+        int start = 0;
+        
+        for(int i = 1; i < len; i++)
+        {
+            if(s[start] != s[i] || i == len-1)
+            {
+                int subLen = i-start;
+                if(s[start] == s[i])
+                    subLen++;
+
+                res.Add((s[start], subLen));
+
+                if(s[start] != s[i] && i == len-1)
+                    res.Add((s[i], 1));
+
+                start = i;
+            }
+        }
+
+        return res;
+    }
+
+    private bool IsValid(List<(char, int)> sample, List<(char, int)> org)
+    {
+        int len = sample.Count;
+        for(int i = 0; i < len; i++)
+        {
+            var s = sample[i];
+            var o = org[i];
+            if(s.Item1 != o.Item1 || s.Item2 < o.Item2)
+                return false;
+
+            int cnt1 = s.Item2, cnt2 = o.Item2;
+            if(cnt1 < 3 && cnt1 != cnt2)
+                return false;
+        }
+
+        return true;
+    }
+    public int ExpressiveWords(string s, string[] words) {
+        // Build char freq of s:
+        List<(char, int)> sample = BuildCh(s);
+        int sLen = s.Length, sampleCnt = sample.Count, res = 0;
+
+        foreach(string w in words)
+        {
+            if(w.Length > sLen)
+                continue;
+
+            List<(char, int)> tmp = BuildCh(w);
+            if(tmp.Count != sampleCnt)
+                continue;
+
+            if(IsValid(sample, tmp))
+                res++;
+        }
+
+        return res;
+    }
+}
