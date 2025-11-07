@@ -1,0 +1,11 @@
+public class Solution {
+    public int MinFlipsMonoIncr(string s) {
+            int endWith0 = 0, endWith1 = 0;
+            foreach(char c in s)
+            {
+                endWith1 = c == '0' ? Math.Min(endWith0, endWith1) + 1 : Math.Min(endWith0, endWith1);
+                endWith0 = c == '0' ? endWith0 : endWith0 + 1;
+            }
+            return Math.Min(endWith1, endWith0);        
+    }
+}
