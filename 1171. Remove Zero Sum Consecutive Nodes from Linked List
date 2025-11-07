@@ -1,0 +1,47 @@
+public class Solution
+{
+    public ListNode RemoveZeroSumSublists(ListNode head)
+    {
+        var list = new List<int>();
+        var current = head;
+
+        while (current != null)
+        {
+            list.Add(current.val);
+            current = current.next;
+        }
+
+        bool changed;
+        do
+        {
+            changed = false;
+            for (int i = 0; i < list.Count; i++)
+            {
+                int sum = 0;
+                for (int j = i; j < list.Count; j++)
+                {
+                    sum += list[j];
+                    if (sum == 0)
+                    {
+                        list.RemoveRange(i, j - i + 1);
+                        changed = true;
+                        break;
+                    }
+                }
+                if (changed) break; 
+            }
+        }
+        while (changed);
+
+        var dummy = new ListNode(0);
+        current = dummy;
+
+        foreach (var val in list)
+        {
+            current.next = new ListNode(val);
+            current = current.next;
+        }
+
+        return dummy.next;
+    }
+}
