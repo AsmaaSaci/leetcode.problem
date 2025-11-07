@@ -1,0 +1,54 @@
+public class Solution {
+    public IList<bool> CanMakePaliQueries(string s, int[][] queries) {
+        var list = CreateList(s);
+        var rs = new List<bool>();
+        for (int i = 0; i < queries.Length; i++)
+        {
+            rs.Add(CanMakePalindrom(queries[i], list));
+        }
+        return rs;
+    }
+    private bool CanMakePalindrom(int[] query, List<int[]> list)
+    {
+        var oddValues = CountOddValues(query[0], query[1], list);
+        if ((query[1] - query[0]) % 2 == 0) oddValues--;
+        return oddValues <= query[2] * 2;
+    }
+    private int CountOddValues(int left, int right, List<int[]> list)
+    {
+        var rs = 0;
+        if (left == 0)
+        {
+            for (int i = 0; i < list[right].Length; i++)
+            {
+                if (list[right][i] % 2 == 1) rs++;
+            }
+        }
+        else
+        {
+            for (int i = 0; i < list[right].Length; i++)
+            {
+                if ((list[right][i] - list[left - 1][i]) % 2 == 1) rs++;
+            }
+        }
+        return rs;
+    }
+    private List<int[]> CreateList(string s)
+    {
+        var rs = new List<int[]>();
+        var dic = new int[26];
+        dic[s[0] - 'a']++;
+        rs.Add(dic);
+        for (int i = 1; i < s.Length; i++)
+        {
+            var dic2 = new int[26];
+            for (int j = 0; j < dic2.Length; j++)
+            {
+                dic2[j] = rs[rs.Count - 1][j];
+            }
+            dic2[s[i] - 'a']++;
+            rs.Add(dic2);
+        }
+        return rs;
+    }
+}
