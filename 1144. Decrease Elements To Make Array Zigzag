@@ -1,0 +1,18 @@
+public class Solution {
+    public int MovesToMakeZigzag(int[] nums) {
+        int len = nums.Length;
+        int[] res = [0, 0];
+
+        for(int i = 0; i < len; i++)
+        {
+            int left = i == 0 ? int.MaxValue : nums[i-1], right = i == len-1 ? int.MaxValue : nums[i+1];
+            int  minBound = Math.Min(left, right);
+            if(nums[i] >= minBound)
+            {
+                res[i%2] += (nums[i] - minBound+1);
+            }
+        }
+
+        return Math.Min(res[0], res[1]);
+    }
+}
