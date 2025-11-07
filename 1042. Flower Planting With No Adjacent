@@ -1,0 +1,58 @@
+public class Solution {
+    public int[] visited;
+    public int[] GardenNoAdj(int n, int[][] paths) {
+        visited = new int[n];
+        Dictionary<int, List<int>> dict = new();
+
+        foreach (var ar in paths)
+        {
+            if (!dict.ContainsKey(ar[1]))
+            {
+                dict.Add(ar[1], new List<int>());
+            }
+
+            if (!dict.ContainsKey(ar[0]))
+            {
+                dict.Add(ar[0], new List<int>());
+            }
+
+            dict[ar[1]].Add(ar[0]);
+            dict[ar[0]].Add(ar[1]);
+        }
+
+        for (int i = 1; i <= n; i++)
+        {
+            int color = 1;
+            if (dict.ContainsKey(i))
+            {
+                color = FillFlowers(dict[i]);                   
+            }
+            
+            visited[i-1] = color;           
+        }
+
+        return visited;
+    }
+
+    public int FillFlowers(List<int> list){
+        bool[] colors = new bool[5];
+
+        foreach (var ar in list)
+        {
+            if (visited[ar-1] != 0)
+            {
+                colors[visited[ar - 1]] = true;
+            }
+        }
+
+        for (int i = 1; i <= 4; i++)
+        {
+            if (!colors[i])
+            {
+                return i;
+            }
+        }
+
+        return -1;
+    }
+}
