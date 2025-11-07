@@ -1,0 +1,60 @@
+public class Solution {
+    public int ThreeSumMulti(int[] arr, int target) {
+        Dictionary<int, int> freq = new();
+        foreach(int n in arr) // distinct nubmer frequency
+        {
+            freq.TryAdd(n, 0);
+            freq[n]++;
+        }
+
+        List<int> keys = freq.Keys.ToList();
+        keys.Sort(); // sort keys and check 3 numbers from small to large
+
+        long res = 0;
+        int kLen = keys.Count, mod = (int)Math.Pow(10, 9)+7;
+
+        for(int i = 0; i < kLen; i++)
+        {
+            int first = keys[i];
+            if(first*3 > target) // smallest number is overflow, early break;
+                break;
+
+            int fCnt = freq[first];
+
+            if(first*3 == target && fCnt >= 3) // a, a, a
+            {
+                long tmp = ((long)fCnt*(fCnt-1)*(fCnt-2)/6)%mod;
+                res = (res + tmp) % mod;
+            }
+
+            if(fCnt >= 2 && target - first*2 > first && freq.ContainsKey(target-first*2)) // a, a, b
+            {
+                long tmp = (long)(fCnt*(fCnt-1)/2) * freq[target-first*2]%mod;
+                res = (res+tmp)%mod;
+            }
+
+            for(int j = i+1; j < kLen; j++)
+            {
+                int sec = keys[j], fSec = freq[sec];
+                if(target < first+sec*2) // early break
+                    break;
+
+                if(fSec >= 2 && target == first+ sec*2) // a, b, b
+                {
+                    long tmp = (long)(fCnt * fSec*(fSec-1)/2)%mod;
+                    res = (res + tmp)%mod;
+                }
+
+                int third = target - first - sec;
+                if(third > sec && freq.ContainsKey(third)) // a, b, c
+                {
+                    int fThd = freq[third];
+                    long tmp = (long)(fCnt*fSec*fThd)%mod;
+                    res = (res +tmp)%mod;
+                }
+            }
+        }
+
+        return (int)res;
+    }
+}
