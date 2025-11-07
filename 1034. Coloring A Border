@@ -1,0 +1,58 @@
+public class Solution {
+    public int[][] ColorBorder(int[][] grid, int row, int col, int color) {
+        int m = grid.Length, n = grid[0].Length;
+        int origC = grid[row][col];
+        if(origC == color)
+            return grid;
+
+        bool[,] visited = new bool[m, n];
+        int[] dirs = [0, 1, 0, -1, 0];
+        Queue<int[]> que = new();
+        que.Enqueue([row, col]);
+        List<int[]> clrId = new();
+        while(que.Count > 0)
+        {
+            int qLen =  que.Count;
+            for(int i = 0; i < qLen; i++)
+            {
+                int[] cur = que.Dequeue();
+                int x = cur[0], y = cur[1];
+                if(visited[x,y])
+                    continue;
+
+                visited[x,y] = true;
+                
+                
+                bool valid = false;
+                if(x == 0 || x == m-1 || y == 0 || y == n-1)
+                    valid = true;
+                else
+                {
+                    for(int d = 0; d < 4; d++)
+                    {
+                        int newX = x + dirs[d], newY = y+dirs[d+1];
+                        if(grid[newX][newY] != origC && !visited[newX, newY])
+                        {
+                            valid = true;
+                            break;
+                        }
+                    }
+                }
+                
+                if(valid) 
+                    grid[x][y] = color;
+                
+                for(int d = 0; d < 4; d++)
+                {
+                    int newX = x + dirs[d], newY = y + dirs[d+1];
+                    if(newX >= 0 && newY >= 0 && newX < m && newY < n && !visited[newX, newY] && grid[newX][newY] == origC)
+                    {
+                        que.Enqueue([newX, newY]);
+                    }
+                }
+            }
+        }
+
+        return grid;
+    }
+}
