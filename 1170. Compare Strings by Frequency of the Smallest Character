@@ -1,0 +1,52 @@
+public class Solution {
+    public int[] NumSmallerByFrequency(string[] queries, string[] words) {
+        int[] result = new int[queries.Length];
+        
+        for (int idx = 0; idx < queries.Length; idx++) {
+            String queryStr = queries[idx];
+
+            // Find smallest char in query str
+            char smallestQueryStrChar = queryStr[0];
+            foreach (char ch in queryStr) {
+                if (ch < smallestQueryStrChar) {
+                    smallestQueryStrChar = ch;
+                }
+            }  
+
+            // Count its occurrences
+            int smallestQueryStrCharCount = 0;
+            foreach (char ch in queryStr) {
+                if (ch == smallestQueryStrChar) {
+                    smallestQueryStrCharCount += 1;
+                }
+            }   
+
+            // Count the amount of times the condition is met
+            int frequency = 0;
+            foreach (String word in words)  {
+                // Find smallest char in word str
+                char smallestWordChar = word[0];
+                foreach(char ch in word) {
+                    if (ch < smallestWordChar) {
+                        smallestWordChar = ch;
+                    }
+                }
+                // Count its occurrences
+                int smallestWordCharCount = 0;
+                foreach (char ch in word) {
+                    if (ch == smallestWordChar) {
+                        smallestWordCharCount += 1;
+                    } 
+                }
+
+                // Inc count if condition is met
+                if (smallestQueryStrCharCount < smallestWordCharCount) {
+                    frequency += 1;         
+                }
+            }
+            // Store result for each query
+            result[idx] = frequency;
+        } 
+        return result;
+    }
+}
