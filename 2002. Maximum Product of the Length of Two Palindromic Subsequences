@@ -1,0 +1,50 @@
+public class Solution {
+    private bool IsPalin(string s)
+    {
+        int low = 0, high = s.Length-1;
+        while(low < high)
+        {
+            if(s[low++] != s[high--])
+                return false;
+        }
+
+        return true;
+    }
+    public int MaxProduct(string s) {
+        int len = s.Length;
+        if(len < 3)
+            return len == 2 ? 1 : 0;
+
+       int totalLen = (1<<len);
+       Dictionary<int, int> palinLen = new();
+
+       for(int i = 1; i < totalLen; i++) // track mask
+       {
+            string tmp = "";
+            for(int j = 0; j < len; j++)
+            {
+                if((i&(1<<j)) != 0)
+                    tmp += s[j];
+            }
+
+            if(IsPalin(tmp))
+            {
+                palinLen.Add(i, tmp.Length);
+            }
+       }
+
+       int res = 1;
+       foreach(var kvp1 in palinLen)
+       {
+            int key1 = kvp1.Key, subLen1 = kvp1.Value;
+            foreach(var kvp2 in palinLen)
+            {
+                int key2 = kvp2.Key, subLen2 = kvp2.Value;
+                if((key1&key2) == 0)
+                    res = Math.Max(res, subLen1*subLen2);
+            }
+       }
+
+       return res;
+    }
+}
