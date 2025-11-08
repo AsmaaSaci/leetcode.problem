@@ -1,0 +1,39 @@
+public class Solution {
+    public int MaxResult(int[] nums, int k) {
+        
+        // [10,-5,-2,4,0,3], k = 3, dp[10]
+
+        // [-5, -2, 4], deque 10, dp[5, 8, 14] == start = 0, end = 4
+
+        // [10,-5,-2,4,0,3] start = 1
+
+        var n = nums.Length;
+        var dp = new int[n];
+
+        dp[0] = nums[0];
+
+        var deque = new int[n];
+
+        var start = 0;
+        var end = 1;
+
+        for(int i=1; i < n; i++){
+
+            while(start < end && deque[start] < i - k){
+                start++;
+            }
+
+            var first = deque[start];
+
+            dp[i] = nums[i] + dp[first];
+
+            while(start < end && dp[i] >= dp[deque[end-1]]){
+                end--;
+            }
+
+            deque[end++] = i;
+        }
+
+        return dp[n -1];
+    }
+}
