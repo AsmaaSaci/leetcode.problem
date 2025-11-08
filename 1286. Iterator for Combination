@@ -1,0 +1,59 @@
+public class CombinationIterator {
+    private Dictionary<char, int> dict;
+    private string curStr;
+    private string origStr;
+    private int subLen;
+    public CombinationIterator(string characters, int combinationLength) {
+        subLen = combinationLength;
+        curStr = "";
+        origStr = characters;
+        dict = new Dictionary<char, int>();
+        for(int i = 0; i < origStr.Length; i++)
+        {
+            dict.Add(origStr[i], i);
+        }
+    }
+    
+    public string Next() {
+        Console.WriteLine($"{curStr}");
+        if(curStr.Length == 0)
+            curStr = origStr.Substring(0, subLen);
+        else
+        {
+           int idx = subLen-1;
+           while(idx >= 0 && dict[curStr[idx]] == origStr.Length-(subLen-idx))
+           {
+                idx--;
+           }
+  
+           if(idx < 0)
+                return "";
+            
+            int p2Id = dict[curStr[idx]]+1;
+            if(idx == 0)
+            {
+                curStr = origStr.Substring(p2Id, subLen); 
+            }
+            else
+            {
+                string p1 = curStr.Substring(0, idx);
+                string p2 = origStr.Substring(p2Id, subLen-idx);
+                curStr = p1+p2;
+            }
+        }
+        
+        return curStr;
+    }
+    
+    public bool HasNext() {
+        int lastId = origStr.Length-subLen;
+        return curStr != origStr.Substring(lastId, subLen);
+    }
+}
+
+/**
+ * Your CombinationIterator object will be instantiated and called as such:
+ * CombinationIterator obj = new CombinationIterator(characters, combinationLength);
+ * string param_1 = obj.Next();
+ * bool param_2 = obj.HasNext();
+ */
