@@ -1,0 +1,67 @@
+public class TweetCounts {
+    private Dictionary<string, List<int>> sample;
+    private Dictionary<string, int> interval = new Dictionary<string, int>(){{"minute", 60}, {"hour", 3600}, {"day", 86400}};
+    public TweetCounts() {
+        sample = new Dictionary<string, List<int>>();
+    }
+    
+    public void RecordTweet(string tweetName, int time) {
+        if(!sample.ContainsKey(tweetName))
+            sample.Add(tweetName, new List<int>());
+
+        int idx = sample[tweetName].BinarySearch(time);
+        if(idx < 0)
+            idx = ~idx;
+
+        sample[tweetName].Insert(idx, time);
+    }
+    
+    public IList<int> GetTweetCountsPerFrequency(string freq, string tweetName, int startTime, int endTime) {
+        int inter = interval[freq];
+        int chunckN = (endTime-startTime)/inter+1;
+        List<int> res = new();
+        if(!sample.ContainsKey(tweetName))
+            return res;
+
+        List<int> ids = sample[tweetName];
+        Console.WriteLine($"Get {tweetName}, chunck n : {ids.Count}");
+        for(int i = 0; i < chunckN; i++)
+        {
+            int ch_s = startTime+i*inter, ch_e = Math.Min(endTime, ch_s+inter-1);
+            int id_s = ids.BinarySearch(ch_s), id_e = ids.BinarySearch(ch_e);
+            if(id_s >= 0)
+            {
+                while(id_s >= 0 && ids[id_s] == ch_s) // get the low bound of ch_s
+                {
+                    id_s--;
+                }
+            }
+            else
+            {
+                id_s = ~id_s;
+                id_s--;
+            }
+
+            if(id_e >= 0)
+            {
+                while(id_e < ids.Count && id_e >= 0 && ids[id_e] == ch_e) // get the high bound of ch_e
+                {
+                    id_e++;
+                }
+            }
+            else
+                id_e = ~id_e;
+
+            res.Add(id_e-id_s-1);
+        }
+
+        return res;
+    }
+}
+
+/**
+ * Your TweetCounts object will be instantiated and called as such:
+ * TweetCounts obj = new TweetCounts();
+ * obj.RecordTweet(tweetName,time);
+ * IList<int> param_2 = obj.GetTweetCountsPerFrequency(freq,tweetName,startTime,endTime);
+ */
