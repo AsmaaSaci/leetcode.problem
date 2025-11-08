@@ -1,0 +1,50 @@
+public class Solution {
+    public int MinAbsoluteSumDiff(int[] nums1, int[] nums2) {
+        int mod = 1000000007;
+        int[] sample = new int[100002], left = new int[100002], right = new int[100002];
+        int minV = int.MaxValue, maxV = 0;
+        foreach(int n in nums1)
+        {
+            minV = Math.Min(minV, n);
+            maxV = Math.Max(maxV, n);
+            sample[n] = n;
+        }
+
+        for(int i = minV; i <= 100001; i++)
+        {
+            left[i] = Math.Max(left[i-1], sample[i]);
+        }
+
+        for(int i = maxV; i >= 0; i--)
+        {
+            right[i] = (sample[i] != 0 ? sample[i] : right[i+1]);
+        }
+
+        int len = nums1.Length;
+        long totalDiff = 0;
+
+        for (int i = 0; i < len; i++) // calculate original total diff
+        {
+            totalDiff += Math.Abs(nums1[i] - nums2[i]);
+        }
+
+        long res = totalDiff;
+        for (int i = 0; i < len; i++)
+        {
+            int cur = nums1[i];
+            long absD = Math.Abs(cur - nums2[i]);
+
+            if (absD != 0)
+            {
+                int n2 = nums2[i];
+                int leftV = left[n2], rightV = right[n2 + 1];
+                int curDiff = Math.Min(Math.Abs(leftV == 0 ? int.MaxValue : (leftV - nums2[i])), Math.Abs(rightV == 0 ? int.MaxValue : rightV - nums2[i]));
+                res = Math.Min(res, totalDiff - absD + curDiff);
+            }
+        }
+
+
+        res %= mod;
+        return (int)res;
+    }
+}
