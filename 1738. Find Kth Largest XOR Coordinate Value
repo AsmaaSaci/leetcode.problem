@@ -1,0 +1,34 @@
+public class Solution {
+    public int KthLargestValue(int[][] matrix, int k) {
+        int m = matrix.Length, n = matrix[0].Length;
+        int[] dp = new int[n];
+        
+        PriorityQueue<int, int> pq = new();
+        for(int i = 0; i < m; i++)
+        {
+            int[] leftXOR = new int[n];
+            int leftV = 0;
+            for(int j = 0; j < n; j++)
+            {
+                int cur = matrix[i][j];
+                cur ^= leftV;
+                leftV = cur;
+                cur ^= dp[j];
+                leftXOR[j] = cur;
+                if (pq.Count == k && pq.Peek() >= cur)
+                    continue;
+
+                pq.Enqueue(cur, cur);
+                if(pq.Count > k)
+                    pq.Dequeue();
+            }
+
+            Array.Copy(leftXOR, 0, dp, 0, n);
+        }
+
+        if (pq.Count < k)
+            return 0;
+
+        return pq.Peek();
+    }
+}
