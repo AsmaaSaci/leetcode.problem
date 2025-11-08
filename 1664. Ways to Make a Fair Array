@@ -1,0 +1,44 @@
+public class Solution {
+    public int WaysToMakeFair(int[] nums) {
+        int len = nums.Length;
+        if(len == 1)
+            return len;
+            
+        List<int> oddSum = new(), evenSum = new();
+
+        for(int i = 0; i < len; i++)
+        {
+            int cur = nums[i];
+            if(i % 2 == 0)
+            {
+                cur += (evenSum.Count > 0 ? evenSum.Last() : 0);
+                evenSum.Add(cur);
+            }
+            else
+            {
+                cur += (oddSum.Count > 0 ? oddSum.Last() : 0);
+                oddSum.Add(cur);
+            }
+        }
+        int evenLen = evenSum.Count, oddLen = oddSum.Count;
+        int uplimit = Math.Max(evenLen, oddLen), res = 0;
+        for(int i = 0; i < uplimit; i++)
+        {
+            // remove ith even number:
+            int evenP1 = (i > 0 ? evenSum[i-1] : 0), evenP2 = oddSum[oddLen-1] - (i == 0 ? 0 : oddSum[i-1]);
+            int oddP1 = (i > 0 ? oddSum[i-1] : 0), oddP2 = evenSum[evenLen-1] - evenSum[i];
+            if(evenP1+evenP2 == oddP1+oddP2)
+                res++;
+
+            // remove ith odd number:
+            evenP1 = evenSum[i];
+            evenP2 = oddSum[oddLen-1] -  (i < oddLen ? oddSum[i] : 0 );
+            oddP1 = (i > 0 ? oddSum[i-1] : 0);
+            oddP2 = evenSum[evenLen-1]-evenSum[i];
+            if(evenP1 + evenP2 == oddP1+oddP2)
+                res++;
+        }
+
+        return res;
+    }
+}
