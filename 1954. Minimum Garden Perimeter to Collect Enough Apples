@@ -1,0 +1,25 @@
+public class Solution {
+    private long getAppleNum(long radius) {
+        return 4 * ( (2 * radius + 1) * (radius + 1) * (radius) / 2);
+    }
+
+    public long MinimumPerimeter(long neededApples) {
+        int left = 1, right = 100000;
+        while (left < right) {
+            int mid = (left + right) / 2;
+            if (mid == left) {
+                if (getAppleNum(left) >= neededApples) return left * 8;
+                return right * 8;
+            }
+
+            if (getAppleNum(mid) > neededApples) {
+                right = mid;
+            }
+            else if (getAppleNum(mid) < neededApples) {
+                left = mid;
+            }
+            else return mid * 8;
+        }
+        return left * 8;
+    }
+}
