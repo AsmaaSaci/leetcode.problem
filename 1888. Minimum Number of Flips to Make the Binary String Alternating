@@ -1,0 +1,12 @@
+public class Solution {
+    public int MinFlips(string s) {
+        var n=s.Length;
+        int res = Int32.MaxValue, cur = 0;        
+        for (int i = 0; i < 2*n; i++)  {
+            if (s[i%n] - '0' == i%2) cur++; 
+            if (i >= n && s[i%n] - '0' == i%n%2) cur--; 
+            if (i >= n-1)  res = Math.Min(res, Math.Min(cur, n-cur));             
+        }
+        return res;
+    }
+}
