@@ -1,0 +1,64 @@
+public class Solution {
+    public int NumTriplets(int[] nums1, int[] nums2) {
+        Dictionary<long, int> sq1 = new(), sq2 = new();
+        foreach(int n in nums1)
+        {
+            long cur = (long)n*n;
+            sq1.TryAdd(cur, 0);
+            sq1[cur]++;
+        }
+
+        foreach(int n in nums2)
+        {
+            long cur = (long)n*n;
+            sq2.TryAdd(cur, 0);
+            sq2[cur]++;
+        }
+
+        int res = 0;
+        int[] freq1 = new int[100001], freq2 = new int[100001];
+        foreach(int cur in nums2)
+        {
+            foreach(var kvp in sq1)
+            {
+                long key = kvp.Key;
+                
+                if(key%cur == 0)
+                {
+                    int p1 = (int)(key/cur);
+                    if(p1 >= 100001)
+                        continue;
+                    
+                    if(freq2[p1] > 0)
+                    {    
+                        res += (sq1[key]*freq2[p1]);
+                    }
+                }
+            }
+
+            freq2[cur]++;
+        }
+
+        foreach(int cur in nums1)
+        {
+            foreach(var kvp in sq2)
+            {
+                long key = kvp.Key;
+                Console.WriteLine($"key {key}, cur : {cur}");
+                if(key%cur == 0)
+                {
+                    int p1 = (int)(key/cur);
+                    if(p1 >= 100001)
+                        continue;
+
+                    if(freq1[p1]> 0)
+                        res += sq2[key]*freq1[p1];
+                }
+            }
+
+            freq1[cur]++;
+        }
+
+        return res;
+    }
+}
