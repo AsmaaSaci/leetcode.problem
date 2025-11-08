@@ -1,0 +1,29 @@
+public class Solution {
+    public string KthLargestNumber(string[] nums, int k) {
+        List<string>[] freq = new List<string>[101];
+        for(int i = 0; i < 101; i++)
+        {
+            freq[i] = new List<string>();
+        }
+
+        foreach(string s in nums)
+        {
+            freq[s.Length].Add(s);
+        }
+
+        for(int i = 100; i >= 0; i--)
+        {
+            int cnt = freq[i].Count;
+
+            if(cnt >=k)
+            {
+                freq[i].Sort();
+                return freq[i][cnt-k];
+            }
+            else
+                k -= cnt;
+        }
+
+        return "";
+    }
+}
