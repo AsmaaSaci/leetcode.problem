@@ -1,0 +1,24 @@
+public class Solution {
+    public int LongestSubarray(int[] nums, int limit) {
+        int rear = 0;
+        int ans = 0;
+        SortedDictionary<int, int> st = new SortedDictionary<int, int>();
+
+        for (int front = 0; front < nums.Length; front++) {
+            if (!st.ContainsKey(nums[front]))
+                st[nums[front]] = 0;
+            st[nums[front]]++;
+
+            while (st.Count > 1 && st.Last().Key - st.First().Key > limit) {
+                st[nums[rear]]--;
+                if (st[nums[rear]] == 0)
+                    st.Remove(nums[rear]);
+                rear++;
+            }
+
+            ans = Math.Max(ans, front - rear + 1);
+        }
+
+        return ans;
+    }
+}
