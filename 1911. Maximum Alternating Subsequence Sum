@@ -1,0 +1,18 @@
+public class Solution {
+    public long MaxAlternatingSum(int[] nums) {
+        int n = nums.Length;
+        long[,] dp = new long[n + 1, 2]; 
+        dp[0, 0] = 0; // Odd
+        dp[0, 1] = 0; // Even
+
+        for(int i = 1; i<=n; i++){
+            for(int j=0; j<=1; j++){
+                long val = j==0 ? -nums[i-1] : nums[i-1];
+                long take = dp[i-1,1-j] + val;
+                long skip = dp[i-1,j];
+                dp[i,j] = Math.Max(take, skip);
+            }
+        }
+        return dp[n,1];
+    }
+}
