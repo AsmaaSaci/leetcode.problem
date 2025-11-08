@@ -1,0 +1,27 @@
+public class Solution {
+    public int[] GetStrongest(int[] arr, int k) {
+
+        int n = arr.Length;
+        Array.Sort(arr);
+        int m = arr[(n - 1) / 2];
+        int[] res = new int[k];
+        int i = 0;
+        int l = 0;
+        int r = n - 1;
+        while(l <= r && i < k)
+        {
+            if(Math.Abs(arr[r] - m) >= Math.Abs(arr[l] - m) && arr[l] < arr[r])
+            {
+                res[i] = arr[r];
+                r--;
+            }
+            else
+            {
+                res[i] = arr[l];
+                l++;
+            }
+            i++;
+        } 
+        return res;
+    }
+}
