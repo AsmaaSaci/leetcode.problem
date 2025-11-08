@@ -1,0 +1,21 @@
+public class Solution {
+    public int MinimumLength(string s) {
+        int low = 0, len = s.Length, high = len-1;
+        while(low < high && s[low] == s[high])
+        {
+            char c = s[low++];
+            while(low <= high && s[low] == c)
+            {
+                low++;
+            }
+
+            while(high >= low && s[high] == c)
+            {
+                high--;
+            }
+        }
+
+        int res = high-low+1;
+        return res < 0 ? 0 : res;
+    }
+}
