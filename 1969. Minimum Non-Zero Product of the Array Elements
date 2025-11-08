@@ -1,0 +1,33 @@
+public class Solution {
+    static long mod = 1000000007;
+    public static long CalculateExpIterative(long n, long exp)
+    {
+        long result = 1;
+        n = n % mod; // In case n is larger than mod
+
+        while (exp > 0)
+        {
+            if ((exp & 1) == 1) // If exp is odd, multiply result by n
+            {
+                result = (result * n) % mod;
+            }
+            exp = exp >> 1; // Divide exp by 2
+            n = (n * n) % mod; // Square n and take modulo
+        }
+
+        return result;
+    }
+    public int MinNonZeroProduct(int p) {
+        long maxVal = (1L << p) - 1;  // 2^p - 1
+        long secondMaxVal = maxVal - 1;  // 2^p - 2
+        long halfCount = (1L << (p - 1)) - 1;  // 2^(p-1) - 1
+
+        // Calculate (2^p - 2)^(2^(p-1) - 1) % mod
+        long secondPart = CalculateExpIterative(secondMaxVal, halfCount);
+
+        // The result is (secondPart * maxVal) % mod
+        long minProduct = (secondPart * (maxVal%mod)) % mod;
+
+        return (int)minProduct;
+    }
+}
