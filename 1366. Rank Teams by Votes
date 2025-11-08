@@ -1,0 +1,45 @@
+public class Solution {
+    public string RankTeams(string[] votes) 
+    {
+        var numOfVotePositions = votes[0].Length;
+        int[][] teamStats = new int[26][];
+        var team = new int[26];
+        
+        for(int i =0; i<26; i++)
+        {
+            teamStats[i] = new int[numOfVotePositions];    
+            team[i]=i;
+        }
+        
+        foreach(var vote in votes)
+        {
+            for(int i=0; i<numOfVotePositions; i++)
+            {
+                var teamIdx = vote[i]-'A';
+                teamStats[teamIdx][i]++;
+            }
+        }
+        //Sort team array with the help of teamStats array
+        Array.Sort(team, (a,b)=>
+                   {
+                       for(int i = 0; i< numOfVotePositions; i++)
+                       {
+                           if(teamStats[a][i]!=teamStats[b][i])
+                           {
+                               return teamStats[b][i] - teamStats[a][i]; // vote order, if vote 0 same, then test vote 1 till all vote, if still tie, then go to a-b;
+                           }
+                       }
+                       return a - b;//alphabatic order
+                        
+                   });
+        var sb = new StringBuilder();
+        
+        for(int i = 0; i<numOfVotePositions; i++)
+        {
+            sb.Append((char)(team[i]+'A'));        
+        }
+        
+        return sb.ToString();
+        
+    }
+}
