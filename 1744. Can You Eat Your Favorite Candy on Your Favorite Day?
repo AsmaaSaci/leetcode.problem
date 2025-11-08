@@ -1,0 +1,24 @@
+public class Solution {
+    public bool[] CanEat(int[] candiesCount, int[][] queries) {
+        int qLen = queries.Length, cLen = candiesCount.Length;
+        bool[] res = new bool[qLen];
+        long[] leftSum = new long[cLen+1];
+        for(int i = 1; i <= cLen; i++)
+        {
+            leftSum[i] = leftSum[i-1] + candiesCount[i-1];
+        }
+
+        for(int i = 0; i < qLen; i++)
+        {
+            long tp = queries[i][0], d = queries[i][1]+1, cap = queries[i][2];
+            
+            long low = leftSum[tp]/cap+1;
+            long high = leftSum[tp+1];
+            
+            if(d >= low && d <= high)
+                res[i] = true;
+        }
+
+        return res;
+    }
+}
