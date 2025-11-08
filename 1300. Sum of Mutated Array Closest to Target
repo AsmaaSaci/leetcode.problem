@@ -1,0 +1,29 @@
+public class Solution {
+    public int FindBestValue(int[] arr, int target) {
+        Array.Sort(arr);
+        int left = 0;
+        int right = arr.Max();
+
+        while (left < right) {
+            int mid = left + (right - left) / 2;
+            int sum = Mutated(arr, mid);
+
+            if (sum < target) left = mid + 1;
+            else right = mid;
+        }
+
+        int sum1 = Mutated(arr, left);
+        int sum2 = Mutated(arr, left - 1);
+
+        if (Math.Abs(sum1 - target) < Math.Abs(sum2 - target)) return left;
+        else return left - 1;
+    }
+
+    public int Mutated(int[] arr, int val) {
+        int sum = 0;
+        foreach (int a in arr) {
+            sum += Math.Min(a, val);
+        }
+        return sum;
+    }
+}
