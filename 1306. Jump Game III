@@ -1,0 +1,16 @@
+public class Solution {
+    public bool CanReach(int[] arr, int start) {
+        var seen = new HashSet<int>();
+        return DFS(arr, start, seen);
+    }
+
+    private bool DFS(int[] arr, int idx, HashSet<int> seen) {
+        if (idx < 0 || idx >= arr.Length) return false;
+        if (arr[idx] == 0) return true;
+        if (seen.Contains(idx)) return false;
+
+        seen.Add(idx);
+        return DFS(arr, idx - arr[idx], seen) || 
+               DFS(arr, idx + arr[idx], seen);
+    }
+}
