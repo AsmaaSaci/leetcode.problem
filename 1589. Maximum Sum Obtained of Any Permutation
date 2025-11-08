@@ -1,0 +1,36 @@
+public class Solution {
+    public int MaxSumRangeQuery(int[] nums, int[][] requests) {
+        int len = nums.Length, mod = (int)Math.Pow(10, 9)+7;
+        SortedDictionary<int, int> freq = new();
+        foreach(int[] cur in requests)
+        {
+            int curStart = cur[0], curEnd = cur[1]+1;
+            freq.TryAdd(curStart, 0);
+            freq.TryAdd(curEnd, 0);
+            freq[curStart]++;
+            freq[curEnd]--;
+        }
+
+        int start = freq.Keys.First(), end = freq.Keys.Last();
+        int[] ids = new int[len];
+        int sum = 0;
+        long res = 0;
+        for(int i = start; i < end; i++)
+        {
+            if(freq.ContainsKey(i))
+                sum += freq[i];
+
+            ids[i] = sum;
+        }
+
+        Array.Sort(ids);
+        Array.Sort(nums);
+        for(int i = len-1; i >= 0 && ids[i] > 0; i--)
+        {
+            res += (long)ids[i]*nums[i];
+            res %= mod;
+        }
+
+        return (int)res;
+    }
+}
