@@ -1,0 +1,63 @@
+public class ThroneInheritance {
+    private Dictionary<string, int> ids;
+    private List<string> names;
+    private List<bool> active;
+    List<List<int>> children;
+
+    private void CreateName(string name)
+    {
+        int newId = ids.Count;
+        ids.Add(name, newId);
+        names.Add(name);
+        active.Add(true);
+        children.Add(new List<int>());
+    }
+    public ThroneInheritance(string kingName) {
+        ids = new Dictionary<string, int>();
+        names = new List<string>();
+        active = new List<bool>();
+        children = new List<List<int>>();
+        CreateName(kingName);
+    }
+    
+    public void Birth(string parentName, string childName) {
+        int parId = ids[parentName];
+        CreateName(childName);
+        children[parId].Add(ids[childName]);
+    }
+    
+    public void Death(string name) {
+        active[ids[name]] = false;
+    }
+    
+    public IList<string> GetInheritanceOrder() {
+        List<string> order = new();
+        Stack<int> stk = new();
+        stk.Push(0);
+        while(stk.Count > 0)
+        {
+            int curId = stk.Pop();
+            string curName = names[curId];
+            if(children[curId].Count > 0)
+            {
+                for(int j = children[curId].Count-1; j >= 0; j--)
+                {
+                    stk.Push(children[curId][j]);
+                }
+            }
+
+            if(active[curId])
+                order.Add(curName);
+        }
+
+        return order;
+    }
+}
+
+/**
+ * Your ThroneInheritance object will be instantiated and called as such:
+ * ThroneInheritance obj = new ThroneInheritance(kingName);
+ * obj.Birth(parentName,childName);
+ * obj.Death(name);
+ * IList<string> param_3 = obj.GetInheritanceOrder();
+ */
