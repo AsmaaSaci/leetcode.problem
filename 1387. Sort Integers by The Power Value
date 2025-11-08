@@ -1,0 +1,32 @@
+public class Solution {
+    private int[] freq;
+
+    private int BackTracking(int num)
+    {
+        if(freq[num] < int.MaxValue)
+            return freq[num];
+
+        int cur = 1;
+        if(num%2 == 0)
+            cur += BackTracking(num/2);
+        else
+            cur += BackTracking(num*3+1);
+
+        freq[num] = cur;
+        return cur;
+    }
+    public int GetKth(int lo, int hi, int k) {
+        freq = Enumerable.Repeat(int.MaxValue, 1000001).ToArray();
+        (int, int)[] sample = new (int, int)[hi-lo+1];
+        freq[1] = 1;
+        for(int i = lo; i <= hi; i++)
+        {
+            int cur = BackTracking(i);
+            sample[i-lo] = (cur, i);
+        }
+
+        sample = sample.OrderBy(x=>x.Item1).ThenBy(x=>x.Item2).ToArray();
+
+        return sample[k-1].Item2;
+    }
+}
