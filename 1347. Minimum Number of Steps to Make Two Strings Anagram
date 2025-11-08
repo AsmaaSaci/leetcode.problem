@@ -1,0 +1,21 @@
+public class Solution {
+    public int MinSteps(string s, string t)
+    {
+        var sCounter = Counter(s);
+        var tCounter = Counter(t);
+
+        int count = 0;
+        for(int i = 0; i < 26; i++)
+            count += Math.Abs(sCounter[i] - tCounter[i]);
+
+        return count / 2;
+    }
+
+    static int[] Counter(string s)
+    {
+        var count = new int[26];
+        foreach(var item in s)
+            count[item - 'a']++;
+        return count;
+    }
+}
