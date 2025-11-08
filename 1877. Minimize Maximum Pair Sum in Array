@@ -1,0 +1,14 @@
+public class Solution {
+    public int MinPairSum(int[] nums) {
+        Array.Sort(nums);
+        int start = 0 , end = nums.Length - 1 , max = int.MinValue;
+
+        while (start < end)
+        {
+            int temp =  nums[start++] + nums[end--];
+            if(temp > max) max = temp;
+        }
+        
+        return max;
+    }
+}
