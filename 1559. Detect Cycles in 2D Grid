@@ -1,0 +1,46 @@
+public class Solution {
+    public bool ContainsCycle(char[][] grid) {
+        // DFS:
+        int m = grid.Length, n = grid[0].Length;
+        int[,] visited = new int[m, n];
+        int[] dirs = [0, 1, 0, -1, 0];
+        for(int i = 0; i < m; i++)
+        {
+            for(int j = 0; j < n; j++)
+            {
+                if(visited[i,j] > 0)
+                    continue;
+
+                char c = grid[i][j];
+                Stack<(int, int, int)> stk = new();
+                stk.Push((i,j, 1));
+                while(stk.Count > 0)
+                {
+                    (int x, int y, int cnt) = stk.Pop();
+                    if(visited[x,y] > 0)
+                        continue;
+
+                    visited[x,y] = cnt;
+                    for(int d = 0; d < 4; d++)
+                    {
+                        int newX = x+dirs[d], newY = y + dirs[d+1];
+                        if(newX < 0 || newY < 0 || newX >= m || newY >= n || grid[newX][newY] != c)
+                            continue;
+
+                        if(visited[newX, newY] > 0)
+                        {
+                            if(cnt - visited[newX, newY] >= 3)
+                                return true;
+
+                            continue;
+                        }
+
+                        stk.Push((newX, newY, cnt+1));
+                    }
+                }
+            }
+        }
+
+        return false;
+    }
+}
