@@ -1,0 +1,94 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     public int val;
+ *     public TreeNode left;
+ *     public TreeNode right;
+ *     public TreeNode(int val=0, TreeNode left=null, TreeNode right=null) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+public class Solution {
+       public int CountPairs(TreeNode root, int distance)
+    {
+        Dictionary<TreeNode, List<TreeNode>> graph = new Dictionary<TreeNode, List<TreeNode>>();
+        HashSet<TreeNode> leafNodes = new HashSet<TreeNode>();
+
+        TraverseTree(root, null, graph, leafNodes);
+
+        int ans = 0;
+
+        foreach (TreeNode leaf in leafNodes)
+        {
+            Queue<TreeNode> bfsQueue = new Queue<TreeNode>();
+            HashSet<TreeNode> seen = new HashSet<TreeNode>();
+            bfsQueue.Enqueue(leaf);
+            seen.Add(leaf);
+
+            // Go through all nodes that are within the given distance of
+            // the current leaf node
+            for (int i = 0; i <= distance; i++)
+            {
+                // Clear all nodes in the queue (distance i away from leaf node)
+                // Add the nodes' neighbors (distance i+1 away from leaf node)
+                int size = bfsQueue.Count;
+                for (int j = 0; j < size; j++)
+                {
+                    // If current node is a new leaf node, add the found pair to our count
+                    TreeNode currNode = bfsQueue.Dequeue();
+                    if (leafNodes.Contains(currNode) && currNode != leaf)
+                    {
+                        ans++;
+                    }
+                    if (graph.ContainsKey(currNode))
+                    {
+                        foreach (TreeNode neighbor in graph[currNode])
+                        {
+                            if (!seen.Contains(neighbor))
+                            {
+                                bfsQueue.Enqueue(neighbor);
+                                seen.Add(neighbor);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return ans / 2;
+    }
+
+    private void TraverseTree(
+        TreeNode currNode,
+        TreeNode prevNode,
+        Dictionary<TreeNode, List<TreeNode>> graph,
+        HashSet<TreeNode> leafNodes)
+    {
+        if (currNode == null)
+        {
+            return;
+        }
+        if (currNode.left == null && currNode.right == null)
+        {
+            leafNodes.Add(currNode);
+        }
+        if (prevNode != null)
+        {
+            if (!graph.ContainsKey(prevNode))
+            {
+                graph[prevNode] = new List<TreeNode>();
+            }
+            graph[prevNode].Add(currNode);
+
+            if (!graph.ContainsKey(currNode))
+            {
+                graph[currNode] = new List<TreeNode>();
+            }
+            graph[currNode].Add(prevNode);
+        }
+        TraverseTree(currNode.left, currNode, graph, leafNodes);
+        TraverseTree(currNode.right, currNode, graph, leafNodes);
+    }
+}
