@@ -1,0 +1,56 @@
+public class Solution {
+    public IList<string> WatchedVideosByFriends(IList<IList<string>> watchedVideos, int[][] friends, int id, int level) {
+        int n = friends.Length;
+        bool[] visited = new bool[n];
+        Dictionary<string, int> freq = new();
+        Queue<int> que = new();
+        que.Enqueue(id);
+        visited[id] = true;
+        int curLvl = 0;
+        while(que.Count > 0)
+        {
+            int qLen = que.Count;
+            curLvl++;
+            for(int i = 0; i < qLen; i++)
+            {
+                int cur = que.Dequeue();
+                foreach(int next in friends[cur])
+                {
+                    if(visited[next])
+                        continue;
+                        
+                    visited[next] = true;
+
+                    if(curLvl == level)
+                    {
+                        foreach(string s in watchedVideos[next])
+                        {
+                            if(!freq.ContainsKey(s))
+                                freq.Add(s, 0);
+
+                            freq[s]++;
+                        }
+                    }
+                    else
+                        que.Enqueue(next);
+                }
+            }
+        }
+
+        List<(string, int)> nameIds = new();
+        foreach(var kvp in freq)
+        {
+            nameIds.Add((kvp.Key, kvp.Value));
+        }
+
+        var ordered = nameIds.OrderBy(x=>x.Item2).ThenBy(x=>x.Item1).ToList();
+        List<string> res = new();
+
+        foreach(var cur in ordered)
+        {
+            res.Add(cur.Item1);
+        }
+
+        return res;
+    }
+}
