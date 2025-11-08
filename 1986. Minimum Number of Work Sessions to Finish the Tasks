@@ -1,0 +1,40 @@
+public class Solution {
+    private int[] workStatus;
+    private int res;
+    private int sessionT;
+    private void BackTracking(int idx, int[] tasks, int used)
+    {
+        if(idx < 0)
+        {
+            res = Math.Min(res, used);
+            return;
+        }
+
+        if(used >= res)
+            return;
+
+        int curT = tasks[idx];
+        for(int i = 0; i < used; i++)
+        {
+            if(workStatus[i] + curT <= sessionT)
+            {
+                workStatus[i] += curT;
+                BackTracking(idx-1, tasks, used);
+                workStatus[i] -= curT;
+            }
+        }
+
+        workStatus[used] = curT;
+        BackTracking(idx-1, tasks, used+1);
+        workStatus[used] = 0;
+    }
+    public int MinSessions(int[] tasks, int sessionTime) {
+        int len = tasks.Length;
+        sessionT = sessionTime;
+        workStatus = new int[len];
+        res = len;
+
+        BackTracking(len-1, tasks, 0);
+        return res;
+    }
+}
