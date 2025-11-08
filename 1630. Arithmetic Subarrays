@@ -1,0 +1,29 @@
+public class Solution {
+    public IList<bool> CheckArithmeticSubarrays(int[] nums, int[] l, int[] r) {
+        List<bool> result = new List<bool>();
+        
+        for(int i = 0; i < l.Length; i++) {
+            // Create a new sub-array for the current l,r
+            int offset = r[i] - l[i] + 1;
+            int[] temp = new int[offset];
+            Array.Copy(nums, l[i], temp, 0, offset);
+
+            result.Add(isArithmetic(temp));
+        }
+
+        return result;
+    }
+
+    private bool isArithmetic(int[] arr) {
+        Array.Sort(arr);
+        int diff = arr[0] - arr[1];
+
+        for(int i = 2; i < arr.Length; i++) {
+            if(diff != arr[i-1] - arr[i]) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+}
