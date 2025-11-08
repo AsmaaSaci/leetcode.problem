@@ -1,0 +1,45 @@
+public class AuthenticationManager {
+    private int liveCycle;
+    PriorityQueue<string, long> pq = new();
+    Dictionary<string, long> dict = new();
+    public AuthenticationManager(int timeToLive) {
+        liveCycle = timeToLive;   
+    }
+    
+    public void Generate(string tokenId, int currentTime) {
+        if(!dict.ContainsKey(tokenId))
+            dict.Add(tokenId, 0);
+
+        dict[tokenId] = currentTime+liveCycle;
+        pq.Enqueue(tokenId, dict[tokenId]);
+    }
+    
+    public void Renew(string tokenId, int currentTime) {
+        if(dict.ContainsKey(tokenId) && dict[tokenId] > currentTime)
+            dict[tokenId] = currentTime+liveCycle;
+    }
+    
+    public int CountUnexpiredTokens(int currentTime) {
+        while(pq.Count > 0 && pq.TryPeek(out string id, out long t))
+        {
+            if(t <= currentTime)
+            {
+                pq.Dequeue();
+                if(dict[id] > currentTime)
+                    pq.Enqueue(id, dict[id]);
+            }
+            else
+                break;
+        }
+
+        return pq.Count;
+    }
+}
+
+/**
+ * Your AuthenticationManager object will be instantiated and called as such:
+ * AuthenticationManager obj = new AuthenticationManager(timeToLive);
+ * obj.Generate(tokenId,currentTime);
+ * obj.Renew(tokenId,currentTime);
+ * int param_3 = obj.CountUnexpiredTokens(currentTime);
+ */
