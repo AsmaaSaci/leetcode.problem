@@ -1,0 +1,13 @@
+public class Solution {
+    public int MinFlips(string target) {
+        int ans = 0;
+        char c = '0';
+        for ( int i = 0 ; i < target.Length ; i++ ){
+            if ( target[i] != c ){
+                c = target[i];
+                ans++;
+            }
+        }
+        return ans;
+    }
+}
