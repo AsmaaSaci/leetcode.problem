@@ -1,0 +1,34 @@
+public class Solution {
+    public IList<bool> CheckIfPrerequisite(int numCourses, int[][] prerequisites, int[][] queries) {
+        var graph = new List<int>[numCourses];
+        for (int i = 0; i < numCourses; i++) {
+            graph[i] = new List<int>();
+        }
+        foreach (var prereq in prerequisites) {
+            graph[prereq[0]].Add(prereq[1]);
+        }
+        var reachable = new HashSet<int>[numCourses];
+        for (int i = 0; i < numCourses; i++) {
+            reachable[i] = new HashSet<int>();
+        }
+
+        void Dfs(int course, int current) {
+            foreach (var next in graph[current]) {
+                if (!reachable[course].Contains(next)) {
+                    reachable[course].Add(next);
+                    Dfs(course, next); 
+                }
+            }
+        }
+
+        for (int i = 0; i < numCourses; i++) {
+            Dfs(i, i);
+        }
+        var result = new List<bool>();
+        foreach (var query in queries) {
+            result.Add(reachable[query[0]].Contains(query[1]));
+        }
+
+        return result;
+    }
+}
