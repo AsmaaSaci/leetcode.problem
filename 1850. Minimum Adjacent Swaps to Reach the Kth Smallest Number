@@ -1,0 +1,76 @@
+public class Solution {
+    private int[] orgArr, permArr;
+    private int len;
+    private void BuildArray(string num)
+    {
+        for(int i = 0; i < len; i++)
+        {
+            int cur = num[i] - '0';
+            orgArr[i] = cur;
+            permArr[i] = cur;
+        }
+    }
+
+    private void GetNextPerm()
+    {
+        int pivot = len-2;
+        while(pivot >= 0 && permArr[pivot] >= permArr[pivot+1])
+        {
+            pivot--;
+        }
+
+        if(pivot < 0)
+        {
+            Array.Sort(permArr);
+            return;
+        }
+
+        int end = len-1;
+        while(end > pivot && permArr[end] <= permArr[pivot])
+        {
+            end--;
+        }
+
+        int tmp = permArr[pivot];
+        permArr[pivot] = permArr[end];
+        permArr[end] = tmp;
+
+        Array.Sort(permArr, pivot+1, len-pivot-1);
+    }
+
+    public int GetMinSwaps(string num, int k) {
+        len = num.Length;
+        orgArr = new int[len];
+        permArr = new int[len];
+        BuildArray(num);
+
+        for(int i = 0; i < k; i++)
+        {
+            GetNextPerm();
+        }
+
+        int swapCnt = 0;
+        for(int i = 0; i < len; i++)
+        {
+            if(permArr[i] != orgArr[i])
+            {
+                int j = i+1;
+                while(j < len && permArr[j] != orgArr[i])
+                {
+                    j++;
+                }
+
+                swapCnt += (j-i);
+                int tmp = permArr[j];
+                while(j > i)
+                {
+                    permArr[j] = permArr[j-1];
+                    j--;
+                }
+                permArr[i] = tmp;
+            }
+        }
+
+        return swapCnt;
+    }
+}
