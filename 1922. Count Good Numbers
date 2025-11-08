@@ -1,0 +1,22 @@
+public class Solution {
+    const long MOD = 1_000_000_007;
+
+    public int CountGoodNumbers(long n) {
+        long evenCount = (n + 1) / 2;
+        long oddCount = n / 2;
+
+        long ans = (PowMod(5, evenCount) * PowMod(4, oddCount)) % MOD;
+        return (int)ans;
+    }
+
+    private long PowMod(long baseVal, long exp) {
+        long result = 1;
+        baseVal %= MOD;
+        while (exp > 0) {
+            if ((exp & 1) == 1) result = (result * baseVal) % MOD;
+            baseVal = (baseVal * baseVal) % MOD;
+            exp >>= 1;
+        }
+        return result;
+    }
+}
