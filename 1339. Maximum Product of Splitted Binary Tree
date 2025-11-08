@@ -1,0 +1,18 @@
+public class Solution
+{
+    public int MaxProduct(TreeNode root)
+    {
+        List<int> sums = new();
+        int totalSum = GetSum(root);
+        long product = sums.Max(x => x * (long)(totalSum - x));
+        return (int)(product % 1_000_000_007);
+
+        int GetSum(TreeNode? treeNode)
+        {
+            if (treeNode is null) return 0;
+            int sum = treeNode.val + GetSum(treeNode.left) + GetSum(treeNode.right);
+            sums.Add(sum);
+            return sum;
+        }
+    }
+}
