@@ -1,0 +1,29 @@
+public class Solution {
+    public int CountSubstrings(string s, string t) {
+        int sLen = s.Length, tLen = t.Length, res = 0, diff = 0;
+
+        for(int i = 0; i < sLen; i++)
+        {
+            for(int j = 0; j < tLen; j++)
+            {
+                int k = 0;
+                diff = 0;
+                while(i+k < sLen && j+k < tLen)
+                {
+                    if(s[i+k] != t[j+k])
+                        diff++;
+
+                    if(diff == 1)
+                        res++;
+
+                    if(diff > 1)
+                        break;
+
+                    k++;
+                }
+            }
+        }
+
+        return res;
+    }
+}
