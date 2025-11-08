@@ -1,0 +1,27 @@
+public class Solution {
+    public int MaxFreq(string s, int maxLetters, int minSize, int maxSize) {
+        Dictionary<string,int> freq = new Dictionary<string,int>();
+        Dictionary<char,int> uniqueuChars = new Dictionary<char,int>();
+        int res = 0,p1 = 0;
+        for (int p2 = 0; p2 < s.Length;p2++)
+        {
+            if(!uniqueuChars.ContainsKey(s[p2]))uniqueuChars.Add(s[p2],0);
+            uniqueuChars[s[p2]]++;
+            if (p2 - p1 + 1 > minSize){
+                uniqueuChars[s[p1]]--;
+                if (uniqueuChars[s[p1]] == 0) uniqueuChars.Remove(s[p1]);
+                p1++;
+            }
+            if (p2 - p1 + 1 == minSize && uniqueuChars.Count <= maxLetters){           
+                string slice = s.Substring(p1,p2 - p1 + 1);
+                if (!freq.ContainsKey(slice)) freq.Add(slice, 0);
+                freq[slice]++;
+                res = Math.Max(freq[slice],res);
+            }
+        }
+        return res;
+    }
+}
+
+
+
