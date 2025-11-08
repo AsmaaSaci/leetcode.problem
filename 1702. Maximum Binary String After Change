@@ -1,0 +1,30 @@
+public class Solution {
+    public string MaximumBinaryString(string binary) {
+        int first1 = 0, idx = 0, ones = 0, zeros = 0, len = binary.Length;
+        while(idx < len && binary[idx] == '1')
+        {
+            idx++;
+        }
+
+        first1  = idx;
+
+        while(idx < len)
+        {
+            char c = binary[idx++];
+            if(c == '1')
+                ones++;
+            else
+                zeros++;
+        }
+
+        if(zeros <= 1) // no need to optimize
+            return binary;
+
+        first1 += (zeros-1);
+        string res = new string('1', first1) + "0";
+        if(ones > 0)
+            res += new string('1', ones);
+
+        return res;
+    }
+}
