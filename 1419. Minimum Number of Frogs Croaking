@@ -1,0 +1,40 @@
+public class Solution {
+    public int MinNumberOfFrogs(string croakOfFrogs) {
+        int maxF = 0;
+        Dictionary<char, int> sample = new Dictionary<char, int>(){{'c', 0}, {'r', 1}, {'o', 2}, {'a', 3}, {'k', 4}};
+        int[] freq = new int[5];
+
+        foreach (char c in croakOfFrogs)
+        {
+            int id = sample[c];
+            if (id > 0)
+            {
+                if (freq[id - 1] == 0)
+                    return -1;
+
+                if (id == 4)
+                {
+                    int sum = 0;
+                    for (int i = 0; i < 4; i++)
+                    {
+                        sum += freq[i];
+                    }
+
+                    maxF = Math.Max(maxF, sum);
+                }
+                
+                freq[id - 1]--;
+            }
+
+            freq[id]++;
+        }
+
+        for (int i = 0; i < 4; i++)
+        {
+            if (freq[i] > 0)
+                return -1;
+        }
+
+        return maxF;
+    }
+}
