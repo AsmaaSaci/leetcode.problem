@@ -1,0 +1,27 @@
+public class Solution {
+    public int NumSplits(string s) {
+        int[] rightFreq = new int[26];
+        int distinct = 0, res = 0;
+        foreach(char c in s)
+        {
+           if(++rightFreq[c-'a'] == 1)
+                distinct++;
+        }
+
+        HashSet<char> leftChars = new();
+        foreach(char c in s)
+        {
+            leftChars.Add(c);
+            if(--rightFreq[c-'a'] == 0)
+                distinct--;
+
+            if(leftChars.Count == distinct)
+                res++;
+
+            if(leftChars.Count > distinct)
+                break;
+        }
+
+        return res;
+    }
+}
