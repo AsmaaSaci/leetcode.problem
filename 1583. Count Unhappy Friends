@@ -1,0 +1,38 @@
+public class Solution
+{
+    public int UnhappyFriends(int n, int[][] preferences, int[][] pairs)
+    {
+        int[,] rank = new int[n, n];
+        int[] currentPartner = new int[n];
+
+        for (int i = 0; i < n; i++)
+        {
+            for (int j = 0; j < preferences[i].Length; j++)
+            {
+                rank[i, preferences[i][j]] = j;
+            }
+        }
+        for (int i = 0; i < pairs.Length; i++)
+        {
+            currentPartner[pairs[i][0]] = pairs[i][1];
+            currentPartner[pairs[i][1]] = pairs[i][0];
+        }
+
+        int unhappyCount = 0;
+        for (int i = 0; i < n; i++)
+        {
+            int partnerRank = rank[i, currentPartner[i]];
+            for (int j = 0; j < partnerRank; j++)
+            {
+                int newPartner = preferences[i][j];
+                int newPartnerPartner = currentPartner[newPartner];
+                if (rank[newPartner, i] < rank[newPartner, newPartnerPartner])
+                {
+                    unhappyCount++;
+                    break;
+                }
+            }
+        }
+        return unhappyCount;
+    }
+}
