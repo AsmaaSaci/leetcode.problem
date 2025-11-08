@@ -1,0 +1,33 @@
+public class Solution {
+    public int BeautySum(string s) 
+    {
+        var result = 0;
+        for(int i = 0; i < s.Length; i++)
+        {
+            var chars = new int[26];
+            for(int j = i; j < s.Length; j++)
+            {
+                chars[s[j] - 'a']++;
+                result += CalculateBeauty(chars);
+            }
+        }
+
+        return result;
+    }
+
+    private int CalculateBeauty(int[] chars)
+    {
+        var min = int.MaxValue;
+        var max = int.MinValue;
+
+        for(int i = 0; i < chars.Length; i++)
+        {
+            if(chars[i] != 0)
+                min = Math.Min(min, chars[i]);
+
+            max = Math.Max(max, chars[i]);
+        }
+
+        return max - min;
+    }
+}
