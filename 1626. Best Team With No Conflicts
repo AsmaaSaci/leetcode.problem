@@ -1,0 +1,34 @@
+//Create a model for player
+public class Player{
+    public int score;
+    public int age;
+}
+
+public class Solution {
+    //Initialise the list for storing both score and ages as single item
+    public List<Player> teamList=new List<Player>();
+    public int BestTeamScore(int[] scores, int[] ages) {
+        int length=ages.Length;
+        int result=0;
+        //Initialise the without conflict scored list of players array
+        int [] dp=new int[length];
+        for(int i=0;i<length;i++){
+            var item=new Player{score=scores[i],age=ages[i]};
+            teamList.Add(item);
+        }
+        //Sort by ascending order the List by age and then by score 
+        teamList=teamList.OrderBy(team=>team.age).ThenBy(team=>team.score).ToList();
+        for(int i=0;i<length;i++){
+            dp[i] = teamList[i].score;
+            for(int j = 0; j < i; j++) {
+                if(teamList[j].age==teamList[i].age){
+                    dp[i]=Math.Max(dp[i],dp[j]+teamList[i].score);
+                }
+                else if(teamList[j].score <= teamList[i].score && teamList[j].age<teamList[i].age)
+                    dp[i] = Math.Max(dp[i], dp[j] + teamList[i].score);
+            }
+            result = Math.Max(result, dp[i]);
+        }
+        return result;;
+    }
+}
