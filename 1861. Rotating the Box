@@ -1,0 +1,60 @@
+public class Solution {
+        public char[][] RotateTheBox(char[][] box)
+        {
+            //loop though each row 
+            for (var i = 0; i < box.Length; i++)
+            {
+                //apply gravity to each row 
+                ApplyGravity(box[i]);
+            }
+            //once we applied the gravity then we should be rotating 90deg and return it 
+            return Rotate90Degree(box);
+        }
+
+        /// <summary>
+        /// this method will apply gravity and move objects to left 
+        /// </summary>
+        /// <param name="row"></param>
+        private void ApplyGravity(char[] row)
+        {
+            int freePos = row.Length - 1;
+
+            for (var i = row.Length - 1; i >= 0; i--)
+            {
+                if (row[i] == '*') //stones cannot fall on or after this 
+                {
+                    freePos = i - 1; //so update free position to before this
+                }
+                else if (row[i] == '#') //i need to move 
+                {
+                    if (freePos != i) //if there is a free space then let it fall 
+                    {
+                        row[freePos] = row[i];
+                        row[i] = '.';
+                    }
+                    freePos--; //stones wont fall on this so do --
+                }
+            }
+        }
+        /// <summary>
+        /// This method will rotate given matrix by 90deg 
+        /// </summary>
+        /// <param name="box"></param>
+        /// <returns></returns>
+        private char[][] Rotate90Degree(char[][] box)
+        {
+            //as we are rotating 90 deg rows will become columns and colums will be rows
+            char[][] rotated = new char[box[0].Length][];
+            for (var row = 0; row < box[0].Length; row++)
+            {
+                rotated[row] = new char[box.Length];
+                for (var col = 0; col < box.Length; col++)
+                {
+                    //as we are rotating 90 deg we need to make sure to swap row and column while copying
+                    //box.Length - j - 1 -- what ever we have at the bottom that will come to top
+                    rotated[row][col] = box[box.Length - col - 1][row];
+                }
+            }
+            return rotated;
+        }  
+}
