@@ -1,0 +1,32 @@
+public class Solution {
+    public int CountHomogenous(string s) {
+        int MOD = 1000000007;
+        int res = 0, i = 0, n = s.Length;
+        
+        while(i < n) {
+            int j = i+1;
+            char c = s[i];
+
+            // Finding Substring having same characters.
+            while(j < n && s[j] == c) {
+                j++;
+            }
+
+            // Count of Substring having same characters
+            long x = j-i;
+
+            // Using the simple formula (n*(n+1))/2, we can form all the
+            // valid homogenous substring because it will be having same charaters.
+            long temp = ((x * (x+1)) / 2l) % MOD; 
+
+            // Adding the count of valid homogenous substring to the result by MOD 
+            // to avoid overflow issue. (Given in question description)
+            res = (((res % MOD) + (int)temp) % MOD);
+
+            // Continue to next iteration for next valid homogenous substring
+            i = j;
+        }
+        
+        return res;
+    }
+}
