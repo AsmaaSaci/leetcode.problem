@@ -1,0 +1,67 @@
+public class Solution {
+    public int MinOperations(int[] nums) {
+        Dictionary<int, int> evenFreq = new(), oddFreq = new();
+        int res = 0;
+        foreach(int n in nums)
+        {
+            if(n == 0)
+                continue;
+
+            if(n%2 == 0)
+            {
+                evenFreq.TryAdd(n, 0);
+                evenFreq[n]++;
+            }
+            else
+            {
+                oddFreq.TryAdd(n, 0);
+                oddFreq[n]++;
+            }
+        }
+
+        while(evenFreq.Count > 0 || oddFreq.Count > 0)
+        {
+            if(oddFreq.Count > 0)
+            {
+                foreach(var kvp in oddFreq)
+                {
+                    int key = kvp.Key-1, cnt = kvp.Value;
+                    res += cnt;
+                    if(key == 0)
+                        continue;
+                        
+                    evenFreq.TryAdd(key, 0);
+                    evenFreq[key] += cnt;
+                }
+
+                oddFreq.Clear();
+            }
+            else
+            {
+                res++;
+                Dictionary<int, int> tmp = new();
+                foreach(var kvp in evenFreq)
+                {
+                    int key = kvp.Key/2, cnt = kvp.Value;
+                    if(key == 0)
+                        continue;
+
+                    if(key%2 == 1)
+                    {
+                        oddFreq.TryAdd(key, 0);
+                        oddFreq[key] += cnt;
+                    }
+                    else
+                    {
+                        tmp.TryAdd(key, 0);
+                        tmp[key] += cnt;
+                    }
+                }
+
+                evenFreq = new Dictionary<int, int>(tmp);
+            }
+        }
+
+        return res;
+    }
+}
