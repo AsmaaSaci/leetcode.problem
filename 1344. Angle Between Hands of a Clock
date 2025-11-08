@@ -1,0 +1,16 @@
+public class Solution {
+    public double AngleClock(int hour, int minutes) {
+        if(hour == 12)
+            hour = 0;
+
+        double hP = (hour*5)+ (double)minutes*5/60;
+        double dist = minutes-hP;
+        dist = Math.Abs(dist);
+
+        double minDegree = 360;
+        minDegree = Math.Min(minDegree, dist*6);
+        minDegree = Math.Min(minDegree, (60-dist)*6);
+
+        return minDegree;
+    }
+}
