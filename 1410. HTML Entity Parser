@@ -1,0 +1,33 @@
+public class Solution {
+    public string EntityParser(string text) {
+        Dictionary<string, string> dict = new Dictionary<string, string>(){{"&quot;", "\""}, {"&apos;", "\'"}, {"&amp;", "&"}, {"&gt;", ">"}, {"&lt;", "<"}, {"&frasl;", "/"}};
+        StringBuilder res = new StringBuilder(text);
+        int idx = res.Length-1;
+
+        while(idx >= 0)
+        {
+            char c = res[idx];
+            if(c == ';')
+            {
+                int preId = idx-1;
+                while(preId >= 0 && idx-preId < 6 && res[preId] != '&')
+                {
+                    preId--;
+                }
+
+                if(preId >= 0 && res[preId] == '&')
+                {
+                    string s = text.Substring(preId, idx-preId+1);
+                    if(dict.ContainsKey(s))
+                        res.Replace(s, dict[s], preId, idx-preId+1);
+
+                    idx = preId;
+                }
+            }
+
+            idx--;
+        }
+
+        return res.ToString();
+    }
+}
