@@ -1,0 +1,36 @@
+public class Solution {
+    public int LongestBeautifulSubstring(string word) {
+        HashSet<char> vols = new HashSet<char>("aeiou");
+        int maxCnt = 0, len = word.Length, mask = 0, cnt = 0;
+        Dictionary<char, int> dict = new Dictionary<char, int>{{'a', 0}, {'e', 1}, {'i', 2}, {'o', 3}, {'u', 4}};
+        for (int i = 0; i < len; i++)
+        {
+            char c = word[i];
+            if (!vols.Contains(c))
+            {
+                mask = 0;
+                cnt = 0;
+            }
+            else
+            {
+                int id = dict[c];
+                int tmp = (1 << (id + 1) )- 1;
+                if (mask > tmp)
+                {
+                    mask = (1 << id);
+                    cnt = 1;
+                }
+                else
+                {
+                    cnt++;
+                    mask |= (1 << id);
+                    
+                    if (mask == (1 << 5) - 1)
+                        maxCnt = Math.Max(maxCnt, cnt);
+                }
+            }
+        }
+
+        return maxCnt;
+    }
+}
