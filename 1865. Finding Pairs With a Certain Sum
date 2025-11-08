@@ -1,0 +1,29 @@
+using System.Collections.Generic;
+
+class FindSumPairs {
+    int[] n1, n2;
+
+    public FindSumPairs(int[] nums1, int[] nums2) {
+        n1 = nums1;
+        n2 = nums2;
+    }
+
+    public void Add(int index, int val) {
+        n2[index] += val;
+    }
+
+    public int Count(int tot) {
+        Dictionary<int, int> freq = new Dictionary<int, int>();
+        foreach (int y in n2) {
+            if (!freq.ContainsKey(y)) freq[y] = 0;
+            freq[y]++;
+        }
+
+        int res = 0;
+        foreach (int x in n1) {
+            int need = tot - x;
+            if (freq.ContainsKey(need)) res += freq[need];
+        }
+        return res;
+    }
+}
