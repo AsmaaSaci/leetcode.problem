@@ -1,0 +1,25 @@
+public class Solution {
+    public int[] ClosestDivisors(int num) {
+        int[] arr= new int[2];
+        int k=Int32.MaxValue;
+        for(int i=1;i<=(num+2)/i;i++){
+            if((num+1)%i==0){
+                int p=(num+1)/i;
+                if(Math.Abs(i-p)<k){
+                    k=Math.Abs(i-p);
+                    arr[0]=i;
+                    arr[1]=p;
+                }
+            }
+            if((num+2)%i==0){
+                int q=(num+2)/i;
+                if(Math.Abs(i-q)<k){
+                    k=Math.Abs(i-q);
+                    arr[0]=i;
+                    arr[1]=q;
+                }
+            }
+        }
+        return arr;
+    }
+}
