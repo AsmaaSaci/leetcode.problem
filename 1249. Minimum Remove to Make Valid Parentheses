@@ -1,0 +1,45 @@
+public class Solution {
+    public string MinRemoveToMakeValid(string s) {
+        
+        int openCount = 0;
+        int balance = 0;
+        StringBuilder chars = new StringBuilder();
+
+        // First pass: add all characters and parenthesis 
+        // closes that have a complement
+        for(int i = 0; i < s.Length; i++) {
+            char character = s[i];
+
+            if(character == '(') {
+                openCount++;
+                balance++;
+            } else if (character == ')') {
+                if(balance == 0) {
+                    continue;
+                }
+                balance--;
+            }
+
+            chars.Append(character);
+        }
+
+        StringBuilder result = new StringBuilder();
+        int opensToKeep = openCount - balance;
+
+        // // Second pass: Keep only the required opening parentheses
+        for(int i = 0; i < chars.Length; i++) {
+            char character = chars[i];
+
+            if(character == '(') {
+                opensToKeep--;
+                if(opensToKeep < 0) {
+                    continue;
+                }
+            }
+            result.Append(character);
+        }
+
+        return result.ToString();
+        
+    }
+}
