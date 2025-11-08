@@ -1,0 +1,12 @@
+public class Solution {
+    public int MinPartitions(string n) {
+      int max = 0;
+        foreach (var item in n)
+        {
+            int temp = item - '0';
+            if(temp > max) max = temp;
+        }
+
+        return max;
+    }
+}
