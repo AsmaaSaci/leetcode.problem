@@ -1,0 +1,36 @@
+public class Solution {
+    private bool IsLarger(string a, string b)
+    {
+        int lenA = a.Length, lenB = b.Length, idx = 0;
+        while(idx < lenA && idx < lenB)
+        {
+            if(a[idx] != b[idx])
+                return a[idx] > b[idx];
+
+            idx++;
+        }
+
+        return idx < lenA;
+    }
+    private Dictionary<string, string> dp = new();
+    public string LargestMerge(string word1, string word2) {
+        int len1 = word1.Length, len2 = word2.Length, idx1 = 0, idx2 = 0;
+   
+        StringBuilder res = new StringBuilder();
+        while(idx1 < len1 && idx2 < len2)
+        {
+           if(IsLarger(word1.Substring(idx1), word2.Substring(idx2)))
+                res.Append(word1[idx1++]);
+            else
+                res.Append(word2[idx2++]);
+        }
+
+        if(idx1 < len1)
+            res.Append(word1.Substring(idx1));
+
+        if(idx2 < len2)
+            res.Append(word2.Substring(idx2));
+
+        return res.ToString();
+    }
+}
