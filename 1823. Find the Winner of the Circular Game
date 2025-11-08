@@ -1,0 +1,15 @@
+public class Solution {
+    public int FindTheWinner(int n, int k) {
+        List<int> friends = new List<int> ();
+        for (int i = 1; i <= n; i ++)
+            friends.Add(i);
+
+        int friend = (k - 1) % friends.Count;
+        while (friends.Count > 1) {
+            friends.RemoveAt(friend);
+            friend = (friend + k - 1) % friends.Count;
+        }
+
+        return friends[0];
+    }
+}
