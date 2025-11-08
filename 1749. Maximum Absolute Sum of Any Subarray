@@ -1,0 +1,21 @@
+public class Solution {
+    public int MaxAbsoluteSum(int[] nums) {
+        var max = int.MinValue;
+        var curr = 0;
+        foreach(var v in nums){
+            curr += v;
+            curr = Math.Max(curr, v);
+            max = Math.Max(max, curr);
+        }
+
+        var min = int.MaxValue;
+        curr = 0;
+        foreach(var v in nums){
+            curr += v;
+            curr = Math.Min(curr,v);
+            min=Math.Min(min, curr);
+        }
+
+        return Math.Max(max, -min);
+    }
+}
