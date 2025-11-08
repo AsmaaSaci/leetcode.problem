@@ -1,0 +1,24 @@
+public class Solution {
+    public string ArrangeWords(string text) {
+        string t2 = text.ToLower();
+        string[] split = t2.Split([' '], StringSplitOptions.RemoveEmptyEntries);
+
+        List<(int, string)> listS = new();
+        for(int i = 0; i < split.Length; i++)
+        {
+            listS.Add((i, split[i]));
+        }
+
+        listS = listS.OrderBy(x=>x.Item2.Length).ThenBy(x=>x.Item1).ToList();
+        StringBuilder res = new StringBuilder();
+        bool isFirst = true;
+        foreach((int idx, string s) in listS)
+        {
+            res.Append((isFirst ? "" : " ") + s);
+            isFirst = false;
+        }
+
+        res[0] = char.ToUpper(res[0]);
+        return res.ToString();
+    }
+}
