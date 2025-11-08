@@ -1,0 +1,35 @@
+using System;
+using System.Collections.Generic;
+
+public class Solution {
+    public int CountNicePairs(int[] nums) {
+        Dictionary<int, int> numbers = new Dictionary<int, int>();
+
+        foreach (int num in nums) {
+            int temporaryNumber = num - Reverse(num);
+
+            if (numbers.ContainsKey(temporaryNumber)) {
+                numbers[temporaryNumber]++;
+            } else {
+                numbers[temporaryNumber] = 1;
+            }
+        }
+
+        long result = 0;
+        int mod = 1000000007;
+        foreach (int value in numbers.Values) {
+            result = (result % mod + ((long)value * ((long)value - 1) / 2)) % mod;
+        }
+
+        return (int)result;
+    }
+
+    private int Reverse(int number) {
+        int reversedNumber = 0;
+        while (number > 0) {
+            reversedNumber = reversedNumber * 10 + number % 10;
+            number /= 10;
+        }
+        return reversedNumber;
+    }
+}
