@@ -1,0 +1,38 @@
+using System;
+using System.Collections.Generic;
+
+public class Solution {
+    public int[] BestCoordinate(int[][] towers, int radius) {
+        int maxQuality = 0;
+        int[] bestCoordinate = new int[2];
+        double radiusSquared = radius * radius;
+
+        // Iterate through all possible coordinates within bounds
+        for (int x = 0; x <= 50; x++) {
+            for (int y = 0; y <= 50; y++) {
+                int currentQuality = 0;
+
+                foreach (var tower in towers) {
+                    int tx = tower[0], ty = tower[1], tq = tower[2];
+                    double distanceSquared = (x - tx) * (x - tx) + (y - ty) * (y - ty);
+
+                    // If within reachable radius, calculate the signal quality
+                    if (distanceSquared <= radiusSquared) {
+                        double distance = Math.Sqrt(distanceSquared);
+                        currentQuality += (int)Math.Floor(tq / (1 + distance));
+                    }
+                }
+
+                // Update best coordinate if a higher quality is found
+                if (currentQuality > maxQuality || 
+                    (currentQuality == maxQuality && (x < bestCoordinate[0] || (x == bestCoordinate[0] && y < bestCoordinate[1])))) {
+                    maxQuality = currentQuality;
+                    bestCoordinate[0] = x;
+                    bestCoordinate[1] = y;
+                }
+            }
+        }
+
+        return bestCoordinate;
+    }
+}
