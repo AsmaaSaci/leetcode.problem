@@ -1,0 +1,26 @@
+public class Solution {
+    private int GCD(int a, int b)
+    {
+        if(a == b)
+            return a;
+        else if(a == 0 || b == 0)
+            return a|b;
+        else if(a > b)
+            return GCD(a-b, b);
+        else
+            return GCD(a, b-a);
+    }
+    public IList<string> SimplifiedFractions(int n) {
+        List<string> res = new();
+        for(int i = 1; i < n; i++)
+        {
+            for(int j = i+1; j <= n; j++)
+            {
+                if(GCD(i,j) == 1)
+                    res.Add(i+"/"+j);
+            }
+        }
+
+        return res;
+    }
+}
