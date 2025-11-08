@@ -1,0 +1,49 @@
+public class Solution {
+    public int MinimumJumps(int[] forbidden, int a, int b, int x) {
+        // 1. Build 2D array with size b+x+a;
+        int size = 6000;
+        bool[,] visited = new bool[size, 2];
+
+        foreach(int id in forbidden)
+        {
+            visited[id, 0] = true;
+            visited[id, 1] = true;
+        }
+
+        Queue<int[]> que = new();
+        que.Enqueue([0, 0]);
+        int steps = 0;
+        while(que.Count > 0)
+        {
+            int qLen = que.Count;
+            for(int i = 0; i < qLen; i++)
+            {
+                int[] cur = que.Dequeue();
+                int curId = cur[0], backCnt = cur[1];
+                if(curId == x)
+                    return steps;
+
+                if(visited[curId, backCnt]) // skip visited id
+                    continue;
+
+                visited[curId, backCnt] = true; // mark visited
+                
+                // to right:
+                if(curId+a < size && !visited[curId+a, 0])
+                {
+                    que.Enqueue([curId+a, 0]);
+                }
+
+                // to left:
+                if(curId-b >= 0 && backCnt == 0 && !visited[curId-b, 1])
+                {
+                    que.Enqueue([curId-b, 1]);
+                }
+            }
+            
+            steps++;
+        }
+
+        return -1;
+    }
+}
