@@ -1,0 +1,5 @@
+public class Solution {
+    public int StoneGameVI(int[] a, int[] b) {
+        return Math.Sign(Enumerable.Range(0, a.Length).OrderBy(x =>-a[x]-b[x]).Select((x,i)=>i%2==0?a[x]:-b[x]).Sum());        
+    }
+}
