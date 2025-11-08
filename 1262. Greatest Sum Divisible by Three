@@ -1,0 +1,20 @@
+public class Solution {
+    public int MaxSumDivThree(int[] nums) {
+        int[] dp = new int[3];
+        foreach (int num in nums) 
+        {
+            int[] temp = new int[dp.Length];
+            for(int i = 0; i < temp.Length; i++)
+            {
+                temp[i] = dp[i];
+            }
+            foreach (int sum in temp) 
+            {
+                int k = (sum + num) % 3;
+                dp[k] = Math.Max(dp[k], sum + num);
+            }
+        }
+        
+        return dp[0];
+    }
+}
