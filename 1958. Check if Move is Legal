@@ -1,0 +1,37 @@
+public class Solution {
+    private bool IsValid(int x, int y)
+    {
+        return x >= 0 && y >= 0 && x < 8 && y < 8;
+    }
+
+    public bool CheckMove(char[][] board, int rMove, int cMove, char color) {
+        // four base direction:
+        int[][] dirs = [[0, 1], [0, -1], [1, 0], [-1, 0], [1, 1], [-1, -1], [1, -1], [-1, 1]];
+        char endC = color, inC = endC == 'B' ? 'W' : 'B';
+        for(int p = 0; p < dirs.Length; p++)
+        {
+            int dx = dirs[p][0], dy = dirs[p][1], offset = 1;
+            int optCnt = 0, endCnt = 1;
+            while(IsValid(rMove+ dx*offset, cMove+dy*offset))
+            {
+                char c = board[rMove+ dx*offset][cMove+dy*offset];
+                if(c != inC)
+                {
+                    if(c == endC)
+                        endCnt++;
+
+                    break;
+                }
+                else
+                    optCnt++;
+                
+                offset++;
+            }
+
+            if(optCnt > 0 && endCnt == 2)
+                return true;
+        }
+
+        return false;
+    }
+}
