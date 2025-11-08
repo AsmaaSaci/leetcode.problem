@@ -1,0 +1,24 @@
+public class Solution {
+    public int[] FindBall(int[][] grid) {
+        int m = grid.Length;
+        int n = grid[0].Length;
+        int[] result = new int[n];
+
+        for (int i = 0; i < n; i++) {
+            int col = i;
+            for (int row = 0; row < m; row++) {
+                int nextCol = col + grid[row][col];
+
+                // Check if the ball gets stuck or moves out of bounds
+                if (nextCol < 0 || nextCol >= n || grid[row][col] != grid[row][nextCol]) {
+                    col = -1;
+                    break;
+                }
+                col = nextCol;
+            }
+            result[i] = col;
+        }
+
+        return result;
+    }
+}
