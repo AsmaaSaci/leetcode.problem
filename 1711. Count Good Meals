@@ -1,0 +1,37 @@
+public class Solution {
+    public int CountPairs(int[] deliciousness) {
+        
+        // Raj Thomas 5th Aug 2025 10:39AM IST
+
+        // main case
+        int MOD = 1_000_000_007;
+        Dictionary<int, int> freq = new();
+        int count = 0;
+
+        foreach(int d in deliciousness) {
+
+            int power = 1;
+
+            while(power <= (1 << 21)) {
+
+                int value = power - d;
+
+                if(freq.ContainsKey(value)) {
+                    count = (count + freq[value]) % MOD;
+                }
+
+                power = power << 1;
+            }
+
+            if(freq.ContainsKey(d)) {
+                freq[d]++;
+            }
+            else {
+                freq[d] = 1;
+            }
+        }
+
+        return count;
+
+    }
+}
