@@ -1,0 +1,30 @@
+public class BrowserHistory {
+
+    int pointer = 0;
+    int max = 0;
+    List<string> history = new List<string>();
+    
+    public BrowserHistory(string homepage) {
+        history.Add(homepage);
+    }
+    
+    public void Visit(string url) {
+        pointer++;
+        max = pointer;
+
+        if(history.Count() > pointer)
+            history[pointer] = url;
+        else
+            history.Add(url);
+    }
+    
+    public string Back(int steps) {
+        pointer = Math.Max(pointer - steps, 0);
+        return history[pointer];
+    }
+    
+    public string Forward(int steps) {
+        pointer = Math.Min(max, pointer + steps);
+        return history[pointer];
+    }
+}
