@@ -1,0 +1,66 @@
+public class Solution {
+    public int MinSideJumps(int[] obstacles) {
+        int n = obstacles.Length;
+        Queue<(int d, int l, int j)> qu = new();
+        qu.Enqueue((0,2,0));
+        HashSet<(int, int)> passed = new();
+        passed.Add((0,2));
+
+        while(qu.Count>0){
+            var(d, l, j) = qu.Dequeue();
+            if(d==n-1) return j;
+
+            // side jump
+            for(int nl = 1; nl<=3; nl++)
+                if(nl!=l && obstacles[d]!=nl && !passed.Contains((d, nl)) )
+                    {qu.Enqueue((d, nl, j+1)); passed.Add((d, nl));}
+            
+            // Forward jump
+            int newD = d;
+            while(newD<n && obstacles[newD]!=l)
+                newD++;
+            if(newD>d+1)
+                {qu.Enqueue((newD-1, l, j)); passed.Add((newD-1, l));}
+
+        }
+
+        return -1;
+    }
+}
+
+/*
+TOTAL JUMPS
+public class Solution {
+    public int MinSideJumps(int[] obstacles) {
+        int n = obstacles.Length;
+        Queue<(int d, int l)> qu = new();
+        qu.Enqueue((0,2));
+        HashSet<(int, int)> passed = new();
+        passed.Add((0,2));
+
+        int step = 0;
+        while(qu.Count>0){
+            int c = qu.Count;
+            for(int i=0; i<c; i++){
+                var(d, l) = qu.Dequeue();
+                if(d==n) return step;
+
+                // side jump
+                for(int nl = 1; nl<=3; nl++)
+                    if(nl!=l && obstacles[d]!=nl && !passed.Contains((d, nl)) )
+                        {qu.Enqueue((d, nl)); passed.Add((d, nl));}
+                
+                int newD = d;
+                while(newD<n && obstacles[newD]!=l)
+                    newD++;
+                if(newD!=d+1)
+                    {qu.Enqueue((newD, l)); passed.Add((newD, l));}
+                        
+            }
+            step++;
+        }
+
+        return -1;
+    }
+}
+*/
