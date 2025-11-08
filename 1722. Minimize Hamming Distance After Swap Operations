@@ -1,0 +1,88 @@
+public class Solution {
+    private int len;
+    private HashSet<int>[] adjs;
+    private void BuildConnection(int[][] swaps)
+    {
+        adjs= new HashSet<int>[len];
+        for(int i = 0; i < len; i++)
+        {
+            adjs[i] = new HashSet<int>();
+        }
+
+        foreach(int[] cur in swaps)
+        {
+            int from = cur[0], to = cur[1];
+            adjs[from].Add(to);
+            adjs[to].Add(from);
+        }
+    }
+
+    private int CheckDist(int[] src, int[] tar, HashSet<int> ids)
+    {
+        Dictionary<int, int> freq = new();
+        foreach(int i in ids)
+        {
+            int cur = src[i];
+            freq.TryAdd(cur, 0);
+            freq[cur]++;
+        }
+
+        foreach(int i in ids)
+        {
+            int cur = tar[i];
+            if(freq.ContainsKey(cur))
+            {
+                if(--freq[cur] == 0)
+                    freq.Remove(cur);
+            }
+        }
+
+        int res = 0;
+        foreach(var kvp in freq)
+        {
+            res += kvp.Value;
+        }
+
+        return res;
+    }
+
+    public int MinimumHammingDistance(int[] source, int[] target, int[][] allowedSwaps) {
+        len = source.Length;
+        BuildConnection(allowedSwaps);
+        bool[] visited = new bool[len];
+        int res = 0;
+
+        for(int i = 0; i < len; i++)
+        {
+            if(visited[i])
+                continue;
+
+            Queue<int> que = new Queue<int>([i]);
+            HashSet<int> ids = new();
+            while(que.Count > 0)
+            {
+                int qLen = que.Count;
+                for(int q = 0; q < qLen; q++)
+                {
+                    int curId = que.Dequeue();
+                    if(visited[curId])
+                        continue;
+
+                    ids.Add(curId);
+                    visited[curId] = true;
+                    foreach(int nextId in adjs[curId])
+                    {
+                        if(!visited[nextId])
+                        {
+                            que.Enqueue(nextId);
+                        }
+                    }
+                }
+            }
+
+            res += CheckDist(source, target, ids);
+        }
+
+        return res;
+    }
+}
