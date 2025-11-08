@@ -1,0 +1,43 @@
+public class Solution {
+    public int MaxValue(int n, int index, int maxSum) {
+        int start = 0;
+        int end = maxSum;
+
+        while(start < end){
+            int mid = 1 + (start+end)/2;
+            var sum = GetSum(index, mid-1) + GetSum(n-index, mid);
+
+            // Console.WriteLine($"start={start}, end={end} sum={sum}, leftSum = {GetSum(index, mid)}, rightSum={GetSum(n-index, mid)}");
+
+            if(sum == maxSum){
+                return mid;
+            }
+            else if(sum > maxSum){
+                end = mid-1;
+            }
+            else{
+                start = mid;
+            }
+        }
+
+        return start;
+    }
+
+    private long GetSum(int index, int cur){
+        if(cur == index){
+            return (cur%2 == 0) ? (long)(cur/2)*(cur+1) : (long)((cur+1)/2)*cur;
+        }
+        else if(cur < index){
+            return (index - cur) + ((cur%2 == 0) ? (long)(cur/2)*(cur+1) : (long)((cur+1)/2)*cur);
+        }
+        else{
+            int rem = cur - index;
+
+            if(index%2 == 0){
+                return (long)(index/2)*(cur+rem+1);
+            }
+
+            return (long)((cur+rem+1)/2)*index;
+        }
+    }
+}
