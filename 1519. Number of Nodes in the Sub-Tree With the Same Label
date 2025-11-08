@@ -1,0 +1,41 @@
+public class Solution {
+    public int[] CountSubTrees(int n, int[][] edges, string labels) {
+        
+        var graph = new List<IList<int>>();
+        var res = new int[n];
+
+        while(graph.Count < n)
+            graph.Add(new List<int>());
+
+        foreach(var edge in edges) {
+            graph[edge[0]].Add(edge[1]);
+            graph[edge[1]].Add(edge[0]);
+        }
+
+        DFS(graph, labels, 0, -1, ref res);
+
+        return res;
+    }
+
+    private int[] DFS(List<IList<int>> graph, string labels, int curr, int prev, ref int[] res) {
+
+        var bucket = new int[26];
+
+        bucket[labels[curr] - 'a']++;
+
+        foreach(var next in graph[curr]) {
+
+            if (next == prev)
+                continue;
+
+            var temp = DFS(graph, labels, next, curr, ref res);
+
+            for(int i = 0; i < 26; i++) 
+                bucket[i] += temp[i];
+        }
+
+        res[curr] = bucket[labels[curr]-'a'];
+
+        return bucket;
+    }
+}
