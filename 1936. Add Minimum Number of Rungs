@@ -1,0 +1,17 @@
+public class Solution {
+    public int AddRungs(int[] rungs, int dist)
+    {	
+        int addedRung = 0, prev = 0, diff = 0;
+        foreach (var rung in rungs)
+        {
+            diff = rung - prev;
+            if (diff > dist)
+            {
+                addedRung += (diff - 1) / dist;
+            }
+            prev = rung;
+        }
+        return addedRung;
+    }
+
+}
