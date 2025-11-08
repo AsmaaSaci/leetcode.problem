@@ -1,0 +1,14 @@
+public class Solution {
+    public int MinElements(int[] nums, int limit, int goal) {
+        long sum = 0;
+        foreach(int n in nums)
+        {
+            sum += n;
+        }
+
+        sum = Math.Abs(goal - sum);
+
+        long res = sum/limit + (sum%limit == 0 ? 0 : 1);
+        return (int)res;
+    }
+}
