@@ -1,0 +1,20 @@
+public class Solution {
+    public int[] XorQueries(int[] arr, int[][] queries) {
+        int n = arr.Length;
+        int[] prefix = new int[n];
+        prefix[0] = arr[0];
+
+        for (int i = 1; i < n; i++) {
+            prefix[i] = prefix[i - 1] ^ arr[i];
+        }
+
+        int[] res = new int[queries.Length];
+        for (int i = 0; i < queries.Length; i++) {
+            int l = queries[i][0];
+            int r = queries[i][1];
+            res[i] = l == 0 ? prefix[r] : prefix[r] ^ prefix[l - 1];
+        }
+
+        return res;
+    }
+}
