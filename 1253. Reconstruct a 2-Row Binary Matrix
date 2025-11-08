@@ -1,0 +1,36 @@
+public class Solution {
+    public IList<IList<int>> ReconstructMatrix(int upper, int lower, int[] colsum) {
+        int twos = 0, ones = 0;
+        foreach (int col in colsum) {
+            ones += col & 1;
+            twos += col & 2;
+        }
+        twos /= 2;
+        upper -= twos;
+        lower -= twos;
+        if (upper < 0 || lower < 0 || upper + lower != ones)
+            return new int[0][];
+        var result = new int[2][];
+        result[0] = new int[colsum.Length];
+        int[] uRow = result[0];
+        result[1] = new int[colsum.Length];
+        int[] lRow = result[1];
+        if (uRow.Length == colsum.Length && lRow.Length == colsum.Length) {
+            for (int i = 0; i < colsum.Length; ++i) {
+                switch (colsum[i]) {
+                    case 1:
+                        if (upper-- > 0)
+                            uRow[i] = 1;
+                        else
+                            lRow[i] = 1;
+                        break;
+                    case 2:
+                        uRow[i] = 1;
+                        lRow[i] = 1;
+                        break;
+                }
+            }
+        }
+        return result;
+    }
+}
