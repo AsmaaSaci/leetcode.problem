@@ -1,0 +1,39 @@
+public class Solution {
+    public int[] MinDifference(int[] nums, int[][] queries) {
+        int len = nums.Length, qLen = queries.Length;
+        int[] res = Enumerable.Repeat(-1, qLen).ToArray();
+        int[][] dp = new int[len+1][];
+        for(int i = 0; i <= len; i++)
+        {
+            dp[i] = new int[101];
+        }
+
+        for(int i = 0; i < len; i++) // store the num-id in 1-indexed
+        {
+            Array.Copy(dp[i], 0, dp[i+1], 0, 101);
+            dp[i+1][nums[i]]++;
+        }
+
+        for(int i = 0; i < qLen; i++)
+        {
+            int l = queries[i][0], r = queries[i][1]+1;
+            int pre = -1, minV = int.MaxValue;
+
+            for(int j = 1; j < 101; j++)
+            {
+                if(dp[r][j]-dp[l][j] > 0)
+                {
+                    if(pre != -1)
+                        minV = Math.Min(minV, j-pre);
+
+                    pre = j;
+                }
+            }
+
+            if(minV != int.MaxValue)
+                res[i] = minV;
+        }
+
+        return res;
+    }
+}
