@@ -1,0 +1,12 @@
+public class Solution {
+    public int MaximumElementAfterDecrementingAndRearranging(int[] arr) {
+        Array.Sort(arr);
+        int max = 0;
+
+        foreach (int num in arr) {
+            max = Math.Min(num, max + 1);
+        }
+
+        return max;
+    }
+}
