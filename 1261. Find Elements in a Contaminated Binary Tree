@@ -1,0 +1,44 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     public int val;
+ *     public TreeNode left;
+ *     public TreeNode right;
+ *     public TreeNode(int val=0, TreeNode left=null, TreeNode right=null) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+public class FindElements {
+    TreeNode tree = new();
+    Dictionary<int,int> cache = new();
+    public FindElements(TreeNode root) {
+        RecoverBTree(root, null, false);
+        tree = root;
+    }
+    private void RecoverBTree(TreeNode root, TreeNode parent, bool isLeft)
+    {
+        if(root == null) return;
+
+        if(parent == null) root.val = 0;
+        else if(isLeft) root.val = (parent.val * 2) + 1;
+        else root.val = (parent.val*2) + 2;
+        if(!cache.ContainsKey(root.val)) cache.Add(root.val, 0);
+
+        RecoverBTree(root.left, root, true);
+        RecoverBTree(root.right, root, false);  
+    }
+    public bool Find(int target) {
+        if(cache.ContainsKey(target))
+            return true;
+        return false;
+    }
+}
+
+/**
+ * Your FindElements object will be instantiated and called as such:
+ * FindElements obj = new FindElements(root);
+ * bool param_1 = obj.Find(target);
+ */
