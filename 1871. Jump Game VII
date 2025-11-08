@@ -1,0 +1,16 @@
+public bool CanReach(string s, int minJump, int maxJump) {
+    int n = s.Length;
+    int count = 0;
+    bool[] canReach = new bool[n];
+    canReach[0] = true;
+
+    for (int i = 1; i < n; i++) {
+        if (i >= minJump && canReach[i - minJump]) count++;
+        if (i > maxJump && canReach[i - maxJump - 1]) count--;
+
+        if (s[i] == '0' && count > 0)
+            canReach[i] = true;
+    }
+
+    return canReach[n - 1];
+}
