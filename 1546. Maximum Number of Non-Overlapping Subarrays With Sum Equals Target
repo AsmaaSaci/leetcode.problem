@@ -1,0 +1,22 @@
+public class Solution {
+    public int MaxNonOverlapping(int[] nums, int target) {
+        int len = nums.Length, res = 0, preSum = 0;
+        HashSet<int> preCal = new HashSet<int> {0};
+
+        foreach(int n in nums)
+        {
+            preSum += n;
+            int req = preSum-target;
+            if(preCal.Contains(req))
+            {
+                res++;
+                preSum = 0;
+                preCal =  new HashSet<int> {0};
+            }
+            else
+                preCal.Add(preSum);
+        }
+
+        return res;
+    }
+}
