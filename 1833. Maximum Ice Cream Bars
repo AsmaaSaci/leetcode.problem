@@ -1,0 +1,26 @@
+//Counting sort + greedy array
+
+public class Solution {
+    public int MaxIceCream(int[] costs, int coins) {
+         int[] freq = new int[100001];
+
+        foreach(int cost in costs){
+            freq[cost]++;
+        }
+    
+    int count =0;
+    for(int price = 1; price <= 100000;price++){
+         if(freq[price] == 0) continue;
+
+         int maxbuy = Math.Min(freq[price], coins /price);
+            count += maxbuy;
+            coins -= maxbuy * price;
+
+          
+          if(coins < price) break;
+    }
+
+  return count;
+    
+    }
+}
