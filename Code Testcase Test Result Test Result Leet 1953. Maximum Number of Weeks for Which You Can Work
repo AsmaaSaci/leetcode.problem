@@ -1,0 +1,16 @@
+public class Solution {
+    public long NumberOfWeeks(int[] milestones) {
+        Array.Sort(milestones);
+        int i =0; int j = milestones.Length-1;
+        long sum =0;
+        for(int m=0; m<j;m++)
+        {
+            sum+=(long)milestones[m];
+        }
+        if(sum<milestones[j])
+        {
+            return (long)(2*sum+1);
+        }
+        return(sum+(long)milestones[j]);
+    }
+}
