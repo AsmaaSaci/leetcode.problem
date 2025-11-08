@@ -1,0 +1,21 @@
+    public class Solution {
+        public int MinDeletions(string s) {
+            int[] frequency = new int[26]; // Array to store character frequencies (assuming lowercase English letters)
+        foreach (char c in s) {
+            frequency[c - 'a']++;
+        }
+        
+        HashSet<int> uniqueFrequencies = new HashSet<int>();
+        int deletions = 0;
+        
+        for (int i = 0; i < 26; i++) {
+            int freq = frequency[i];
+            while (freq > 0 && !uniqueFrequencies.Add(freq)) {
+                freq--;
+                deletions++;
+            }
+        }
+        
+        return deletions;
+        }
+    }
