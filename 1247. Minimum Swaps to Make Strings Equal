@@ -1,0 +1,17 @@
+public class Solution {
+    public int MinimumSwap(string s1, string s2) {
+        int xy=0, yx=0, swaps=0;
+        for(var i=0; i<s1.Length; i++){
+            if(s1[i] == s2[i]) continue;    // we don't care about chars that already match
+            
+            if(s1[i] == 'x') xy++;
+            else yx++;
+        }
+
+        if((xy+yx) % 2 == 1) return -1;   // we need xy+yx to be even number for ensuring success
+        swaps = xy/2 + yx/2;            // case 1 + case 2
+        if(xy % 2 == 1) swaps+=2;         // case 3
+
+        return swaps;
+    }
+}
