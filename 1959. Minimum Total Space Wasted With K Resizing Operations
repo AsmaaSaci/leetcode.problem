@@ -1,0 +1,41 @@
+public class Solution {
+    private int[][] dp;
+    private int len;
+    private int upLimit = (int)Math.Pow(10, 9);
+
+    private int BackTracking(int i, int k, int[] nums)
+    {
+        if(i == len)
+            return 0;
+
+        if(k < 0)
+            return upLimit;
+
+        if(dp[i][k] != -1)
+            return dp[i][k];
+
+        int maxV = nums[i], sum = 0, res = int.MaxValue;
+        
+        for(int j = i; j < len; j++)
+        {
+            maxV = Math.Max(maxV, nums[j]);
+            sum += nums[j];
+            res = Math.Min(res, maxV*(j-i+1)-sum + BackTracking(j+1, k-1, nums));
+        }
+
+        dp[i][k] = res;
+        return res;
+    }
+    public int MinSpaceWastedKResizing(int[] nums, int k) {
+        len = nums.Length;
+        dp = new int[len][];
+
+        for(int i = 0; i < len; i++)
+        {
+            dp[i] = Enumerable.Repeat(-1, len).ToArray();
+        }
+
+        BackTracking(0, k, nums);
+        return dp[0][k];
+    }
+}
