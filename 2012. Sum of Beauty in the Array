@@ -1,0 +1,35 @@
+public class Solution {
+    public int SumOfBeauties(int[] nums) 
+    {
+        //   keep max from left    
+        //   min from right 
+        var maxFromLeft = nums[0];
+
+        var n = nums.Length;
+        var minFromRight = new int[n];
+        minFromRight[n-1] = nums[n-1];
+        for(int i = n-2; i >= 0; --i)
+        {
+            minFromRight[i] = Math.Min(minFromRight[i+1], nums[i]);
+        }
+
+        var result = 0;
+
+        for(int i = 1; i <= nums.Length - 2; ++i)
+        {
+            if(nums[i-1] < nums[i] && nums[i] < nums[i+1])
+            {
+                ++result;
+
+                if(maxFromLeft < nums[i] && nums[i] < minFromRight[i+1])
+                {
+                    ++result;
+                }
+            }
+            
+            maxFromLeft = Math.Max(maxFromLeft, nums[i]);
+        }
+
+        return result;
+    }
+}
