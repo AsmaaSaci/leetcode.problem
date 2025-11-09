@@ -1,0 +1,29 @@
+public class Solution {
+    public long NumberOfWays(string s) {
+        int n = s.Length;
+        long prefixZeroes = 0, prefixOnes = 0;
+        long suffixZeroes = 0, suffixOnes = 0;
+        long ways = 0;
+
+        // Count initial suffix counts
+        foreach (char c in s) {
+            if (c == '0') suffixZeroes++;
+            else suffixOnes++;
+        }
+
+        // Iterate through the array to calculate valid ways for '010' and '101' patterns
+        for (int i = 0; i < n; i++) {
+            if (s[i] == '0') {
+                suffixZeroes--;
+                ways += prefixOnes * suffixOnes; // Pattern '101'
+                prefixZeroes++;
+            } else if (s[i] == '1') {
+                suffixOnes--;
+                ways += prefixZeroes * suffixZeroes; // Pattern '010'
+                prefixOnes++;
+            }
+        }
+
+        return ways;
+    }
+}
