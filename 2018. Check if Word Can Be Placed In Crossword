@@ -1,0 +1,91 @@
+public class Solution {
+    private bool IsValid(string a, string word)
+    {
+        bool isSimilar = true;
+        int len = a.Length, idx = 0;
+        while(idx < len)
+        {
+            if(a[idx] == ' ' || a[idx] == word[idx])
+                idx++;
+            else
+            {
+                isSimilar = false;
+                break;
+            }
+        }
+
+        if(isSimilar)
+            return true;
+
+        isSimilar = true;
+        idx = len-1;
+        while(idx >= 0)
+        {
+            int idW = len-1-idx;
+            if(a[idx] == ' ' || a[idx] == word[idW])
+                idx--;
+            else
+            {
+                isSimilar = false;
+                break;
+            }
+        }
+
+        return isSimilar;
+    }
+    public bool PlaceWordInCrossword(char[][] board, string word) {
+        int wLen = word.Length;
+        int m = board.Length, n = board[0].Length;
+        for(int i = 0; i < m; i++)
+        {
+            StringBuilder s = new StringBuilder();
+            for(int j = 0; j < n; j++)
+            {
+                char c = board[i][j];
+                if(c== '#' || j == n-1)
+                {
+                    if(c != '#')
+                        s.Append(c);
+
+                    if(s.Length == wLen && IsValid(s.ToString(), word))
+                        return true;
+
+                    if(n-j-1 < wLen)
+                        break;
+
+                    s = new StringBuilder();
+                }
+                else
+                {
+                    s.Append(c);
+                }
+            }
+        }
+
+        for(int j = 0; j < n; j++)
+        {
+            StringBuilder s = new StringBuilder();
+            for(int i = 0; i < m; i++)
+            {
+                char c = board[i][j];
+                if(c == '#' || i == m-1)
+                {
+                    if(c != '#')
+                        s.Append(c);
+   
+                    if(s.Length == wLen && IsValid(s.ToString(), word))
+                        return true;
+
+                    if(m-1-i < wLen)
+                        break;
+
+                    s = new StringBuilder();
+                }
+                else
+                    s.Append(c);
+            }
+        }
+
+        return false;
+    }
+}
