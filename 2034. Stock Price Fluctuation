@@ -1,0 +1,49 @@
+public class StockPrice {
+    Dictionary<int, int> map;
+    int latestTS = 0;
+    SortedSet<(int price, int timeStamp)> mapPrice;
+    public StockPrice() {
+        map = new Dictionary<int,int>();
+        mapPrice = new SortedSet<(int,int)>();
+    }
+    
+    public void Update(int timestamp, int price) {
+        latestTS = Math.Max(latestTS, timestamp);
+        if(map.ContainsKey(timestamp))
+        {
+            int incorrectPrice = map[timestamp];
+            mapPrice.Remove((incorrectPrice, timestamp));
+            mapPrice.Add((price,timestamp));
+            map[timestamp] = price;
+        }
+        else
+        {
+            map.Add(timestamp,price);
+            mapPrice.Add((price, timestamp));
+        }
+    }
+    
+    public int Current() {
+        if(map.Count ==0) return -1;
+        return map[latestTS];
+    }
+    
+    public int Maximum() {
+      if(mapPrice.Count == 0) return -1;
+      return mapPrice.Max.price;
+    }
+    
+    public int Minimum() {
+        if(mapPrice.Count == 0) return -1;
+        return mapPrice.Min.price;
+    }
+}
+
+/**
+ * Your StockPrice object will be instantiated and called as such:
+ * StockPrice obj = new StockPrice();
+ * obj.Update(timestamp,price);
+ * int param_2 = obj.Current();
+ * int param_3 = obj.Maximum();
+ * int param_4 = obj.Minimum();
+ */
