@@ -1,0 +1,25 @@
+public class Solution {
+    public IList<int> MaxScoreIndices(int[] nums) {
+        var scores = new int[nums.Length + 1];
+        var rightScore = nums.Count(r => r == 1);
+
+        scores[0] = rightScore;
+        var maxScore = scores[0];
+        var indexes = new List<int>() { 0 };
+        for (int i = 1; i <= nums.Length; i ++) {
+
+            // We'll gain if nums[i-1] was 0. We'll lose one if it was 1.
+            scores[i] = scores[i-1] + (nums[i-1] == 0 ? 1 : -1);
+            if (scores[i] > maxScore) {
+                maxScore = scores[i];
+                indexes = new List<int>();
+            }
+            
+            if (scores[i] == maxScore) {
+                indexes.Add(i);
+            }
+        }
+
+        return indexes;
+    }
+}
