@@ -1,0 +1,23 @@
+public class Solution {
+    public string DecodeCiphertext(string encodedText, int rows) {
+        int cols = encodedText.Length/rows;
+        int wz = cols-1;
+        int hz = rows-1;
+        int row = 0;
+        int col = 0;
+        StringBuilder result = new StringBuilder();
+
+        while (col<cols){        
+            result.Append(encodedText[row*cols+col]);        
+            if (row==hz || col==wz) {                
+                col -= (row-1);                
+                row = 0;
+            } else {
+                row++;
+                col++;
+            }
+        }
+        
+        return result.ToString().TrimEnd();
+    }
+}
