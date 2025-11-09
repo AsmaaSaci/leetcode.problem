@@ -1,0 +1,76 @@
+public class LockingTree {
+    Dictionary<int, LNode> locks;
+
+    public LockingTree(int[] p) {
+        locks = new();
+        for(int i=0; i<p.Length; i++){
+            if(!locks.ContainsKey(i))
+                locks.Add(i, new LNode(i, 0) );
+            if(p[i]!=-1){
+                if(!locks.ContainsKey(p[i]))
+                    locks.Add(p[i], new LNode(i, 0));
+                locks[p[i]].desc.Add(locks[i]);
+                locks[i].parent = locks[p[i]];
+            }
+        }
+    }
+    
+    public bool Lock(int num, int user) {
+        if(locks[num].locked != 0) return false;
+        // lock with user ID
+        locks[num].locked  = user;
+        return true;
+    }
+    
+    public bool Unlock(int num, int user) {
+        if(locks[num].locked != user) return false;
+        // unlock
+        locks[num].locked = 0;
+        return true;
+    }
+    
+    public bool Upgrade(int num, int user) {
+        // check ancestors
+        bool anc = false;
+        LNode n = locks[num];
+        while(n != null){
+            if(n.locked != 0)
+                {anc = true; break;}
+            n = n.parent;
+        }
+        if(anc) return false;
+        // unlock desc
+        Queue<LNode> qu = new(); qu.Enqueue(locks[num]);
+        while(qu.Count>0){
+            n = qu.Dequeue();
+            if(n.locked != 0) anc = true;
+            n.locked = 0;
+            foreach(LNode _n in n.desc)
+                qu.Enqueue(_n);
+        }
+        // true if at least one is locked
+        if(anc) locks[num].locked = user;
+        return anc;
+    }
+}
+
+public class LNode {
+    public int name;
+    public int locked;
+    public LNode parent;
+    public List<LNode> desc;
+    public LNode(int val = 0, int l = 0) {
+        this.name = val;
+        this.locked = l;
+        this.parent = null;
+        this.desc = new List<LNode>();
+    }
+}
+
+/**
+ * Your LockingTree object will be instantiated and called as such:
+ * LockingTree obj = new LockingTree(parent);
+ * bool param_1 = obj.Lock(num,user);
+ * bool param_2 = obj.Unlock(num,user);
+ * bool param_3 = obj.Upgrade(num,user);
+ */
