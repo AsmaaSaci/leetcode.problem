@@ -1,0 +1,56 @@
+public class Solution {
+    public int NetworkBecomesIdle(int[][] edges, int[] patience) {
+        int n = patience.Length;
+        List<int>[] adj = new List<int>[n];
+        for(int i = 0; i < n; i++)
+        {
+            adj[i] = new List<int>();
+        } 
+
+        foreach(int[] cur in edges)
+        {
+            int from = cur[0], to = cur[1];
+            adj[from].Add(to);
+            adj[to].Add(from);
+        }
+
+        int[] dist = new int[n];
+        Queue<int> que = new();
+        que.Enqueue(0);
+
+        int step = 0;
+        HashSet<int> visited = new();
+        while(que.Count > 0)
+        {
+            int qLen = que.Count;
+            for(int i = 0; i < qLen; i++)
+            {
+                int cur = que.Dequeue();
+                if(visited.Contains(cur))
+                    continue;
+
+                visited.Add(cur);
+                dist[cur] = step;
+                foreach(int next in adj[cur])
+                {
+                    if(visited.Contains(next))
+                        continue;
+
+                    que.Enqueue(next);
+                }
+            }
+            step++;
+        }
+
+        int res = 0;
+        for(int i = 1; i < n; i++)
+        {
+            int time = dist[i] * 2;
+            int lastTime = time*2 - (time - 1) % patience[i];
+
+            res = Math.Max(res, lastTime);
+        }
+
+        return res;
+    }
+}
