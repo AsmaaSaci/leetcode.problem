@@ -1,0 +1,60 @@
+public class Solution {
+    private List<int> candles = new List<int>();
+    
+    public int[] PlatesBetweenCandles(string s, int[][] queries) 
+    {
+
+        for(int c=0;c<s.Length; c++)
+        {
+            if(s[c]=='|')
+            {
+                candles.Add(c);
+            }
+        }
+
+        List<int> paltesInQueries = new List<int>();
+        for(int i=0; i< queries.Length; i++)
+        {
+            int lowerCandle = GetClosetsCandle(0,candles.Count-1,queries[i][0],true);
+            int upperCandle = GetClosetsCandle(0,candles.Count-1,queries[i][1],false);
+            int candlesCount = upperCandle - lowerCandle;
+            if (candlesCount < 1)
+            {
+                paltesInQueries.Add(0);
+            }
+            else
+            {
+                paltesInQueries.Add(candles[upperCandle] - candles[lowerCandle] - candlesCount);
+            }
+        }
+
+        return paltesInQueries.ToArray();
+    }
+
+
+    public int GetClosetsCandle(int s, int e, int target, bool lower)
+    {
+        if(e < s)
+        {
+            if (lower)
+                return s;
+            else
+                return e;
+        }
+
+        int m = (s+e)/2;
+
+        if (candles[m] == target)
+        {
+            return m;
+        }
+        else if (candles[m] > target)
+        {
+            return GetClosetsCandle(s,m-1, target, lower);
+        }
+        else
+        {
+            return GetClosetsCandle(m+1,e, target, lower);
+        }
+    }
+}
