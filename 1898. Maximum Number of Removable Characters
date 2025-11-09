@@ -1,0 +1,99 @@
+public class Solution {
+    private Dictionary<char, List<int>> freq = new();
+    private int[] patternFreq;
+    private int maxIdx = 0;
+
+    private bool IsValid(string pattern, string s, int idx, int[] arr)
+    {
+        List<int>[] remFreq = new List<int>[26];
+        HashSet<char> visited = new();
+        foreach(var kvp in freq)
+        {
+            char c = kvp.Key;
+            remFreq[c-'a'] = new List<int>(kvp.Value);
+        }
+
+        for(int i = 0; i <= idx; i++)
+        {
+            int  sId = arr[i];
+            char c = s[sId];
+            int curId = c-'a';
+
+            if(freq.ContainsKey(c))
+            {
+                int fIdx = remFreq[curId].BinarySearch(sId);
+                remFreq[curId].RemoveAt(fIdx);
+
+                if(remFreq[curId].Count < patternFreq[curId])
+                    return false;
+            }
+        }
+
+        int start = remFreq[pattern[0]-'a'].First()+1, pId =1, pLen = pattern.Length;
+
+        while(start <= maxIdx && pId < pLen)
+        {
+            int c = pattern[pId] - 'a';
+            int fId = remFreq[c].BinarySearch(start);
+            if(fId < 0)
+                fId = ~fId;
+
+            if(fId == remFreq[c].Count)
+                return false;
+
+            start = remFreq[c][fId]+1;
+            pId++;
+        }
+
+        return pId == pLen;
+    }
+
+    public int MaximumRemovals(string s, string p, int[] removable) {
+        HashSet<char> sample = new HashSet<char>(p);
+        int len = s.Length, idx = 0;
+        patternFreq = new int[26];
+        
+        for (int i = 0; i < len; i++)
+        {
+            char c = s[i];
+            if (sample.Contains(c))
+            {
+                if (!freq.ContainsKey(c))
+                    freq.Add(c, new List<int>());
+
+                freq[c].Add(i);
+
+                if (idx < p.Length && p[idx] == c)
+                    idx++;
+
+                maxIdx = i;
+            }
+        }
+
+        foreach (char c in p)
+        {
+            patternFreq[c - 'a']++;
+        }
+
+        if (idx < p.Length)
+            return -1;
+
+        int low = 0, high = removable.Length-1, res = 0;
+        bool findValid = false;
+
+        while (low <= high)
+        {
+            int mid = low + (high - low) / 2;
+            if (IsValid(p, s, mid, removable))
+            {
+                res = mid;
+                low = mid + 1;
+                findValid = true;
+            }
+            else
+                high = mid - 1;
+        }
+
+        return findValid ? res+1 : res;
+    }
+}
