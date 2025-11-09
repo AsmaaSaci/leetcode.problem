@@ -1,0 +1,83 @@
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     public int val;
+ *     public ListNode next;
+ *     public ListNode(int val=0, ListNode next=null) {
+ *         this.val = val;
+ *         this.next = next;
+ *     }
+ * }
+ */
+public class Solution {
+    public ListNode ReverseEvenLengthGroups(ListNode head) {
+        ListNode prev = null;
+        ListNode node = head;
+        int nodesInGroup = 1;
+        
+        while (node != null) {
+            // Track for linkage updates
+            ListNode firstNodeInGroup = node;
+            ListNode groupPrev = prev;
+
+            // Odd group
+            if (nodesInGroup % 2 != 0) {
+                int counter = 0;
+                // Move forward in this group
+                while (counter < nodesInGroup && node != null) {
+                    prev = node;
+                    node = node.next;
+                    counter++;
+                }
+
+                // Last group expected odd group but was even, so reverse
+                if (counter % 2 == 0) {
+                    (var reverseHead, var count) = ReverseSubList(firstNodeInGroup, counter);
+
+                    // Update links outside of group
+                    groupPrev.next = reverseHead;
+                    node = null;
+                }
+            }
+            else { // Even Groups
+                // Reverse
+                (var reverseHead, var count) = ReverseSubList(firstNodeInGroup, nodesInGroup);
+
+                // Update links outside of group
+                prev.next = reverseHead;
+                prev = firstNodeInGroup;
+                node = firstNodeInGroup.next;
+
+                // Expected even group but was odd, so undue reverse
+                if (count % 2 != 0) {
+                    _ = ReverseSubList(reverseHead, count);
+
+                    // Update links outside of group
+                    groupPrev.next = firstNodeInGroup;
+                    node = null;
+                }
+            }
+
+            nodesInGroup++; // next group is ready to be processed
+        }
+
+        return head;
+    }
+
+    private (ListNode lastNodeInGroup, int counter) ReverseSubList(ListNode startNode, int nodesInGroup) {
+        ListNode prev = null;
+        ListNode node = startNode;
+        int counter = 0;
+        while (counter < nodesInGroup && node != null) {
+            // Reverse nodes
+            var tmp = node.next;
+            node.next = prev;
+            prev = node;
+            node = tmp;
+            counter++;
+        }
+
+        startNode.next = node;
+        return (prev, counter);
+    }
+}
