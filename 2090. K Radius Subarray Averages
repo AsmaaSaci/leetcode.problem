@@ -1,0 +1,19 @@
+public class Solution {
+    public int[] GetAverages(int[] nums, int k) {
+        var len = nums.Length;
+        long curSum = nums.Take(2*k).Sum(x => (long)x);
+
+        int[] op = Enumerable.Repeat(-1, len).ToArray();
+
+        for (int i = k; i < len - k; i++) {
+            int a = i - k;
+            int b = k + i;
+
+            curSum += nums[b];
+            op[i] = (int)(curSum/(b - a + 1));
+            curSum -= nums[a];
+        }
+
+        return op;
+    }
+}
