@@ -1,0 +1,42 @@
+public class Solution {
+    public int[] MaximumBobPoints(int numArrows, int[] aliceArrows) {
+        int[] bobArrows = new int[12];
+        int maxScore = 0;
+
+        for(int mask = 0; mask < (1<<12); mask++) 
+        {
+            int usedArrow = 0, curScore = 0;
+            int[] tmp = new int[12];
+
+            for(int i = 0; i < 12; i++)
+            {
+                if((mask &(1<<i)) != 0)
+                {
+                    tmp[i] = aliceArrows[i]+1;
+                    usedArrow  += tmp[i];
+                    curScore+=i;
+                    if(usedArrow > numArrows)
+                        break;
+                }
+            }
+
+            if(usedArrow <= numArrows && curScore > maxScore)
+            {
+                maxScore = curScore;
+                Array.Copy(tmp, 0, bobArrows, 0, 12);
+            }
+        }
+
+        int curSum = 0;
+        foreach(int n in bobArrows)
+        {
+            curSum += n;
+        }
+
+        int remain = numArrows -curSum;
+        if(remain > 0)
+            bobArrows[0] = remain;
+
+        return bobArrows;
+    }
+}
