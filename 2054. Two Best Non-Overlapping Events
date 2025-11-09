@@ -1,0 +1,28 @@
+public class Solution {
+    // Time O(nlogn) | Space O(n), n = length of 'events'
+    public int MaxTwoEvents(int[][] events) {
+        int n = events.Length, maxSeen = 0, maxSum = 0, val, idx, time, lastSeenTillTime = 0, curMax = 0;
+        int[][] e = new int[n<<1][];
+        // split each event into 2 (1 marks the startTime & other the endTime)
+        for(int i=0;i<n;i++)
+        {
+            val = events[i][2];
+            idx = i<<1;
+            // add the startTime
+            e[idx] = [events[i][0],1,val];
+            // add the endTime (add 1 to endTime to avoid over-lapping slots when calculating maxSum
+            e[idx + 1] = [events[i][1]+1,-1,val];
+        }
+
+        n<<=1;
+        // sort intervals by start time (if same time then one ending should be given priority)
+        Array.Sort(e,(a,b) => a[0]!=b[0] ? a[0].CompareTo(b[0]) : a[1].CompareTo(b[1]));
+        // calculate the answer
+        for(int i=0;i<n;i++)
+            if(e[i][1]==-1) // endTime seen than update the maxSeen so far
+                maxSeen = Math.Max(maxSeen,e[i][2]);
+            else    // if startTime see if bigger 'maxSum' possible without overlapping
+                maxSum = Math.Max(maxSum,maxSeen+e[i][2]);
+        return maxSum;
+    }
+}
