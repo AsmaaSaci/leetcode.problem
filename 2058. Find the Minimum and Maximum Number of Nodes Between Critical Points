@@ -1,0 +1,39 @@
+public class Solution
+{
+    public int[] NodesBetweenCriticalPoints(ListNode head)
+    {
+        ListNode current = head.next;
+        ListNode prev = head;
+        int[] ans = new int[] { int.MaxValue, -1 };
+        int index = 1,
+            firstCriticalIndex = -1,
+            lastCriticalIndex = -1;
+        while (current != null && current.next != null)
+        {
+            if (
+                current.val > prev.val && current.val > current.next.val
+                || current.val < prev.val && current.val < current.next.val
+            )
+            {
+                if (firstCriticalIndex == -1)
+                {
+                    firstCriticalIndex = index;
+                }
+                else
+                {
+                    ans[0] = Math.Min(ans[0], index - lastCriticalIndex);
+                    ans[1] = Math.Max(ans[1], index - firstCriticalIndex);
+                }
+                lastCriticalIndex = index;
+            }
+            prev = current;
+            current = current.next;
+            index++;
+        }
+        if (ans[0] == int.MaxValue)
+        {
+            ans[0] = -1;
+        }
+        return ans;
+    }
+}
