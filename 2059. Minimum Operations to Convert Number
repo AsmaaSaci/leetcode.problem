@@ -1,0 +1,43 @@
+public class Solution {
+    public int MinimumOperations(int[] nums, int start, int goal) {
+        int len = nums.Length;
+        if (start == goal)
+            return 0;
+
+        Queue<int> que = new();
+        bool[] visited = Enumerable.Repeat(false, 1001).ToArray();
+        que.Enqueue(start);
+        int step = 0;
+        while (que.Count > 0)
+        {
+            step++;
+            int qLen = que.Count;
+            for (int i = 0; i < qLen; i++)
+            {
+                int cur = que.Dequeue();
+                if (visited[cur])
+                    continue;
+
+                visited[cur] = true;
+                foreach (int n in nums)
+                {
+                    int[] tmp = [n + cur, cur-n, n ^ cur];
+                    foreach (int val in tmp)
+                    {
+                        if (val == goal)
+                            return step;
+
+                        if (val >= 0 && val <= 1000 && !visited[val])
+                        {
+                            que.Enqueue(val);
+                        //	visited[val] = true;
+                        }
+                    }
+
+                }
+            }
+        }
+
+        return -1;
+    }
+}
