@@ -1,0 +1,37 @@
+public class Solution {
+    public int MaxConsecutiveAnswers(string answerKey, int k) {
+        int n = answerKey.Length;
+        int maxCount = 0;  // Maximum consecutive count of the same answer
+        int trueCount = 0;  // Count of consecutive 'T's
+        int falseCount = 0;  // Count of consecutive 'F's
+        
+        // Sliding window approach
+        int left = 0;
+        int right = 0;
+        
+        while (right < n) {
+            if (answerKey[right] == 'T') {
+                trueCount++;
+            } else {
+                falseCount++;
+            }
+            
+            // If the number of changes required exceeds k, move the left pointer
+            if (Math.Min(trueCount, falseCount) > k) {
+                if (answerKey[left] == 'T') {
+                    trueCount--;
+                } else {
+                    falseCount--;
+                }
+                left++;
+            }
+            
+            // Update the maxCount
+            maxCount = Math.Max(maxCount, right - left + 1);
+            
+            right++;
+        }
+        
+        return maxCount;
+    }
+}
