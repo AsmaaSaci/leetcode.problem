@@ -1,0 +1,22 @@
+public class Solution {
+    public string MaximumNumber(string num, int[] change) {
+        int idx = 0, start = -1;
+        StringBuilder res = new StringBuilder(num);
+
+        while(idx < num.Length)
+        {
+            int id = num[idx]-'0';
+            if(change[id] < id && start >= 0) // Done with the replacing sub string
+                break;
+            else if(change[id] > id) // replace if change item is larger or equal
+            {
+                start = idx;
+                res[idx] = (char)(change[id]+'0');
+            }
+
+            idx++;
+        }
+
+        return res.ToString();
+    }
+}
