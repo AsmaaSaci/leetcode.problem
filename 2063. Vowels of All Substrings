@@ -1,0 +1,14 @@
+public class Solution {
+    public long CountVowels(string word) {
+        int len = word.Length;
+        long res = 0;
+        HashSet<char> vows = new HashSet<char>("aeiou");
+        for(int i = 0; i < len; i++)
+        {
+            if(vows.Contains( word[i]))
+                res += (long)(i+1)*(len-i);
+        }
+
+        return res;
+    }
+}
