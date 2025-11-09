@@ -1,0 +1,41 @@
+public class Solution 
+{
+    public bool MergeTriplets(int[][] triplets, int[] target) 
+    {
+        int xTarget = target[0];
+        int yTarget = target[1];
+        int zTarget = target[2];
+
+        bool hasX = false;
+        bool hasY = false;
+        bool hasZ = false;
+
+        int count = 0;
+
+        foreach (int[] triplet in triplets)
+        {
+            if (triplet[0] <= xTarget
+                && triplet[1] <= yTarget
+                && triplet[2] <= zTarget)
+            {
+                count++;
+
+                if (hasX == false && triplet[0] == xTarget)
+                hasX = true;
+
+                if (hasY == false && triplet[1] == yTarget)
+                hasY = true;
+
+                if (hasZ == false && triplet[2] == zTarget)
+                hasZ = true;
+            }
+        }
+
+        if (hasX && hasY && hasZ && count > 0)
+        {
+            return true;
+        }
+
+        return false;
+    }
+}
