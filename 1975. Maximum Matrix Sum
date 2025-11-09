@@ -1,0 +1,31 @@
+public class Solution {
+    public long MaxMatrixSum(int[][] matrix) {
+        //used for stroing total sum of the matrix
+        long totalSum = 0;
+        //this will store minimum abs values that we found in current matrix 
+        var minNegative = int.MaxValue;
+        //will be using this variable to store total number of negative values in current matrix 
+        var totalNegativeCount = 0;
+        //loop through each row
+        for (var i = 0; i < matrix.Length; i++)
+        {
+            //loop through each col 
+            for (var j = 0; j < matrix[i].Length; j++)
+            {
+                //find min value in the current matrix so that if we have to subract we will do min value
+                minNegative = Math.Min(Math.Abs(matrix[i][j]), minNegative);
+                //if current one is < 0 then increment the count
+                if (matrix[i][j] < 0)
+                {
+                    totalNegativeCount++;
+                }
+                //add absolute value of current cell to the total sum 
+                totalSum += Math.Abs(matrix[i][j]);
+            }
+        }
+        //if there are even negatives then we can convert them to postive else we will be endup with 1 negative value
+        //so remove it from the total, do 2 * because we added it to the total and then we have remove it from the total 
+        //ex: [-1,2,3] ==> ABS total is 6 to make to get right sume we have to remove -1 twice  
+        return totalNegativeCount % 2 == 0 ? totalSum : totalSum - (2 * minNegative) ;
+    }
+}
