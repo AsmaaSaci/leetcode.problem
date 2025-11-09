@@ -1,0 +1,42 @@
+public class Solution {
+    public int CountSubIslands(int[][] grid1, int[][] grid2) {
+        
+        var m = grid1.Length;
+        var n = grid1[0].Length;
+
+        var result = 0;
+
+        var valid = true;
+
+        for(int row=0; row < m; row++){
+            for(int col =0; col < n; col++){
+
+                valid =  grid2[row][col] == 1;
+
+                Matches(row, col);
+
+                if(valid){
+                    result++;
+                }
+            }
+        }
+
+        return result;
+
+        void Matches(int row, int col){
+
+            if(row < 0 || col < 0 || row >= m || col >= n || grid2[row][col] != 1) return;
+
+            if (grid1[row][col] != grid2[row][col] && grid2[row][col] != 9){
+                valid = false;
+            }
+            
+            grid2[row][col] = 9;
+
+            Matches(row, col +1);
+            Matches(row, col -1); 
+            Matches(row+1, col);
+            Matches(row-1, col);
+        }
+    }
+}
