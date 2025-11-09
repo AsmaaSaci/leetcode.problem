@@ -1,0 +1,22 @@
+public class Solution {
+    public int MinimumDeletions(int[] nums) {
+        int len = nums.Length;
+        if(len < 3)
+            return len;
+
+        int[] ids = [0, 0];
+        for(int i = 1; i < len; i++)
+        {
+            int cur = nums[i];
+            if(nums[ids[0]] > cur)
+                ids[0] = i;
+
+            if(nums[ids[1]] < cur)
+                ids[1] = i;
+        }
+
+        int low = Math.Min(ids[0], ids[1]), high = Math.Max(ids[0], ids[1]);
+
+        return Math.Min(high+1, Math.Min(len-low, len-(high-low-1)));
+    }
+}
