@@ -1,0 +1,40 @@
+public sealed class Solution 
+{
+    public int MinimumRefill(int[] plants, int capacityA, int capacityB) 
+    {
+        int cA = capacityA, cB = capacityB, l = plants.Length, r = 0, p = 0;
+
+        for(int a = 0; a < l / 2; a++)
+        {
+            if(cA < plants[a])
+            {
+                cA = capacityA;
+                r++;
+            }
+
+            cA -= plants[a];
+
+            var b = l - a - 1;
+
+            if(cB < plants[b])
+            {
+                cB = capacityB;
+                r++;
+            }
+
+            cB -= plants[b];
+        }
+
+        if(l % 2 == 1 && l > 1)
+        {
+            var m = plants[l / 2];
+
+            if(cA < m && cB < m)
+            {
+                r++;
+            }
+        }
+
+        return r;
+    }
+}
