@@ -1,0 +1,37 @@
+public class Solution {
+    private long maxV;
+    private long highHalf;
+    private long GetKPalin(int k, int digs)
+    {
+        long res = -1;
+        long curHighHalf = highHalf + (k-1);
+        if(curHighHalf > maxV)
+            return res;
+
+        long paLin = curHighHalf;
+        if(digs%2 == 1)
+            curHighHalf /= 10;
+
+        while(curHighHalf > 0)
+        {
+            paLin *= 10;
+            paLin += (curHighHalf%10);
+            curHighHalf /= 10;
+        }
+
+        return paLin;
+    }
+    public long[] KthPalindrome(int[] queries, int intLength) {
+        int halfLen = intLength/2 + intLength%2, qLen = queries.Length;
+        maxV = (long)Math.Pow(10, halfLen)-1;
+        highHalf = (long)Math.Pow(10, halfLen-1);
+
+        long[] res = new long[qLen];
+        for(int i = 0; i < qLen; i++)
+        {
+            res[i] = GetKPalin(queries[i], intLength);
+        }
+
+        return res;
+    }
+}
