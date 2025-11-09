@@ -1,0 +1,15 @@
+public class Solution {
+    public int NumberOfWeakCharacters(int[][] properties) {
+        properties = properties.OrderBy(x => -x[0]).ThenBy(x => x[1]).ToArray();
+        
+        var count = 0;
+        var max = 0;
+        
+        foreach(var x in properties) {
+            if(x[1] < max)count++;
+            max = Math.Max(max, x[1]);
+        }
+        
+        return count;
+    }
+}
