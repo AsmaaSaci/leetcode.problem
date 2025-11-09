@@ -1,0 +1,19 @@
+public class Solution {
+    public int[] FindPeakGrid(int[][] mat) {
+        
+     int begin =0, end = mat.Length-1;  
+     int col = 0;      
+     while(begin < end)
+        {
+                int row = begin + (end-begin) /2;       
+                col = Array.IndexOf(mat[row], mat[row].Max());
+                             
+                if(mat[row][col] >  mat[row+1][col])
+                    end = row;
+                else 
+                    begin = row+1;
+        }
+        return new int[] {end, col};
+    }
+   
+}
