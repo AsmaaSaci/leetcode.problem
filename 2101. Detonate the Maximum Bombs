@@ -1,0 +1,77 @@
+public class Solution {
+    List<int>[] adjacencyList;
+    public int MaximumDetonation(int[][] bombs) 
+    {
+        int n = bombs.Length;
+        adjacencyList = new List<int>[n];
+        int maxBombsDetonated = 0;
+
+        for(int i = 0 ; i < n ; i++)
+        {
+            adjacencyList[i] = new List<int>();
+        }
+
+        for(int i = 0 ; i < n ; i++)
+        {
+            for(int j = 0 ; j < n ; j++)
+            {
+                if(i != j)
+                {
+                    double dist = Math.Sqrt(Math.Pow((bombs[i][0]-bombs[j][0]),2) + Math.Pow((bombs[i][1] - bombs[j][1]),2));
+                    if(bombs[i][2] >= dist)
+                    {
+                        // bombs are adjacent if the second bomb lies in the range of first, drawing an edge from first to second
+                        adjacencyList[i].Add(j);
+                    }
+                }
+            }
+        }
+
+        for(int i = 0 ; i < n ; i++)
+        {
+            maxBombsDetonated = Math.Max(BFS(i),maxBombsDetonated);
+            if(maxBombsDetonated == n)
+            {
+                return n;
+            }
+        }
+        return maxBombsDetonated;          
+    }
+    public int BFS(int i)
+    {
+       // Travsering the adjacencyList in BFS manner 
+       Queue<int> queue = new Queue<int>();
+       HashSet<int> visited = new HashSet<int>();
+
+       queue.Enqueue(i);
+       visited.Add(i);
+
+       while(queue.Count != 0)
+       {
+           int temp = queue.Dequeue();
+           foreach(int curr in adjacencyList[temp])
+           {
+               if(!visited.Contains(curr))
+               {
+                   queue.Enqueue(curr);
+                   visited.Add(curr);
+               }
+           }
+       }
+       return visited.Count;
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
