@@ -1,0 +1,20 @@
+public class Solution {
+    public long MaxTaxiEarnings(int n, int[][] rides) {
+        Array.Sort(rides, (a, b) => { return a[1]-b[1]; });
+
+        long max = 0;
+        long[] dp = new long[n+1];
+
+        for(int i=0; i<rides.Length; i++) {
+            long dollar = rides[i][1] - rides[i][0] + rides[i][2];
+            dp[rides[i][1]] = Math.Max(dp[rides[i][1]], dp[rides[i][0]] + dollar);
+            max = Math.Max(max, dp[rides[i][1]]);
+            if(i < rides.Length -1) {
+                for(int j=rides[i][1]; j<rides[i+1][1]; j++)
+                    dp[j] = Math.Max(dp[j], max);
+            }
+        }
+        
+        return max;
+    }
+}
