@@ -1,0 +1,60 @@
+public class Solution {
+    private List<int> BuildMask(int[][] arr)
+    {
+        List<int> res = new();
+        foreach(int[] id in arr)
+        {
+            int val = 0;
+            foreach(int i in id)
+            {
+                val *= 2;
+                val += i;
+            }
+
+            res.Add(val);
+        }
+
+        return res;
+    }
+    private int[] dp;
+    private int rows;
+    private int cols;
+    private int BackTracking(int id, int mask, List<int> mA, List<int> mB)
+    {
+        if(id == rows)
+            return 0;
+
+        if(dp[mask] != -1)
+            return dp[mask];
+
+        int res = 0;
+        for(int i = 0; i < rows; i++)
+        {
+            if((mask & (1<<i)) != 0)
+            {
+                int newMask = mask ^ (1<<i);
+                int freq = 0;
+                for(int j = 0; j < cols; j++)
+                {
+                    if((mA[id] & (1<<j)) == (mB[i] &(1<<j)))
+                        freq++;
+                }
+
+                res = Math.Max(res, freq+BackTracking(id+1, newMask, mA, mB));
+            }
+        }
+
+        dp[mask] = res;
+        return res;
+    }
+    public int MaxCompatibilitySum(int[][] students, int[][] mentors) {
+        rows = students.Length;
+        cols = students[0].Length;
+        List<int> maskS = BuildMask(students);
+        List<int> maskM = BuildMask(mentors);
+        int mask = (int)Math.Pow(2, rows)-1;
+        dp = Enumerable.Repeat(-1, mask+1).ToArray();
+        BackTracking(0, mask, maskS, maskM);
+        return dp[mask];
+    }
+}
