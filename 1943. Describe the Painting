@@ -1,0 +1,33 @@
+public class Solution {
+    public IList<IList<long>> SplitPainting(int[][] segments) {
+        long[] sample = new long[100001];
+        bool[] endP = new bool[100001];
+        List<IList<long>> res = new();
+        int minV = int.MaxValue, maxV = 0;
+        foreach(int[] cur in segments)
+        {
+            int begin = cur[0], end = cur[1], col = cur[2];
+            sample[begin] += col;
+            sample[end] -= col;
+            endP[end] = true;
+            minV = Math.Min(minV, begin);
+            maxV = Math.Max(maxV, end);
+        }
+
+        long start = 0;
+        for(long i = minV; i <= maxV; i++)
+        {
+            sample[i] += sample[i-1];
+            if(sample[i] > 0 && start == 0)
+                start = i;
+
+            if(sample[i] != sample[start] || endP[i])
+            {
+                res.Add(new List<long>([start, i, sample[start]]));
+                start = (sample[i] > 0) ? i : 0;
+            }
+        }
+
+        return res;
+    }
+}
