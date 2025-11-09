@@ -1,0 +1,89 @@
+public class Solution {
+    public class CompP : IComparer<Points>
+    {
+        public int Compare(Points a, Points b)
+        {
+            if (a.dist != b.dist)
+                return a.dist >= b.dist ? 1 : -1;
+
+            if (a.price != b.price)
+                return a.price >= b.price ? 1 : -1;
+
+            if (a.x != b.x)
+                return a.x >= b.x ? 1 : -1;
+
+            return a.y >= b.y ? 1 : -1;
+        }
+    }
+    public class Points
+    {
+        public int x;
+        public int y;
+        public int price;
+        public int dist;
+        
+        public Points(int in_x, int in_y, int in_price, int in_dist)
+        {
+            x = in_x;
+            y = in_y;
+            price = in_price;
+            dist = in_dist;
+        }
+    }
+    public IList<IList<int>> HighestRankedKItems(int[][] grid, int[] pricing, int[] start, int k) {
+			int m = grid.Length, n = grid[0].Length;
+			bool[,] visited = new bool[m, n];
+			int[] dir = [0, 1, 0, -1, 0];
+			List<Points> validP = new List<Points>();
+			PriorityQueue<(int, int), int> pq = new();
+			pq.Enqueue((start[0], start[1]), 0);
+
+            int preStep = 0;
+            bool findEnough = false;
+			while (pq.TryDequeue(out var cur, out int curStep))
+			{
+				int x = cur.Item1, y = cur.Item2;
+				if (visited[x, y])
+					continue;
+
+				visited[x, y] = true;
+				int val = grid[x][y];
+				
+				if (val >= pricing[0] && val <= pricing[1])
+				{
+					Points p = new Points(x, y, val, curStep);
+					validP.Add(p);
+				}
+                if(curStep != preStep && validP.Count > k)
+                {
+                    findEnough = true;
+                    break;
+                }
+                preStep = curStep;
+                
+				for (int i = 0; i < 4; i++)
+				{
+					int newX = x + dir[i], newY = y + dir[i + 1];
+
+					if (newX >= 0 && newX < m && newY >= 0 && newY < n && !visited[newX, newY])
+					{
+						val = grid[newX][newY];
+						if (val != 0)
+						{
+							pq.Enqueue((newX, newY), curStep+1);
+						}
+					}
+				}
+			}
+
+			validP.Sort(new CompP());
+			int size = Math.Min(validP.Count, k);
+			List<IList<int>> res = new();
+			for (int i = 0; i < size; i++)
+			{
+				res.Add(new List<int>([validP[i].x, validP[i].y]));
+			}
+
+			return res;
+    }
+}
