@@ -1,0 +1,48 @@
+public class Solution {
+    private int BackTrackingRows(HashSet<int>[] Ones, List<int> validRows, int idx, HashSet<int> visitedCols, int numSelect)
+    {
+        int validCnt = validRows.Count;
+        // end:
+        if(idx >= validCnt)
+            return 0;
+
+        // include current row:
+        HashSet<int> comb = new HashSet<int>(visitedCols);
+        comb.UnionWith(Ones[validRows[idx]]);
+        int maxRows = 0;
+        if(comb.Count <= numSelect)
+        {
+            maxRows = Math.Max(maxRows, 1+ BackTrackingRows(Ones, validRows, idx+1, comb, numSelect));
+        }
+
+        maxRows = Math.Max(maxRows, BackTrackingRows(Ones, validRows, idx+1, visitedCols, numSelect));
+
+        return maxRows;
+    }
+    public int MaximumRows(int[][] matrix, int numSelect) {
+        int rows = matrix.Length, cols = matrix[0].Length, res = 0;
+        HashSet<int>[] Ones = new HashSet<int>[rows];
+        List<int> validRows = new();
+        if(numSelect == cols)
+            return rows;
+
+        for(int i = 0; i < rows; i++)
+        {
+            Ones[i] = new HashSet<int>();
+            for(int j = 0; j < cols; j++)
+            {
+                if(matrix[i][j] == 1)
+                    Ones[i].Add(j);
+            }
+
+            int oneNum = Ones[i].Count;
+            if(oneNum == 0)
+                res++;
+            else if(oneNum <= numSelect)
+                validRows.Add(i);
+        }
+
+        res += BackTrackingRows(Ones, validRows, 0, new HashSet<int>(), numSelect);
+        return res;
+    }
+}
