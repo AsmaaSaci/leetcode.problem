@@ -1,0 +1,61 @@
+public class Solution {
+    public class UnionFind{
+        public int[] par, rank;
+        public int comp;
+        public UnionFind(int n){
+            par = new int[n];
+            rank = new int[n];
+            for(int i=0;i<n;i++){
+                par[i] = i;
+            }
+            Array.Fill(rank,1);
+            comp = n;
+        }
+
+        public int Find(int x){
+            if(par[x] == x)
+                return x;
+            return Find(par[x]);
+        }
+
+        public void Union(int x, int y){
+            var parX = Find(x);
+            var parY = Find(y);
+
+            if(parX != parY){
+                if(rank[parX]>= rank[parY]){
+                    par[parY]  = parX;
+                    rank[parX] += rank[parY];
+                }
+                else{
+                    par[parX]  = parY;
+                    rank[parY] += rank[parX];
+                }
+                comp--;
+            }
+        }
+    }
+    public long CountPairs(int n, int[][] edges) {
+        UnionFind uf = new UnionFind(n);
+        long res = 0;
+        foreach(var edge in edges){
+            if(uf.Find(edge[0]) != uf.Find(edge[1]))
+                uf.Union(edge[0], edge[1]);
+        }
+        var dict = new Dictionary<int,long>();
+        for(int i=0;i<n;i++){
+            var par = uf.Find(i);
+            if(!dict.ContainsKey(par))
+                dict[par]  = 0;
+            dict[par]++;
+        }
+        long rem = n;
+        foreach(var val in dict.Values){
+            res += (val * (rem - val));
+            rem -= val;
+        }
+        return res;
+    }
+}
+
+//12 + 10 + 7
