@@ -1,0 +1,31 @@
+public class Solution {
+    public int LatestTimeCatchTheBus(int[] buses, int[] passengers, int capacity) {
+        // Sort Array:
+        Array.Sort(buses);
+        Array.Sort(passengers);
+
+        int pre = 1, maxT = 1, idx = 0, pN = passengers.Length, cnt = 0;
+        foreach(int dep in buses)
+        {
+            while(idx < pN && passengers[idx] <= dep && cnt < capacity) // Track available passengers for current bus
+            {
+                cnt++;
+                int nextT = passengers[idx++];
+                if(nextT-pre > 1)
+                    maxT = nextT-1;
+
+                pre = nextT;
+            }
+
+            if(cnt < capacity && pre != dep)
+            {
+                pre = dep;
+                maxT = pre;
+            }
+            
+            cnt = 0;
+        }
+
+        return maxT;
+    }
+}
