@@ -1,0 +1,46 @@
+public class Solution {
+    public int[] CountRectangles(int[][] rectangles, int[][] points) {
+        int n = points.Length;
+        int[] res = new int[n];
+        List<int>[] heights = new List<int>[101];
+
+        for (int i = 0; i <= 100; i++) {
+            heights[i] = new List<int>();
+        }
+
+        foreach (var rectangle in rectangles) {
+            heights[rectangle[1]].Add(rectangle[0]);
+        }
+
+        for (int i = 0; i <= 100; i++) {
+            if (heights[i].Count > 0) {
+                heights[i].Sort();
+            }
+        }
+
+
+        int index = 0;
+        foreach (var point in points) {
+            int count = 0;
+            for (int i = point[1]; i <= 100; i++) {
+                if (heights[i].Count > 0) {
+                    int left = 0;
+                    int right = heights[i].Count;
+
+                    while (left < right) {
+                        int mid = (left + right) >> 1;
+                        if (point[0] <= heights[i][mid]) {
+                            right = mid;
+                        } else {
+                            left = mid + 1;
+                        }
+                    }
+                
+                    count += heights[i].Count - left;
+                }
+            }
+            res[index++] = count;
+        }
+        return res;
+    }
+}
