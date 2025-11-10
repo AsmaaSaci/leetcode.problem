@@ -1,0 +1,23 @@
+public class Solution {
+    public IList<int> FindLonely(int[] nums) {
+        HashSet<int> fOnes = new(), fMulti = new();
+        foreach(int n in nums)
+        {
+            if(fOnes.Contains(n))
+            {
+                fMulti.Add(n);
+            }
+            else
+                fOnes.Add(n);
+        }
+
+        List<int> res = new();
+        foreach(int n in fOnes)
+        {
+            if(!fMulti.Contains(n) && !fOnes.Contains(n-1) && !fOnes.Contains(n+1))
+                res.Add(n);
+        }
+
+        return res;
+    }
+}
