@@ -1,0 +1,26 @@
+public class Solution {
+    public int HalveArray(int[] nums) {
+
+        PriorityQueue<double, double> maxHeap = new PriorityQueue<double, double>(Comparer<double>.Create((a, b) => b.CompareTo(a)));
+        double sum = 0;
+
+        foreach(var num in nums)
+        {
+            maxHeap.Enqueue(num, num);
+            sum += num;
+        }
+
+        double targetSum = sum / 2;
+        int operation = 0;
+        while(sum > targetSum)
+        {
+            operation++;
+            maxHeap.TryDequeue(out double maxNum, out _);
+            double newNum = maxNum / 2.0;
+            sum -= newNum;
+            maxHeap.Enqueue(newNum, newNum);
+        }
+
+        return operation;
+    }
+}
