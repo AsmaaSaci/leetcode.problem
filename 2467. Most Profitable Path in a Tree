@@ -1,0 +1,52 @@
+public class Solution {
+    public int MostProfitablePath(int[][] edges, int bob, int[] amount) {
+        int n = amount.Length;
+        List<int>[] tree = new List<int>[n];
+        for (int i = 0; i < n; i++) {
+            tree[i] = new List<int>();
+        }
+        foreach (var edge in edges) {
+            tree[edge[0]].Add(edge[1]);
+            tree[edge[1]].Add(edge[0]);
+        }
+        int[] bobDist = new int[n];
+        Array.Fill(bobDist, -1);
+        FindBobPath(bob, -1, 0, tree, bobDist);
+        return DfsAlice(0, -1, 0, 0, tree, bobDist, amount);
+    }
+
+    private bool FindBobPath(int node, int parent, int depth, List<int>[] tree, int[] bobDist) {
+        bobDist[node] = depth; 
+
+        if (node == 0) return true; 
+
+        foreach (int neighbor in tree[node]) {
+            if (neighbor == parent) continue;
+            if (FindBobPath(neighbor, node, depth + 1, tree, bobDist)) {
+                return true;
+            }
+        }
+
+        bobDist[node] = -1; 
+        return false;
+    }
+
+    private int DfsAlice(int node, int parent, int depth, int currentProfit, List<int>[] tree, int[] bobDist, int[] amount) {
+        if (bobDist[node] == -1 || depth < bobDist[node]) {
+            currentProfit += amount[node];
+        } else if (depth == bobDist[node]) {
+            currentProfit += amount[node] / 2;
+        }
+        if (tree[node].Count == 1 && node != 0) {
+            return currentProfit;
+        }
+
+        int maxProfit = int.MinValue;
+        foreach (int neighbor in tree[node]) {
+            if (neighbor == parent) continue;
+            maxProfit = Math.Max(maxProfit, DfsAlice(neighbor, node, depth + 1, currentProfit, tree, bobDist, amount));
+        }
+
+        return maxProfit;
+    }
+}
