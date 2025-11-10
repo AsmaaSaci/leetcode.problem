@@ -1,0 +1,27 @@
+using System;
+using System.Collections.Generic;
+
+public class Solution {
+    public string SmallestNumber(string pattern) {
+        int n = pattern.Length;
+        Stack<char> stack = new Stack<char>();
+        List<char> result = new List<char>();
+
+        // We need to push digits from '1' to 'n + 1'
+        for (int i = 1; i <= n + 1; i++) {
+            stack.Push((char)(i + '0')); // Push the current digit as a character
+
+            // If we reach the end of the pattern or the next character is 'I'
+            if (i == n + 1 || pattern[i - 1] == 'I') {
+                // Pop all elements from the stack and add to the result
+                while (stack.Count > 0) {
+                    result.Add(stack.Pop());
+                }
+            }
+        }
+
+        // Convert the result list to a string
+        return new string(result.ToArray());
+    }
+
+}
