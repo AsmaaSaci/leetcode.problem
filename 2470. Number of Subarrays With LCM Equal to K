@@ -1,0 +1,42 @@
+public class Solution {
+    private int GetGCD(int a, int b)
+    {
+        if(a == 0 || b == 0)
+            return a | b;
+        else if(a == b)
+            return a;
+        else if(a > b)
+            return GetGCD(a%b, b);
+        else
+            return GetGCD(a, b%a);
+    }
+
+    private int GetLCM(int a, int b)
+    {
+        return a*b/GetGCD(a, b);
+    }
+
+    public int SubarrayLCM(int[] nums, int k) {
+        int len = nums.Length, res = 0;
+        for(int i = 0; i < len; i++)
+        {
+            int lcm = nums[i];
+            if(lcm > k)
+                continue;
+
+            if(lcm == k)
+                res++;
+
+            for(int end = i+1; end < len; end++)
+            {
+                lcm = GetLCM(lcm, nums[end]);
+                if(lcm > k)
+                    break;
+                else if(lcm == k)
+                    res++;
+            }
+        }
+
+        return res;
+    }
+}
