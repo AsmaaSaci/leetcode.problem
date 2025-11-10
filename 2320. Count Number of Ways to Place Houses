@@ -1,0 +1,17 @@
+public class Solution {
+    public int CountHousePlacements(int n) {
+        // It's 0, 1 => valid: 00, 01, 10 and invalid : 11
+        // It's Fibonacci sequence:
+        int mod = 1000000007;
+        int[] pre = [1, 1];
+        while(n > 0)
+        {
+            int cur = (int)((long)(pre[0]+pre[1])%mod);
+            pre[0] = pre[1];
+            pre[1] = cur;
+            n--;
+        }
+
+        return (int)(((long)pre[1]*pre[1])%mod);
+    }
+}
