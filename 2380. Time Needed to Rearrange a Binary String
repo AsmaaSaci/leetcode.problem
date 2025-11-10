@@ -1,0 +1,37 @@
+public class Solution {
+    public int SecondsToRemoveOccurrences(string s) {
+        int len = s.Length;
+        if(len < 2)
+            return 0;
+
+        List<int> idxs = new();
+        for(int i = 0; i < len; i++)
+        {
+            if(s[i] == '1')
+                idxs.Add(i);
+        }
+
+        int steps = 0;
+       
+        while(true)
+        {
+            bool hasChanges = false;
+            int size = idxs.Count;
+            for(int i = size-1; i >= 0; i--)
+            {
+                if(i > 0 && idxs[i]-idxs[i-1]> 1 || i == 0 && idxs[0] > 0)
+                {
+                    idxs[i]--;
+                    hasChanges = true;
+                }
+            }
+
+            if(!hasChanges)
+                return steps;
+
+            steps++;
+        }
+
+        return steps;
+    }
+}
