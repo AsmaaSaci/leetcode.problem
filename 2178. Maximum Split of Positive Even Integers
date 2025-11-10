@@ -1,0 +1,24 @@
+public class Solution {
+    public IList<long> MaximumEvenSplit(long finalSum) {
+        List<long> res = new();
+        if(finalSum % 2 != 0)
+            return res;
+
+        long pre = 2;
+        while(finalSum%2 == 0 && finalSum > pre)
+        {
+            if((finalSum-pre)%2 == 0 && finalSum > pre*2)
+            {
+                res.Add(pre);
+                finalSum -= pre;
+            }
+
+            pre += 2;
+        }
+
+        if(finalSum > 0)
+            res.Add(finalSum);
+
+        return res;
+    }
+}
