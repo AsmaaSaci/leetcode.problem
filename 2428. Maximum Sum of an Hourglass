@@ -1,0 +1,13 @@
+public class Solution {
+    public int MaxSum(int[][] grid) {
+        int n = grid.Length, m = grid[0].Length;
+        int ans = -1;
+        for(int i=1; i<n-1; i++)
+            for(int j=1; j<m-1; j++)
+                ans = Math.Max(ans, HourGlass(ref grid, i, j));
+        return ans;
+    }
+
+    public int HourGlass(ref int[][] g, int x, int y) =>
+        g[x-1][y-1] + g[x-1][y] + g[x-1][y+1] + g[x][y] + g[x+1][y-1] + g[x+1][y] + g[x+1][y+1];
+}
