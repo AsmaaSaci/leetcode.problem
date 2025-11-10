@@ -1,0 +1,57 @@
+public class FoodRatings {
+    private Dictionary<string, string> foodToCuisine;   // food -> cuisine
+    private Dictionary<string, int> foodToRating;       // food -> rating
+    private Dictionary<string, SortedSet<(int Rating, string Food)>> cuisineToFoods;
+    public FoodRatings(string[] foods, string[] cuisines, int[] ratings) {
+        foodToCuisine = new Dictionary<string, string>();
+        foodToRating = new Dictionary<string, int>();
+        cuisineToFoods = new Dictionary<string, SortedSet<(int Rating, string Food)>>();
+
+        for (int i = 0; i < foods.Length; i++) {
+            string food = foods[i];
+            string cuisine = cuisines[i];
+            int rating = ratings[i];
+
+            foodToCuisine[food] = cuisine;
+            foodToRating[food] = rating;
+
+            if (!cuisineToFoods.ContainsKey(cuisine)) {
+                cuisineToFoods[cuisine] = new SortedSet<(int Rating, string Food)>(
+                    Comparer<(int Rating, string Food)>.Create((a, b) => {
+                        // Higher rating first
+                        int cmp = b.Rating.CompareTo(a.Rating);
+                        if (cmp != 0) return cmp;
+                        // If tie, lexicographically smaller food first
+                        return a.Food.CompareTo(b.Food);
+                    })
+                );
+            }
+            cuisineToFoods[cuisine].Add((rating, food));
+        }
+    }
+    
+    public void ChangeRating(string food, int newRating) {
+        string cuisine = foodToCuisine[food];
+        int oldRating = foodToRating[food];
+
+        // Remove old entry
+        cuisineToFoods[cuisine].Remove((oldRating, food));
+
+        // Update rating
+        foodToRating[food] = newRating;
+
+        // Insert new entry
+        cuisineToFoods[cuisine].Add((newRating, food));
+    }
+    
+    public string HighestRated(string cuisine) {
+        return cuisineToFoods[cuisine].Min.Food;
+    }
+}
+
+/**
+ * Your FoodRatings object will be instantiated and called as such:
+ * FoodRatings obj = new FoodRatings(foods, cuisines, ratings);
+ * obj.ChangeRating(food,newRating);
+ * string param_2 = obj.HighestRated(cuisine);
+ */
