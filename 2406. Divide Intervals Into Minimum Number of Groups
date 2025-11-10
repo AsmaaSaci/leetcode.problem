@@ -1,0 +1,20 @@
+public class Solution {
+    public int MinGroups(int[][] intervals) {
+        Array.Sort(intervals, (a, b) => a[0].CompareTo(b[0]));
+
+        PriorityQueue<int, int> minHeap = new PriorityQueue<int, int>();
+
+        foreach (var interval in intervals) {
+            int start = interval[0];
+            int end = interval[1];
+
+            if (minHeap.Count > 0 && minHeap.Peek() < start) {
+                minHeap.Dequeue(); 
+            }
+
+            minHeap.Enqueue(end, end);
+        }
+
+        return minHeap.Count;
+    }
+}
