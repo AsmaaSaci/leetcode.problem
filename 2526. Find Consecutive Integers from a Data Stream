@@ -1,0 +1,26 @@
+public class DataStream 
+{
+    int counter = 0;
+    int barrier = 0;
+    int prototype = int.MinValue;
+
+    public DataStream(int value, int k) 
+    {
+        barrier = k;
+        prototype = value;
+    }
+    
+    public bool Consec(int num) 
+    {
+        if(num == prototype)
+        {
+            counter++;
+        }
+        else
+        {
+            counter = 0;
+        }
+        
+        return counter >= barrier;
+    }
+}
