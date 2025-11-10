@@ -1,0 +1,55 @@
+public class Solution {
+    public long MaximumSubsequenceCount(string text, string pattern) {
+        int len = text.Length;
+        int[] preCnt = new int[len], tailCnt = new int[len];
+        List<int> firstC = new();
+        for (int i = 0; i < len; i++)
+        {
+            char c = text[i];
+            preCnt[i] = (i == 0 ? 0 : preCnt[i - 1]);
+            if (c == pattern[0])
+            {
+                preCnt[i]++;
+                firstC.Add(i);
+            }
+        }
+
+        for (int i = len - 1; i >= 0; i--)
+        {
+            char c = text[i];
+            tailCnt[i] = (i == len-1 ? 0 : tailCnt[i + 1]);
+            if(c == pattern[1])
+                tailCnt[i]++;
+        }
+
+        long res = 0;
+        if (preCnt[len - 1] == 0 || tailCnt[0] == 0) // missing pattern character
+        {
+            if (preCnt[len - 1] == tailCnt[0])
+                return res;
+            else
+                return Math.Max(preCnt[len-1], tailCnt[0]);
+        }
+
+        if(pattern[0] == pattern[1]) // same character
+        {
+            int cnt = tailCnt[0]+1;
+            if(cnt < 2)
+                return res;
+
+            res = (long)cnt*(cnt-1)/2;
+            return res;
+        }
+        
+        foreach(int i in firstC)
+        {
+            if(i < len-1)
+                res += tailCnt[i+1];
+        }
+
+        int maxAdd = Math.Max(tailCnt[0], preCnt[len-1]);
+
+        res += maxAdd;
+        return res;
+    }
+}
