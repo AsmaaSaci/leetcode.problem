@@ -1,0 +1,21 @@
+
+public class Solution {
+    public ListNode MergeNodes(ListNode head) {
+        ListNode currentNode = head;
+
+        while (currentNode != null && currentNode.next != null) {
+            if (currentNode.next.val != 0) {
+                currentNode.val += currentNode.next.val;
+                currentNode.next = currentNode.next.next;
+            }
+            else {
+                currentNode = currentNode.next;
+            }
+
+            if (currentNode.next != null && currentNode.next.val == 0 && currentNode.next.next == null) {
+                currentNode.next = null;
+            }
+        }
+        return head;
+    }
+}
