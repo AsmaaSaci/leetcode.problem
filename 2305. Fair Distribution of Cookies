@@ -1,0 +1,41 @@
+public class Solution {
+    public int DistributeCookies(int[] cookies, int k) {
+        int[] distribute = new int[k];
+        
+        return DFS(0, distribute, cookies, k, k);
+    }
+
+    private int DFS(int i, int[] distribute, int[] cookies, int k, int zeroCount) {
+        // If there are not enough cookies remaining, return Int32.MaxValue
+        // as it leads to an invalid distribution.
+        if (cookies.Length - i < zeroCount) {
+            return Int32.MaxValue;   
+        }
+
+        // After distributing all cookies, return the unfairness of this
+        // distribution.
+        if (i == cookies.Length) {
+            int unfairness = Int32.MinValue;
+            foreach (int value in distribute) {
+                unfairness = Math.Max(unfairness, value);
+            }
+            return unfairness;
+        }
+        
+        // Try to distribute the i-th cookie to each child, and update answer
+        // as the minimum unfairness in these distributions.
+        int answer = Int32.MaxValue;
+        for (int j = 0; j < k; ++j) {
+            zeroCount -= distribute[j] == 0 ? 1 : 0;
+            distribute[j] += cookies[i];
+            
+            // Recursively distribute the next cookie.
+            answer = Math.Min(answer, DFS(i + 1, distribute, cookies, k, zeroCount));
+            
+            distribute[j] -= cookies[i];
+            zeroCount += distribute[j] == 0 ? 1 : 0;
+        }
+        
+        return answer;
+    }
+}
