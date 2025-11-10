@@ -1,0 +1,61 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     public int val;
+ *     public TreeNode left;
+ *     public TreeNode right;
+ *     public TreeNode(int val=0, TreeNode left=null, TreeNode right=null) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+public class Solution {
+    public IList<IList<int>> ClosestNodes(TreeNode root, IList<int> queries) {
+        List<IList<int>> res = new();
+        List<int> flat = new();
+
+        TreeNode cur = root;
+        Stack<TreeNode> stk = new();
+        while(stk.Count > 0 || cur != null)
+        {
+            if(cur != null)
+            {
+                stk.Push(cur);
+                cur = cur.left;
+            }
+            else
+            {
+                cur = stk.Pop();
+                flat.Add(cur.val);
+                cur = cur.right;
+            }
+        }
+
+        foreach(int q in queries)
+        {
+            int idx = flat.BinarySearch(q);
+            List<int> tmp = new List<int>([-1, -1]);
+
+            if(idx >= 0)
+            {
+                tmp[0] = q;
+                tmp[1] = q;
+            }
+            else
+            {
+                idx = ~idx;
+                if(idx > 0)
+                    tmp[0] = flat[idx-1];
+
+                if(idx < flat.Count)
+                    tmp[1] = flat[idx];
+            }
+
+            res.Add(tmp);
+        }
+
+        return res;
+    }
+}
