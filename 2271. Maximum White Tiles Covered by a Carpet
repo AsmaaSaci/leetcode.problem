@@ -1,0 +1,26 @@
+public class Solution
+{
+    public int MaximumWhiteTiles(int[][] tiles, int carpetLen)
+    {
+        var result = 0;
+        var covered = 0;
+        Array.Sort(tiles, (a, b) => a[0] - b[0]);
+
+        for (int left = 0, right = 0; right < tiles.Length; right++)
+        {
+            covered += EndOf(right) - StartOf(right) + 1;
+
+            for (; EndOf(left) < EndOf(right) - carpetLen; left++)
+                covered -= EndOf(left) - StartOf(left) + 1;
+
+            var uncovered = EndOf(right) - StartOf(left) - carpetLen + 1;
+            result = Math.Max(result, covered - Math.Max(uncovered, 0));
+        }
+
+        return result;
+
+        int StartOf(int i) => tiles[i][0];
+
+        int EndOf(int i) => tiles[i][1];
+    }
+}
