@@ -1,0 +1,21 @@
+public class Solution {
+    public int LongestSubarray(int[] nums) {
+        int max = 0;
+        for (int i = 0; i < nums.Length; i++) {
+            max = Math.Max(max, nums[i]);
+        }
+        int res = 0;
+        for (int i = 0; i < nums.Length; i++) {
+            if (nums[i] != max) {
+                continue;
+            }
+            int j = i + 1;
+            while (j < nums.Length && nums[j] == nums[i]) {
+                j++;
+            }
+            res = Math.Max(res, j - i);
+            i = j - 1;
+        }
+        return res;
+    }
+}
