@@ -1,0 +1,47 @@
+public class Solution {
+      public IList<IList<int>> GetAncestors(int n, int[][] edges) {
+        var res = new List<IList<int>>();
+        var adjList = new Dictionary<int,List<int>>();
+
+        foreach(var edge in edges){
+            var src = edge[0];
+            var dst = edge[1];
+
+            if(!adjList.ContainsKey(dst)){
+                adjList[dst] = new List<int>();
+            }
+            adjList[dst].Add(src);
+        }
+
+        for(int i=0;i<n;i++){
+            if(!adjList.ContainsKey(i)){
+                res.Add(new List<int>());
+            }
+            else{
+                var list = new List<int>();
+                var visited = new HashSet<int>();
+                foreach(var nei in adjList[i]){
+                    list = DFS(nei,list,visited);
+                }
+                list.Sort();
+                res.Add(list);
+            }
+        }
+
+        return res;
+
+        List<int> DFS(int node, List<int> list, HashSet<int> visited){
+            if(!visited.Contains(node)){
+                visited.Add(node);
+                list.Add(node);
+
+                if(adjList.ContainsKey(node)){
+                    foreach(var nei in adjList[node]){
+                        DFS(nei,list,visited);
+                    }
+                }
+            }
+            return list;
+        }
+    }
+}
