@@ -1,0 +1,26 @@
+public class Solution {
+    private long GCD(long a, long b)
+    {
+        if(a == 0 || b == 0)
+            return a|b;
+        else if(a > b)
+            return GCD(a%b, b);
+        else
+            return GCD(a, b%a);
+    }
+
+    private long LCM(long a, long b)
+    {
+        return (long)(a*b)/GCD(a, b);
+    }
+   
+    private int GetLast(int cnt, int div1, int div2 = 1)
+    {
+        long d = LCM(div1, div2);
+        return (int)(cnt + cnt/(d-1) - (cnt%(d-1) == 0 ? 1 : 0));
+    }
+
+    public int MinimizeSet(int divisor1, int divisor2, int uniqueCnt1, int uniqueCnt2) {
+       return Math.Max(GetLast(uniqueCnt1, divisor1), Math.Max(GetLast(uniqueCnt2, divisor2), GetLast(uniqueCnt1+uniqueCnt2, divisor1, divisor2)));
+    }
+}
