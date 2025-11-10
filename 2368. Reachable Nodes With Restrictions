@@ -1,0 +1,53 @@
+public class Solution {
+    public int ReachableNodes(int n, int[][] edges, int[] restricted) {
+        var graph = new Dictionary<int, IList<int>>();
+        var visited = new HashSet<int>();
+        var hide = new HashSet<int>();
+
+        foreach (var value in restricted)
+        {
+            hide.Add(value);
+        }
+        
+        for (int i = 0; i < n; i++)
+        {
+            if (hide.Contains(i))
+            {
+                continue;
+            }
+            
+            graph.Add(i, new List<int>());
+        }
+        
+        foreach (var edge in edges)
+        {
+            var from = edge[0];
+            var to = edge[1];
+
+            if (hide.Contains(from) || hide.Contains(to))
+            {
+                continue;
+            }
+            
+            graph[from].Add(to);
+            graph[to].Add(from);
+        }
+        
+        visited.Add(0);
+        Traverse(graph, visited, 0);
+
+        return visited.Count;
+    }
+
+    void Traverse(Dictionary<int, IList<int>> graph, HashSet<int> visited, int start)
+    {
+        foreach (var edge in graph[start])
+        {
+            if (!visited.Contains(edge))
+            {
+                visited.Add(edge);
+                Traverse(graph, visited, edge);
+            }
+        }
+    }
+}
