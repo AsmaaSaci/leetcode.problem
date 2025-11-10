@@ -1,0 +1,22 @@
+public class LUPrefix {
+  private int llp = 0;
+  private readonly BitArray b;
+  public LUPrefix(int n) => b = new(n);
+
+  public void Upload(int video) {
+    if(b[video - 1])
+      return;
+    b[video - 1] = true;
+    while(llp< b.Length && b[llp])
+      llp++;
+  }
+
+  public int Longest() => llp;
+}
+
+/**
+ * Your LUPrefix object will be instantiated and called as such:
+ * LUPrefix obj = new LUPrefix(n);
+ * obj.Upload(video);
+ * int param_2 = obj.Longest();
+ */
