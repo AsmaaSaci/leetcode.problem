@@ -1,0 +1,3 @@
+public class Solution {
+    public int MatrixSum(int[][] nums) => nums.SelectMany(row => row.OrderBy(_ => _).Select((num, i) => (num, i))).GroupBy(pair => pair.Item2).Sum(g => g.MaxBy(pair => pair.Item1).Item1);
+}
