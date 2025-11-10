@@ -1,0 +1,54 @@
+public class Solution {
+    public string MinimizeResult(string expression) {
+        int len = expression.Length;
+        int idx = 1;
+        while(idx < len && expression[idx] != '+')
+        {
+            idx++;
+        }
+
+        int first = int.Parse(expression.Substring(0, idx)), second = int.Parse(expression.Substring(idx+1));
+        int dig1 = 1, minV = first+second;
+        string res = "(" + expression+")";
+        while(first/dig1 > 0)
+        {
+            int p1 = first/dig1, p2 = first%dig1;
+            int dig2 = 1;
+            while(second/dig2 > 0)
+            {
+                int p3 = second/dig2, p4 = second%dig2;
+                int curV = 0;
+                string curStr = "";
+                
+                dig2 *= 10;
+                if(p2 == 0 && p4 == 0)
+                    continue;
+                else if(p2 == 0)
+                {
+                    curV = (p1+p3)*p4;
+                    curStr = "(" + p1.ToString() + "+" + p3.ToString() + ")" + p4.ToString();
+                }
+                else if(p4 == 0)
+                {
+                    curV = p1*(p2+p3);
+                    curStr = p1.ToString() + "("+p2.ToString() + "+" + p3.ToString() + ")";
+                }
+                else
+                {
+                    curV = p1*p4*(p2+p3);
+                    curStr = p1.ToString() + "("+p2.ToString() + "+"+p3.ToString()+")" + p4.ToString();
+                }
+
+                if(minV > curV)
+                {
+                    minV = curV;
+                    res = curStr;
+                }
+            }
+
+            dig1 *= 10;
+        }
+
+        return res;
+    }
+}
