@@ -1,0 +1,19 @@
+public class Solution {
+    public IList<int> TopStudents(string[] positive_feedback, string[] negative_feedback, string[] report, int[] student_id, int k) {
+        HashSet<string> pos = new(positive_feedback), neg = new(negative_feedback);
+        return student_id
+            .Zip(report, (sid, rep) => new {sid, rep})
+            .Select(p => 
+                (p.sid, p.rep.Split(" ").Sum(x => x switch
+                {
+                    _ when pos.Contains(x) => 3,
+                    _ when neg.Contains(x) => -1,
+                    _ => 0
+                })))
+            .OrderByDescending(x => x.Item2)
+            .ThenBy(x => x.Item1)
+            .Select(x => x.Item1)
+            .Take(k)
+            .ToList();
+    }
+}
