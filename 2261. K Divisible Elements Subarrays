@@ -1,0 +1,33 @@
+public class Solution {
+    public int CountDistinct(int[] nums, int k, int p) {
+        HashSet<string> seenArr = new();
+        // Each subarray will have a key - Only count new subarrays
+        // if they aren't in seenArr.
+
+        int len = nums.Length;
+        int total = 0;
+
+        StringBuilder sb = new(); // For building arr-keys
+
+        for (int i = 0; i < len; i++){
+            sb.Clear();
+            int currP = 0;
+            int ind = i;
+            while (ind < len){
+                if (nums[ind] % p == 0){
+                    if (currP == k) break;
+                    currP++;
+                }
+                sb.Append(nums[ind]).Append('-');
+                var key = sb.ToString();
+                if (!seenArr.Contains(key)){
+                    seenArr.Add(key);
+                    total++;
+                }
+                ind++;
+            }
+        }
+
+        return total;
+    }
+}
