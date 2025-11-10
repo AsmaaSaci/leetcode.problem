@@ -1,0 +1,12 @@
+public class Solution {
+    public long[] SumOfThree(long num) {
+        long[] a = new long[0];
+        if (num % 3l != 0) return a;
+        long[] ans = new long[3];
+        long n = num / 3l;
+        ans[0] = n - 1l;
+        ans[1] = n;
+        ans[2] = n + 1l;
+        return ans;
+    }
+}
