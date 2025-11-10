@@ -1,0 +1,11 @@
+public class Solution {
+    public int NumberOfArrays(int[] differences, int lower, int upper) {
+        int x = 0, y = 0, cur = 0;
+        foreach (int d in differences) {
+            cur += d;
+            x = Math.Min(x, cur);
+            y = Math.Max(y, cur);
+        }
+        return Math.Max(0, (upper - lower) - (y - x) + 1);
+    }
+}
