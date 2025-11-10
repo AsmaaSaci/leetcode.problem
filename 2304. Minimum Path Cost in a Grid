@@ -1,0 +1,30 @@
+public class Solution {
+    public int MinPathCost(int[][] grid, int[][] moveCost) {
+        int m = grid.Length, n = grid[0].Length;
+        int[] dp = new int[n];
+       
+        for(int i = 0; i < m-1; i++)
+        {
+            int[] tmp = Enumerable.Repeat(int.MaxValue, n).ToArray();
+            for(int j = 0; j < n; j++)
+            {
+                int id = grid[i][j], preSum = dp[j] + id;
+                for(int k = 0; k < n; k++)
+                {
+                    int cost = moveCost[id][k];
+                    tmp[k] = Math.Min(tmp[k], cost+preSum);
+                }
+            }
+
+            Array.Copy(tmp, dp, n);
+        }
+
+        int res = int.MaxValue;
+        for(int j = 0; j < n; j++)
+        {
+            res = Math.Min(dp[j]+grid[m-1][j], res);
+        }
+
+        return res;
+    }
+}
