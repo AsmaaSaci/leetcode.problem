@@ -1,0 +1,26 @@
+public class Solution
+{
+	// @TrickyCat
+	public long MinimalKSum(int[] nums, int k)
+	{
+		long sum = (1L + k) * k / 2;
+		int lastNum = k;
+		HashSet<int> handled = new(), numSet = new(nums);
+		
+		for (int i = 0; i < nums.Length; i++)
+		{
+			if (nums[i] > lastNum) continue;
+
+			if (handled.Add(nums[i]))
+			{
+				sum -= nums[i];
+				while (numSet.Contains(++lastNum))
+				{
+					handled.Add(lastNum);
+				}
+				sum += lastNum;
+			}
+		}
+		return sum;
+	}
+}
