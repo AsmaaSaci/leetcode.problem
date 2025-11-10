@@ -1,0 +1,22 @@
+public class Solution {
+    public int MinimumPartition(string s, int k) {
+        long pre = 0;
+        int idx = 0, cnt = 0, len = s.Length;
+
+        while(idx < len)
+        {
+            int dig = s[idx++]-'0';
+            if(dig > k)
+                return -1;
+
+            pre = (pre*10+dig);
+            if(pre >= k)
+            {
+                pre = (pre == k ? 0 : dig);
+                cnt++;
+            }
+        }
+
+        return cnt + (pre > 0 ? 1 : 0);
+    }
+}
