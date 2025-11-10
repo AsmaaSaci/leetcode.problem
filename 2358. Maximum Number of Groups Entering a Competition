@@ -1,0 +1,27 @@
+public class Solution {
+    public int MaximumGroups(int[] grades) {
+        // sort array, and start with smallest item as the first group:
+        int len = grades.Length;
+        if(len < 2)
+            return len;
+
+        int[] pre = new int[2];
+        Array.Sort(grades);
+
+        int sum = 0, cnt = 0, res = 0;
+        for(int i = 0; i < len; i++)
+        {
+            sum += grades[i];
+            cnt++;
+            if(sum > pre[0] && cnt > pre[1])
+            {
+                pre = [sum, cnt];
+                sum = 0;
+                cnt = 0;
+                res++;
+            }
+        }
+
+        return res;
+    }
+}
