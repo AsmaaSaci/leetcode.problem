@@ -1,0 +1,43 @@
+public string RepeatLimitedString(string s, int repeatLimit){
+    StringBuilder sb = new StringBuilder();
+    int[] symbolCount = new int[26];
+    int[] indices = new int[26];
+    int i = 0;
+
+    for (; i < s.Length; i++) // Count total number of symbols in s
+        symbolCount[(int)s[i] - 97]++;
+
+    for (i = 1; i < 26; i++){ // Setup indices
+        if (symbolCount[i] > 0)
+            indices[i] = i;
+        else
+            indices[i] = indices[i-1];
+    }
+
+    i = 25;
+    while (true){ // Loop for every letter 'z'->'a'
+        if (symbolCount[i] <= 0) // Ran out of symbols
+            i = indices[i - 1]; // Pick the next present llc 
+
+        if (i == 0){ // i points to 'a', so we can no longer take llc from the left
+            sb.Append((char)97, Math.Min(repeatLimit, symbolCount[0])); // Add whatever is left
+            return sb.ToString();
+        }
+
+        while (symbolCount[i] > repeatLimit){ // Handle the case when we have more symbols than repeatLimit
+            sb.Append((char)(i + 97), repeatLimit);
+            symbolCount[i] -= repeatLimit;
+
+            if (symbolCount[indices[i-1]] <= 0){ // If next llc is empty
+                if (indices[i-1] <= 0) // If indices[i-1] points to 'a' => can't take the next llc
+                    return sb.ToString();
+                indices[i-1] = indices[indices[i-1]-1]; // Move to the next lexicographically largest
+            }
+            
+            sb.Append((char)(indices[i-1] + 97)); // Add "filler" character
+            symbolCount[indices[i-1]]--;
+        }
+        sb.Append((char)(i + 97), symbolCount[i]); // Add remaining characters
+        symbolCount[i] = 0;
+    }
+}
