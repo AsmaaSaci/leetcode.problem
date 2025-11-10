@@ -1,0 +1,78 @@
+public class Solution {
+    private int GetCnt(string s)
+    {
+        int len = s.Length, cnt = 0;
+        for(int i = 0; i < len; i++)
+        {
+            char c = s[i];
+            if(c == ' ' || i == len-1)
+                cnt++;
+        }
+
+        return cnt;
+    }
+    
+    private bool IsLarger(string a, string b)
+    {
+        int lenA = a.Length, lenB = b.Length, idx = 0;
+        while(idx < lenA && idx < lenB)
+        {
+            char c1 = a[idx], c2 = b[idx];
+            if(c1 != c2)
+            {
+                if(c1 >= 'A' && c1 <= 'Z')
+                {
+                    if(c2 >= 'A' && c2 <= 'Z')
+                        return c1 > c2;
+                    else
+                        return false;
+                }
+                else
+                {
+                    if(c2 >= 'A' && c2 <= 'Z')
+                        return true;
+                    else
+                        return c1 > c2;
+                }
+            }
+            
+            idx++;
+        }
+
+        return idx < lenA;
+    }
+
+    public string LargestWordCount(string[] messages, string[] senders) {
+        int len = messages.Length, maxLen = 0;
+        string res = "";
+        Dictionary<string, int> dict = new();
+
+        for(int i = 0; i < len; i++)
+        {
+            string sName = senders[i];
+            dict.TryAdd(sName, 0);
+            dict[sName] += GetCnt(messages[i]);
+
+            maxLen = Math.Max(maxLen, dict[sName]);
+        }
+
+        foreach(var kvp in dict)
+        {
+            string key = kvp.Key;
+            int curLen = kvp.Value;
+
+            if(curLen >= maxLen)
+            {
+                if(curLen > maxLen)
+                {
+                    res = key;
+                    maxLen = curLen;
+                }
+                else if(IsLarger(key, res))
+                    res = key;
+            }
+        }
+
+        return res;
+    }
+}
