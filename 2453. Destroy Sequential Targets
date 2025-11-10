@@ -1,0 +1,33 @@
+public class Solution {
+    public int DestroyTargets(int[] nums, int space) {
+        int len = nums.Length;
+        Dictionary<int, int[]> freq = new();
+        int maxFreq = 0;
+        foreach(int n in nums)
+        {
+           int id = n%space, preMin = int.MaxValue, preCnt = 0;
+           if(freq.ContainsKey(id))
+           {
+                preMin = freq[id][0];
+                preCnt = freq[id][1];
+           }
+           else
+                freq.Add(id, new int[2]);
+
+           int minV = Math.Min(n, preMin), cnt = preCnt+1;
+           freq[id] = [minV, cnt];
+
+           maxFreq = Math.Max(maxFreq, cnt);
+        }
+
+        int res = int.MaxValue;
+        foreach(var kvp in freq)
+        {
+            int curV = kvp.Value[0], f =kvp.Value[1];
+            if(f == maxFreq)
+                res = Math.Min(curV, res);
+        }
+
+        return res;
+    }
+}
