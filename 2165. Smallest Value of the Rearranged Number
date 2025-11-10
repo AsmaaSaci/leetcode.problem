@@ -1,0 +1,54 @@
+public class Solution {
+    public long SmallestNumber(long num) 
+    {
+        long res = 0;
+        int i = 0;
+        int[] digitsCount = new int[10];
+
+        if (num < 0)
+        {
+            num = -1 * num;
+            while (num > 0)
+            {
+                digitsCount[num % 10]++;
+                num /= 10;
+            }
+            for (i = digitsCount.Length - 1; i >= 0; --i)
+            {
+                while (digitsCount[i] > 0)
+                {
+                    res = 10 * res + i;
+                    --digitsCount[i];
+                }
+            }
+            return -1 * res;
+        }
+
+        while (num > 0)
+        {
+            digitsCount[num % 10]++;
+            num /= 10;
+        }
+
+        for (i = 0; i < digitsCount.Length; ++i)
+        {
+            if (i != 0 && digitsCount[i] > 0)
+            {
+                res = 10 * res + i;
+                --digitsCount[i];
+                break;
+            }
+        }
+
+        for (i = 0; i < digitsCount.Length; ++i)
+        {
+            while (digitsCount[i] > 0)
+            {
+                res = 10 * res + i;
+                --digitsCount[i];
+            }
+        }
+        
+        return res;
+    }
+}
