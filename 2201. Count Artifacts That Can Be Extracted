@@ -1,0 +1,35 @@
+public class Solution {
+    public int DigArtifacts(int n, int[][] artifacts, int[][] dig) {
+        Dictionary<int, HashSet<int>> digs = new();
+        foreach(int[] d in dig)
+        {
+            int x = d[0], y = d[1];
+            if(!digs.ContainsKey(x))
+                digs.Add(x, new HashSet<int>());
+
+            digs[x].Add(y);
+        }
+
+        int res = 0;
+        foreach(int[] arti in artifacts)
+        {
+            bool valid = true;
+            for(int i = arti[0]; i <= arti[2]; i++)
+            {
+                for(int j = arti[1]; j <= arti[3]; j++)
+                {
+                    if(!digs.ContainsKey(i) || !digs[i].Contains(j))
+                    {
+                        valid = false;
+                        break;
+                    }
+                }
+            }
+
+            if(valid)
+                res++;
+        }
+
+        return res;
+    }
+}
