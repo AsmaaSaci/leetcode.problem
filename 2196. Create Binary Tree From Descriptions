@@ -1,0 +1,52 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     public int val;
+ *     public TreeNode left;
+ *     public TreeNode right;
+ *     public TreeNode(int val=0, TreeNode left=null, TreeNode right=null) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+public class Solution {
+    public TreeNode CreateBinaryTree(int[][] descriptions) {
+        var dt = new Dictionary<int, (TreeNode node, int parent)>();
+        int p = -1;
+        for(int i=0; i<descriptions.Length; i++){
+
+            var node = descriptions[i];
+            var pn = new TreeNode();
+
+            if(!dt.ContainsKey(node[0])){
+                pn.val = node[0];
+                dt[node[0]] = (pn,-1);
+            }else {
+                pn = dt[node[0]].node;
+            }
+            
+            var cn = new TreeNode();
+            
+            if(dt.ContainsKey(node[1])){
+                cn = dt[node[1]].node;
+            }else{
+                cn.val = node[1];
+            }
+            dt[node[1]] = (cn,pn.val);
+
+            if(node[2]==1){
+                pn.left = cn;
+            }else{
+                pn.right = cn;
+            }
+        }
+         foreach(var k in dt.Keys) {
+            if(dt[k].parent == -1) p = k;
+        }
+
+        Console.WriteLine(p);
+        return dt[p].node;
+    }
+}
