@@ -1,0 +1,20 @@
+public class Solution
+{
+    public int[] ArrayChange(int[] nums, int[][] operations) 
+    {
+        var dict = new Dictionary<int, int>();
+
+        for (int i = 0; i < nums.Length; i++)
+        {
+            dict.Add(nums[i], nums[i]);
+        }
+
+        foreach (var item in operations)
+        {
+            dict.Remove(item[0]);
+            dict.Add(item[1] ,item[1]);
+        }
+
+        return dict.Values.ToArray();
+    }
+}
