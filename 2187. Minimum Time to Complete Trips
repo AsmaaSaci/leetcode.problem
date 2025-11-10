@@ -1,0 +1,42 @@
+public class Solution {
+    public long MinimumTime(int[] time, int totalTrips) {
+        int min = time[0];
+        for(int i = 1; i < time.Length; i++)
+        {
+            if (min > time[i])
+            {
+                min = time[i];
+            }
+        }
+
+        long left = 1;
+        long right = (long)totalTrips * min;
+        while (left < right)
+        {
+            long mid = left + (right - left) / 2;
+            if (IsLess(time, mid, totalTrips))
+            {
+                left = mid + 1;
+            }
+            else
+            {
+                right = mid;
+            }
+        }
+        return left;
+    }
+
+    private bool IsLess(int[] time, long current, int totalTrips)
+    {
+        long total = 0;
+        for(int j = 0; j < time.Length; j++)
+        {
+            total += current / time[j];
+            if (total >= totalTrips)
+            {
+                return false;
+            } 
+        }
+        return true;
+    }
+}
