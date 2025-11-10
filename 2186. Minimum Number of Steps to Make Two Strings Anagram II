@@ -1,0 +1,23 @@
+public class Solution {
+    public int MinSteps(string s, string t) {
+        int[] sample = new int[26];
+
+        foreach(char c in s)
+        {
+            sample[c-'a']++;
+        }
+
+        foreach(char c in t)
+        {
+            sample[c-'a']--;
+        }
+
+        int res = 0;
+        foreach(int cur in sample)
+        {
+            res += Math.Abs(cur);
+        }
+
+        return res;
+    }
+}
