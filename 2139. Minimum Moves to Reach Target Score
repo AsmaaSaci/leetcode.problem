@@ -1,0 +1,23 @@
+public class Solution {
+    public int MinMoves(int target, int maxDoubles) {
+        int cur = target, dT = maxDoubles;
+        if(dT == 0)
+            return cur-1;
+        int times = 0;
+        while(cur > 1)
+        {
+            if(cur%2 == 0)
+            {
+                cur /= 2;
+                if(--dT == 0)
+                    return times + cur;
+            }
+            else
+                cur--;
+
+            times++;
+        }
+
+        return times;
+    }
+}
