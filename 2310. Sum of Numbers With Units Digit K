@@ -1,0 +1,21 @@
+public class Solution {
+    public int MinimumNumbers(int num, int k) {
+        if(num == 0)
+            return 0; // Empty set
+
+        int[] res = new int[10];
+        int cnt = 1, id = k;
+        while(res[id] == 0)
+        {
+            res[id] = cnt++;
+            id += k;
+            id %= 10;
+        }
+
+        cnt = res[num%10];
+        if(cnt <= 1)
+            return cnt == 1 ? 1 : -1;
+
+        return num - (cnt-1)*k > 0 ? cnt : -1;
+    }
+}
