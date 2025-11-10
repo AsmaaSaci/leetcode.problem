@@ -1,0 +1,18 @@
+public class Solution {
+    public bool IsStrictlyPalindromic(int n) {
+        for (int i = 2; i <= n - 2; i++) {
+            int temp = n;
+            string digits = "";
+            while (temp > 0) {
+                int rem = temp % i;
+                digits = rem.ToString() + digits;
+                temp /= i;
+            }
+            char[] arr = digits.ToCharArray();
+            Array.Reverse(arr);
+            string rev = new string(arr);
+            if (digits != rev) return false;
+        }
+        return true;
+    }
+}
