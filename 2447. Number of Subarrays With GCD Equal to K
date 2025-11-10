@@ -1,0 +1,41 @@
+public class Solution {
+    private int GCD(int a, int b)
+    {
+        if(a == b)
+            return a;
+        else if(a == 0 || b == 0)
+            return a|b;
+        else if(a > b)
+            return GCD(a%b, b);
+        else
+            return GCD(a, b%a);
+    }
+    public int SubarrayGCD(int[] nums, int k) {
+        int res = 0, len = nums.Length;
+
+        // Slide Window:
+        for(int i = 0; i < len; i++)
+        {
+            int cur = nums[i];
+            if(cur == k)
+                res++;
+
+            if(cur < k || cur%k != 0)
+                continue;
+
+            for(int j = i+1; j < len; j++)
+            {
+                if(nums[j] < k || nums[j]%k != 0)
+                    break;
+
+                cur = GCD(cur, nums[j]);
+                if(cur < k)
+                    break;
+                else if(cur == k)
+                    res++;
+            }
+        }
+
+        return res;
+    }
+}
