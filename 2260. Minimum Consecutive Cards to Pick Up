@@ -1,0 +1,19 @@
+public class Solution {
+    public int MinimumCardPickup(int[] cards) {
+        //int l = 0;
+        int r = 0;
+        int minCards = int.MaxValue;
+        Dictionary<int ,int> dict = new Dictionary<int,int>();
+
+        while(r<cards.Length){
+            if(dict.ContainsKey(cards[r])){
+                minCards = Math.Min(minCards, r - dict[cards[r]]+1);
+            }
+            
+            dict[cards[r]] = r;
+            r++;
+        }
+        
+        return minCards == int.MaxValue? -1: minCards;
+    }
+    }
