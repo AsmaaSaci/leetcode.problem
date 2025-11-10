@@ -1,0 +1,33 @@
+public class Solution {
+    private static IEnumerable<int> Factors(int value) {
+        if (value <= 1)
+            yield break;
+
+        for (; value % 2 == 0; value /= 2)
+            yield return 2;
+
+        int n = (int)(Math.Sqrt(value) + 0.1);
+
+        for (int d = 3; d <= n; d += 2) {
+            while (value % d == 0) {
+                yield return d;
+
+                value /= d;
+
+                n = (int)(Math.Sqrt(value) + 0.1);
+            }
+        }
+
+        if (value != 1)
+            yield return value;
+    }
+
+    public int DistinctPrimeFactors(int[] nums) {
+        HashSet<int> divisors = new();
+
+        foreach (int num in nums)
+            divisors.UnionWith(Factors(num));
+
+        return divisors.Count;       
+    }
+}
