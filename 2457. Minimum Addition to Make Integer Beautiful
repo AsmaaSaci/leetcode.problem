@@ -1,0 +1,33 @@
+public class Solution {
+    public long MakeIntegerBeautiful(long n, int target) {
+        // try to make last digit zero
+        long num = n;
+        long answer = 0;
+        long multiplier = 1;        
+
+        while(GetSum(num) > target)
+        {            
+            long add = 10 - num % 10;
+            answer += multiplier * add;
+            multiplier *= 10;            
+            num += add;            
+            num /= 10;
+        }
+
+        return answer;
+    }
+
+    private long GetSum(long num)
+    {
+        long sum = 0;
+
+        while(num > 0)
+        {
+            long digit = num % 10;
+            sum += digit;
+            num /= 10;
+        }
+
+        return sum;
+    }
+}
