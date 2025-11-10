@@ -1,0 +1,29 @@
+public class Solution {
+    public int MaximumProduct(int[] nums, int k) {
+        int mod = 1000000007;
+        PriorityQueue<int, int> pq = new();
+        foreach(int n in nums)
+        {
+            pq.Enqueue(n, n);
+        }
+
+        while(k > 0)
+        {
+            int cur = pq.Dequeue();
+            int next = (pq.Count > 0 ? pq.Peek() :cur);
+            int gap = Math.Min(k, next-cur+1);
+            cur += gap;
+            k -= gap;
+            pq.Enqueue(cur, cur);
+        }
+
+        long res = 1;
+        while(pq.Count > 0)
+        {
+            res *= pq.Dequeue();
+            res %= mod;
+        }
+
+        return (int)res;
+    }
+}
