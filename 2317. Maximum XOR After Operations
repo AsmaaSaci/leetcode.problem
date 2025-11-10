@@ -1,0 +1,9 @@
+public class Solution {
+    public int MaximumXOR(int[] nums) {
+        int n = 0;
+
+        foreach(int num in nums) n |= num;
+
+        return n;
+    }
+}
