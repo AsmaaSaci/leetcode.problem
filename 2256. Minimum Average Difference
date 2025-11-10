@@ -1,0 +1,22 @@
+public class Solution
+{
+    public int MinimumAverageDifference(int[] nums)
+    {
+        long sum = nums.Sum(n => (long)n);
+        if (sum == 0) return 0;
+
+        int minIndex = 0;
+        int len = nums.Length;
+        long front = 0;
+        long minDiff = long.MaxValue;
+
+        for (int i = 1; i < len; i++)
+        {
+            front += nums[i - 1];
+            long diff = Math.Abs((sum - front) / (len - i) - front / i);
+            if (diff < minDiff) (minDiff, minIndex) = (diff, i - 1);
+        }
+
+        return sum / len < minDiff ? len - 1 : minIndex;
+    }
+}
