@@ -1,0 +1,66 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     public int val;
+ *     public TreeNode left;
+ *     public TreeNode right;
+ *     public TreeNode(int val=0, TreeNode left=null, TreeNode right=null) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+public class Solution {
+    public int AmountOfTime(TreeNode root, int start) {
+        if (root == null) return 0;
+        
+        Dictionary<TreeNode, TreeNode> parentMap = new Dictionary<TreeNode, TreeNode>();
+        Queue<TreeNode> queue = new Queue<TreeNode>();
+        HashSet<TreeNode> visited = new HashSet<TreeNode>();
+        
+        PopulateParentMap(root, null, parentMap, start, queue, visited);
+        
+        int minutes = -1; // start at -1 to count the initial node as minute 0
+        
+        while (queue.Count > 0) {
+            int size = queue.Count;
+            while (size-- > 0) {
+                TreeNode current = queue.Dequeue();
+                visited.Add(current);
+                
+                if (current.left != null && !visited.Contains(current.left)) {
+                    queue.Enqueue(current.left);
+                    visited.Add(current.left);
+                }
+                
+                if (current.right != null && !visited.Contains(current.right)) {
+                    queue.Enqueue(current.right);
+                    visited.Add(current.right);
+                }
+                
+                TreeNode parentOfCurrent = parentMap[current];
+                if (parentOfCurrent != null && !visited.Contains(parentOfCurrent)) {
+                    queue.Enqueue(parentOfCurrent);
+                    visited.Add(parentOfCurrent);
+                }
+            }
+            minutes++;
+        }
+        return minutes;
+    }
+
+    private void PopulateParentMap(TreeNode node, TreeNode parentNode, Dictionary<TreeNode, TreeNode> parent,
+                                   int start, Queue<TreeNode> queue, HashSet<TreeNode> visited) {
+        if (node == null) return;
+        
+        if (node.val == start) {
+            queue.Enqueue(node);
+            visited.Add(node);
+        }
+        
+        parent.Add(node, parentNode);
+        PopulateParentMap(node.left, node, parent, start, queue, visited);
+        PopulateParentMap(node.right, node, parent, start, queue, visited);
+    }
+}
