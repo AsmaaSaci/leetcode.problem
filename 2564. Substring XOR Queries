@@ -1,0 +1,33 @@
+public class Solution {
+    public IList<IList<int>> SubstringXorQueries(string s, int[][] queries) {
+        var map = new Dictionary<int, (int, int)>();
+        int n = s.Length;
+
+        for (int l = 0; l < n; l++) {
+            if (s[l] == '0') {
+                if (!map.ContainsKey(0))
+                    map[0] = (l, l);
+                continue;
+            }
+
+            int num = 0;
+            for (int r = l; r < n && r - l < 30; r++) {
+                num = (num << 1) | (s[r] - '0');
+                if (!map.ContainsKey(num))
+                    map[num] = (l, r);
+            }
+        }
+
+        var res = new List<IList<int>>();
+        foreach (var query in queries) {
+            int target = query[0] ^ query[1];
+            if (map.ContainsKey(target)) {
+                var pos = map[target];
+                res.Add(new List<int>{pos.Item1, pos.Item2});
+            } else {
+                res.Add(new List<int>{-1, -1});
+            }
+        }
+        return res;
+    }
+}
