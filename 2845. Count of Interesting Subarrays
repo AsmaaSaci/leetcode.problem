@@ -1,0 +1,28 @@
+public class Solution {
+    public long CountInterestingSubarrays(IList<int> nums, int modulo, int k) {
+        var countMap = new Dictionary<int, long>();
+        countMap[0] = 1;  
+        long result = 0;
+        int prefix = 0;
+
+        foreach (var num in nums) {
+            if (num % modulo == k) {
+                prefix++;
+            }
+
+            int currentMod = prefix % modulo;
+            int target = (currentMod - k + modulo) % modulo;
+
+            if (countMap.ContainsKey(target)) {
+                result += countMap[target];
+            }
+
+            if (!countMap.ContainsKey(currentMod)) {
+                countMap[currentMod] = 0;
+            }
+            countMap[currentMod]++;
+        }
+
+        return result;
+    }
+}
