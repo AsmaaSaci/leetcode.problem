@@ -1,0 +1,19 @@
+public class Solution {
+    public long MaxArrayValue(int[] nums) {
+        long maxVal = 0, sum = 0;
+        int len = nums.Length, idx = len-1;
+
+        while(idx >= 0)
+        {
+            sum = nums[idx--];
+            while(idx >= 0 && sum >= nums[idx])
+            {
+                sum += nums[idx--];
+            }
+
+            maxVal = Math.Max(maxVal, sum);
+        }
+
+        return maxVal;
+    }
+}
