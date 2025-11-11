@@ -1,0 +1,37 @@
+public class Solution {
+    public int MinimumAddedInteger(int[] nums1, int[] nums2) {
+        Array.Sort(nums1);
+        Array.Sort(nums2);
+        int x = int.MaxValue;
+        for(int i = 0; i <= 2; i++)
+        {
+            int target = nums2[0] - nums1[i];
+            if(Cheking(nums1, nums2, target))
+            {
+                x = Math.Min(x, target);
+            }
+        }
+        return x;
+    }
+
+    public bool Cheking (int[] arr1, int[] arr2, int x)
+    {
+        int count = 0;
+        for(int i = 0, j = 0; i < arr1.Length && j < arr2.Length; i++)
+        {
+            if(arr1[i] + x != arr2[j])
+            {
+                count++;
+            }
+            else
+            {
+                j++;
+            }
+        }
+        if(count > 2)
+        {
+            return false;
+        }
+        return true;
+    }
+}
