@@ -1,0 +1,39 @@
+public class Solution {
+    public int CountWays(IList<int> nums) {
+        var list = nums.ToList();
+        list.Sort();
+
+        var selected = new Queue<int>();
+        var unselected = new Queue<int>(list);
+
+        var total = 0;
+
+        if (unselected.Peek() != 0)
+        {
+            total++;
+        }
+
+        while (unselected.Count != 0)
+        {
+            var current = unselected.Dequeue();
+            selected.Enqueue(current);
+
+            if (current >= selected.Count)
+            {
+                continue;
+            }
+
+            if (unselected.Any())
+            {
+                if (unselected.Peek() > selected.Count)
+                {
+                    total++;
+                }
+                continue;
+            }
+            total++;
+        }
+
+        return total;
+    }
+}
