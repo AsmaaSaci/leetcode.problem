@@ -1,0 +1,37 @@
+public class Solution {
+    public int MaximizeSquareHoleArea(int n, int m, int[] hBars, int[] vBars) {
+        Array.Sort(hBars);
+        Array.Sort(vBars);
+        int ah = 0;
+        int av = 0;
+        int answer = 2;
+        int streak = 0;
+        for(int i = 1; i < hBars.Length; i++)
+        {
+            if(Math.Abs(hBars[i - 1] - hBars[i]) == 1)
+            {
+                streak++;
+            }
+            else
+            {
+                streak = 0;
+            }
+        ah = ah < streak ? streak : ah;
+        }
+        streak = 0;
+        for(int i = 1; i < vBars.Length; i++)
+        {
+            if(Math.Abs(vBars[i - 1] - vBars[i]) == 1)
+            {
+                streak++;
+            }
+            else
+            {
+                streak = 0;
+            }
+        av = av < streak ? streak : av;
+        }
+        answer += Math.Min(ah, av);
+        return Convert.ToInt32(Math.Pow(answer, 2));
+    }
+}
