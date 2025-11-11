@@ -1,0 +1,21 @@
+public class Solution {
+    public int MinRectanglesToCoverPoints(int[][] points, int w) {
+        int lx=0;
+        Array.Sort(points, (a, b) => a[0] - b[0]);
+        lx = points[0][0];
+        int count=1;
+        foreach(var p in points)
+        {
+            if(p[0] - lx <= w)
+            {
+                if(lx > p[0])
+                    lx = p[0];
+            }
+            else {
+                lx = p[0];
+                count++;
+            }
+        }
+        return count;
+    }
+}
