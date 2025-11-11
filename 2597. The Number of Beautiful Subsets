@@ -1,0 +1,29 @@
+public class Solution {
+    public int BeautifulSubsets(int[] nums, int k) {
+        Array.Sort(nums);
+        return CountBeautifulSubsets(nums, k, 0, new List<int>(), new HashSet<int>());
+    }
+
+    private int CountBeautifulSubsets(int[] nums, int k, int index, List<int> currentSubset, HashSet<int> seen) {
+        if (index == nums.Length) {
+            return currentSubset.Count > 0 ? 1 : 0;
+        }
+
+        int count = 0;
+
+        // Case 1: Exclude current element and move to next element
+        count += CountBeautifulSubsets(nums, k, index + 1, currentSubset, seen);
+
+        // Case 2: Include current element if it does not violate the beautiful condition
+        int currentElement = nums[index];
+        if (!seen.Contains(currentElement - k) && !seen.Contains(currentElement + k)) {
+            currentSubset.Add(currentElement);
+            seen.Add(currentElement);
+            count += CountBeautifulSubsets(nums, k, index + 1, currentSubset, seen);
+            currentSubset.RemoveAt(currentSubset.Count - 1);
+            seen.Remove(currentElement);
+        }
+
+        return count;
+    }
+}
