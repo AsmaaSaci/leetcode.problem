@@ -1,0 +1,23 @@
+public class Solution {
+    public int MonkeyMove(int n) {
+        long p = 1;
+        long r = 2;
+
+        while(n != 0) {
+
+            bool b = (n & 1) == 1;
+            n >>= 1;
+
+            if(b) {
+
+                p *= r;
+                p %= 1000000007;
+            }
+            
+            r *= r;
+            r %= 1000000007;
+        }
+
+        return ((int) p + 1000000005) % 1000000007;
+    }
+}
