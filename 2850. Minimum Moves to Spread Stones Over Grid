@@ -1,0 +1,45 @@
+public class Solution {
+    public int MinimumMoves(int[][] grid) {
+        List<(int,int)> zero = new ();
+        List<(int,int)> bulk = new();
+        for(int i =0;i<3;i++)
+        {
+            for(int j =0;j<3;j++)
+            {
+                if (grid[i][j] == 0)
+                {
+                    zero.Add((i,j));
+                }
+                if (grid[i][j] > 1)
+                {
+                    bulk.Add((i,j));
+                }
+            }
+        }
+        int moves = 1000;
+        Iterate(zero, bulk, 0, -1, -1, 0, grid,ref moves);
+        return moves;
+    }
+
+    private void Iterate( List<(int,int)> zero,  List<(int,int)> bulk, int index, int x, int y, int moves,int[][] grid, ref int minMoves)
+    {
+        if (index >= zero.Count)
+        {
+            minMoves = Math.Min(minMoves, moves);
+            return;
+        }
+        (int a, int b) = zero[index];
+        foreach((int k, int l) in bulk)
+        {
+            if (grid[k][l] > 1)
+            {
+                    grid[k][l] -=1;
+                    grid[a][b] +=1;
+                    int val = Math.Abs(k-a) + Math.Abs(l-b);
+                    Iterate(zero, bulk, index+1, k, l, moves+val, grid,ref minMoves);
+                    grid[k][l] +=1;
+                    grid[a][b] -=1;
+            }        
+        }
+    }
+}
