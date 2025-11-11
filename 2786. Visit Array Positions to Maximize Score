@@ -1,0 +1,19 @@
+public class Solution {
+    public long MaxScore(int[] nums, int x) {
+        int len = nums.Length;
+        long[] res = new long[2];
+        res[nums[0]%2] = nums[0];
+        res[(nums[0]+1)%2] = nums[0]-x;
+        
+        for(int i = 1; i < len; i++)
+        {
+            long cur = nums[i];
+            if(cur % 2 == 0)
+                res[0] = Math.Max(res[0], res[1]-x) + cur;
+            else
+                res[1] = Math.Max(res[0]-x, res[1]) + cur;
+        }
+
+        return Math.Max(res[0], res[1]);
+    }
+}
