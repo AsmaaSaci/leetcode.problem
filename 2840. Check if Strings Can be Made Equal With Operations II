@@ -1,0 +1,20 @@
+public class Solution {
+    public bool CheckStrings(string s1, string s2) {
+        return string.Equals(Transform(s1), Transform(s2));        
+    }
+
+    private string Transform(string a)
+    {
+        var list1 = new List<char>();
+        var list2 = new List<char>();
+        for (var i = 0; i < a.Length; i+=2)
+        {
+            list1.Add(a[i]);
+            if (i < a.Length - 1)
+                list2.Add(a[i+1]);
+        }
+        list1.Sort();
+        list2.Sort();
+        return string.Join("", list1.Concat(list2));
+    }
+}
