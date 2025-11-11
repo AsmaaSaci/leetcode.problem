@@ -1,0 +1,46 @@
+public class Solution {
+     public int MaxMoves(int[][] grid)
+ {
+     int m = grid.Length;
+     int n = grid[0].Length;
+     int maxMoves = 0;
+
+     // Directions for moving right, top-right, and bottom-right
+     int[][] directions = new int[][] {
+     new int[] {0, 1},  // Move right
+     new int[] {-1, 1}, // Move top-right
+     new int[] {1, 1}   // Move bottom-right
+ };
+
+     // Initialize BFS queue for each cell in the first column
+     for (int row = 0; row < m; row++)
+     {
+         Queue<(int, int, int)> queue = new Queue<(int, int, int)>();
+         queue.Enqueue((row, 0, 0));  // Start from column 0 with move count 0
+         bool[,] visited = new bool[m, n];
+         visited[row, 0] = true;
+
+         while (queue.Count > 0)
+         {
+             var (curRow, curCol, moves) = queue.Dequeue();
+             maxMoves = Math.Max(maxMoves, moves);
+
+             // Explore all directions
+             foreach (var dir in directions)
+             {
+                 int newRow = curRow + dir[0];
+                 int newCol = curCol + dir[1];
+
+                 if (newRow >= 0 && newRow < m && newCol < n && !visited[newRow, newCol]
+                     && grid[newRow][newCol] > grid[curRow][curCol])
+                 {
+                     queue.Enqueue((newRow, newCol, moves + 1));
+                     visited[newRow, newCol] = true;
+                 }
+             }
+         }
+     }
+
+     return maxMoves;
+ }
+}
