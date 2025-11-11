@@ -1,0 +1,36 @@
+public class Solution {
+    public IList<IList<int>> FindMatrix(int[] nums)
+    {
+        var dict = GetDict(nums);
+        int step = dict.Values.Max();
+        var listOutput = new List<IList<int>>();
+
+        while (step != 0)
+        {
+            var list = new List<int>();
+
+            foreach (var item in dict.ToList())
+            {
+                if (item.Value != 0)
+                {
+                    list.Add(item.Key);
+                    dict[item.Key]--;
+                }
+            }
+
+            listOutput.Add(list);
+            step--;
+        }
+
+        return listOutput;
+    }
+
+    private Dictionary<int, int> GetDict(int[] nums)
+    {
+        var dict = new Dictionary<int, int>();
+        foreach (var item in nums)
+            dict[item] = dict.GetValueOrDefault(item, 0) + 1;
+
+        return dict;
+    }
+}
