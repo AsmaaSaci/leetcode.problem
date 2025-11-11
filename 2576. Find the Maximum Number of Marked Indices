@@ -1,0 +1,52 @@
+public class Solution {
+
+    int[] ascendArray;
+    int n;
+
+    public int MaxNumOfMarkedIndices(int[] nums) {
+        
+        n = nums.Length;
+        ascendArray = (int[])nums.Clone();
+
+        Array.Sort(ascendArray);
+
+
+        int left = 0;
+        int right = n/2;
+
+        while(left <= right)
+        {
+            int mid = left + (right - left) / 2;
+            if(Check(mid))
+            {
+                left = mid + 1;
+            }
+            else
+            {
+                right = mid - 1;
+            }
+        }
+
+        return right * 2;
+
+    }
+
+    bool Check(int max)
+    {
+        if(max > n) {
+            return false;
+        }
+
+        for(int i = 0; i < max; i++)
+        {
+            int small = ascendArray[i];
+            int large = ascendArray[n - (max - i)];
+            if(small * 2 > large)
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+}
