@@ -1,0 +1,11 @@
+public class Solution {
+    public bool MakeStringsEqual(string s, string target) {
+        bool s_one = false, target_one = false;
+        for (var i = 0; i < s.Length && (!s_one || !target_one); i++) {            
+            if (s[i] == '1')    s_one = true;
+            if (target[i] == '1')   target_one = true;
+        }
+        
+        return !(s_one ^ target_one);
+    }
+}
