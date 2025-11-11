@@ -1,0 +1,32 @@
+public class Solution {
+    public int BeautifulSubstrings(string s, int k) {
+        int len = s.Length, res = 0;
+        int[] vowFreq = new int[len+1];
+        HashSet<char> vows = new HashSet<char>("aeiou");
+        for(int i = 0; i < len; i++)
+        {
+            vowFreq[i+1] = vowFreq[i];
+            if(vows.Contains(s[i]))
+                vowFreq[i+1]++;
+        }
+
+        for(int size = 2; size <=len; size+=2)
+        {
+            int half = size/2;
+            if(half*half%k != 0)
+                continue;
+
+            int right = size;
+            while(right <= len)
+            {
+                int subVCnt = vowFreq[right] - vowFreq[right-size];
+                if(subVCnt*2 == size)
+                    res++;
+
+                right++;
+            }
+        }
+
+        return res;
+    }
+}
