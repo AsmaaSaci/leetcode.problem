@@ -1,0 +1,22 @@
+public class Solution {
+    public int[] VowelStrings(string[] words, int[][] queries) {
+        char[] vowels = {'a', 'e', 'i', 'o', 'u'};
+        var result = new int[queries.Length];
+        var eachSum = new int[words.Length + 1];
+        eachSum[0] = 0;
+        int curSum = 0;
+        for (int i = 0; i < words.Length; i++)
+        {
+            if (vowels.Contains(words[i][0]) && vowels.Contains(words[i][^1]))
+                curSum += 1;
+            eachSum[i+1] = curSum;
+        }
+
+        for (int k = 0; k < queries.Length; k++)
+        {
+            int i = queries[k][0], j = queries[k][1];
+            result[k] = eachSum[j+1] - eachSum[i];
+        }
+        return result;
+    }
+}
