@@ -1,0 +1,39 @@
+public class Solution {
+    public int MaximumLength(string s) {
+        
+        
+        int right = 0;
+        //char prev='a';
+        int max = -1;
+        Dictionary<int,int>[] arr = new Dictionary<int,int>[26];
+        for(var i =0;i<26;i++){
+            arr[i] = new Dictionary<int,int>();
+        }
+
+        while(right<s.Length){
+             var dict = arr[s[right]-'a'];
+            int count = 1;
+            while(right+1<s.Length && s[right+1]==s[right]){
+                count++;
+                right++;
+            }
+            
+            for(var i = 0;i<3 && i<count ;i++){
+                var left = i;
+                for(var j = 1;j<=count-left;j++){
+                    if(!dict.ContainsKey(j)){
+                            dict[j] = 0;
+                    }
+                    dict[j]++;
+                    if(dict[j]>=3 && j>max){
+                        max = j;
+                    }
+                }
+            }
+            right++;
+
+        }
+        return max;
+        
+    }
+}
