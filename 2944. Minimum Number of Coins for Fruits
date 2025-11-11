@@ -1,0 +1,27 @@
+public class Solution {
+    public int MinimumCoins(int[] prices) {
+        int len = prices.Length, res = prices[0];
+        
+        PriorityQueue<int, int> pq = new();
+        HashSet<(int, int)> visited = new();
+        pq.Enqueue(0, prices[0]);
+        while(pq.TryDequeue(out int idx, out int preSum))
+        {
+            if(idx*2+1 >= len-1)
+                return preSum;
+           // Console.WriteLine($"should sum prices in {idx}, and sum value is {preSum}");
+           for(int offset = 1; offset <= idx+2; offset++)
+           {
+                int nextId = idx+offset;
+                if(nextId >= len)
+                    break;
+
+                int nextV = preSum + prices[nextId];
+                if(visited.Add((nextId, nextV)))
+                    pq.Enqueue(nextId, nextV);
+           }
+        }
+
+        return res;
+    }
+}
