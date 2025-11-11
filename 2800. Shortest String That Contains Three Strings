@@ -1,0 +1,82 @@
+public class Solution {
+    private int CommStr(string a, string b)
+    {
+        int lenA = a.Length, lenB = b.Length;
+        for(int i = 0; i < lenA; i++)
+        {
+            char c = a[i];
+            if(c == b[0])
+            {
+                int subLen = Math.Min(lenA-i, lenB);
+                if(a.Substring(i, subLen) == b.Substring(0, subLen))
+                    return subLen;
+            }
+        }
+
+        return 0;
+    }
+    public string MinimumString(string a, string b, string c) {
+        int lenA = a.Length, lenB = b.Length, lenC = c.Length;
+        string[] sample = [a, b, c];
+        sample = sample.OrderBy(x=>x.Length).ToArray();
+
+        // base String:
+        string baseStr = sample[2];
+
+        // Check First string:
+        int com11 = CommStr(baseStr, sample[0]), com12 = CommStr(sample[0], baseStr);
+        int com21 = CommStr(baseStr, sample[1]), com22 = CommStr(sample[1], baseStr);
+        List<string> s1 = new(), s2 = new();
+        string tmpS = baseStr + sample[0].Substring(com11);
+        s1.Add(tmpS);
+        tmpS = sample[0] + baseStr.Substring(com12);
+        s1.Add(tmpS);
+
+        s2.Add(baseStr+sample[1].Substring(com21));
+        s2.Add(sample[1]+baseStr.Substring(com22));
+
+        int maxLen = int.MaxValue;
+        string res = "";
+        // Check Second:
+        foreach(string s in s1)
+        {
+            int com = CommStr(s, sample[1]);
+            string newS = s+sample[1].Substring(com);
+            if(newS.Length < maxLen || newS.Length == res.Length && string.Compare(newS, res) < 0)
+            {
+                res = newS;
+                maxLen = res.Length;
+            }
+
+            com = CommStr(sample[1], s);
+            newS = sample[1] + s.Substring(com);
+             if(newS.Length < maxLen || newS.Length == res.Length && string.Compare(newS, res) < 0)
+            {
+                res = newS;
+                maxLen = res.Length;
+            }
+        }
+
+        foreach(string s in s2)
+        {
+            int com = CommStr(s, sample[0]);
+            string newS = s+sample[0].Substring(com);
+            if(newS.Length < maxLen || newS.Length == res.Length && string.Compare(newS, res) < 0)
+            {
+                res = newS;
+                maxLen = res.Length;
+            }
+
+            com = CommStr(sample[0], s);
+            newS = sample[0]+s.Substring(com);
+
+            if(newS.Length < maxLen || newS.Length == res.Length && string.Compare(newS, res) < 0)
+            {
+                res = newS;
+                maxLen = res.Length;
+            }
+        }
+
+        return res;
+    }
+}
