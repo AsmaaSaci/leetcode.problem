@@ -1,0 +1,30 @@
+public class Solution {
+    public int MaximumXorProduct(long a, long b, int n) {
+        int mod = 1000000007;
+       // Track Bit by Bit 49 ~0;
+       long sample = 1L, aXor = 0, bXor = 0;
+        for(int i = 49; i >= 0; i--)
+        {
+            long bitA = (a & sample<<i), bitB = (b& sample<<i);
+            if(i < n)
+            {
+                if(bitA == bitB)
+                {
+                    aXor |= sample<<i;
+                    bXor |= sample<<i;
+                }
+                else if(aXor <= bXor)
+                    aXor |= sample<< i;
+                else
+                    bXor |= sample<< i;
+            }
+            else
+            {
+                aXor |= bitA;
+                bXor |= bitB;
+            }
+        }
+
+        return (int)((aXor%mod) * (bXor%mod)%mod);
+    }
+}
