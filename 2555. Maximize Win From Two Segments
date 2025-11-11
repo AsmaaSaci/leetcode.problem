@@ -1,0 +1,39 @@
+public class Solution
+{
+    public int MaximizeWin(int[] prizePositions, int k)
+    {
+        var result = 0;
+        var first  = new Window(prizePositions, k);
+        var second = new Window(prizePositions, k);
+
+        while (first.Slide(limit: prizePositions.Length))
+        {
+            while (second.Slide(limit: first.Left));
+
+            result = Math.Max(result, first.CurPrize + second.MaxPrize);
+        }
+
+        return result;
+    }
+
+    record Window(int[] prizePositions, int k)
+    {
+        public int Left { get; private set; }
+        public int Right { get; private set; }
+        public int MaxPrize { get; private set; }
+        public int CurPrize => Right - Left;
+
+        public bool Slide(int limit)
+        {
+            if (Right >= limit)
+                return false;
+
+            while (prizePositions[Right] - prizePositions[Left] > k)
+                Left += 1;
+
+            Right += 1;
+            MaxPrize = Math.Max(CurPrize, MaxPrize);
+            return true;
+        }
+    }
+}
