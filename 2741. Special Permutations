@@ -1,0 +1,42 @@
+public class Solution {
+    private int[,] dp;
+    private int mod = 1000000007;
+    private int DFS(int i, int mask, int[] nums)
+    {
+        int len = nums.Length;
+        if(mask == (1<<len)-1)
+            return 1;
+
+        if(dp[i, mask] != -1)
+            return dp[i, mask];
+
+        int steps = 0;
+        for(int j = 0; j < len; j++)
+        {
+            int first = nums[i], sec = nums[j];
+            if((mask & (1<<j)) == 0 && (mask == 0 || first % sec == 0 || sec%first == 0))
+            {
+                steps = (steps + DFS(j, mask | (1<<j), nums)) %mod;
+            }
+        }
+
+        dp[i, mask] = steps;
+        return steps;
+    }
+    public int SpecialPerm(int[] nums) {
+        int len = nums.Length;
+        int uplimit = (1<<len)-1;
+        dp = new int[len, uplimit];
+
+        for(int i = 0; i < len; i++)
+        {
+            for(int j = 0; j < uplimit; j++)
+            {
+                dp[i,j] = -1;
+            }
+        }
+
+        int res = DFS(0, 0, nums);
+        return res;
+    }
+}
