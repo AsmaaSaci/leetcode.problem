@@ -1,0 +1,17 @@
+public class Solution {
+    public int MaxScore(int[] nums)
+    {
+        int res = 0;
+        long predix = 0;
+        Array.Sort(nums, (a, b) => b - a);
+        foreach (int num in nums)
+        {
+            predix += num;
+            if (predix > 0)
+                res++;
+            else
+                return res; ;
+        }
+        return res;
+    }
+}
