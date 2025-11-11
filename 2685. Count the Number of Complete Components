@@ -1,0 +1,76 @@
+public class Solution {
+    public class UnionFind{
+        public int[] par, rank;
+        public int component;
+        public UnionFind(int n){
+            par = new int[n];
+            for(int i=0;i<n;i++){
+                par[i]=i;
+            }
+            rank = new int[n];
+            Array.Fill(rank,1);
+            component=0;
+        }
+
+        public int Find(int x){
+            var p = x;
+            if(par[x]!=x)
+                p = Find(par[x]);
+            return p;
+        }
+
+        public void Union(int x, int y){
+            var px = Find(x);
+            var py = Find(y);
+            if(px!=py){
+                if(rank[px]>rank[py]){
+                    rank[px] += rank[py];
+                    rank[py]=0;
+                    par[py] = px;
+                }
+                else{
+                    rank[py] += rank[px];
+                    rank[px]=0;
+                    par[px] = py;
+                }
+            }
+            else{
+                component++;
+            }
+        }
+    }
+    public int CountCompleteComponents(int n, int[][] edges) {
+        var uf = new UnionFind(n);
+        var adjList = new Dictionary<int,List<int>>();
+        foreach(var edge in edges){
+            
+            uf.Union(edge[0], edge[1]);
+
+            if(!adjList.ContainsKey(edge[0]))
+                adjList[edge[0]]= new List<int>();
+            if(!adjList.ContainsKey(edge[1]))
+                adjList[edge[1]]= new List<int>();
+            adjList[edge[0]].Add(edge[1]);
+            adjList[edge[1]].Add(edge[0]);
+        }
+        int res=0;
+        for(int i=0;i<n;i++){
+            if(uf.rank[i]==1 ){
+                res++;
+            }
+            else if(uf.rank[i]>0){
+                bool connected = true;
+                for(int j=0;j<n;j++){
+                    if(uf.Find(j) == i && (adjList[j].Count != uf.rank[i]-1 )){
+                        connected = false;
+                        break;
+                    }
+                }
+                if(connected){
+                    res++;
+                }
+            }
+        }
+        return res;
+    }
+}
