@@ -1,0 +1,40 @@
+public class Solution
+{
+    public long[] UnmarkedSumArray(int[] nums, int[][] queries)
+    {
+        var marked = new HashSet<int>(nums.Length);
+        var queue = new PriorityQueue<int, float>();
+        var answer = new long[queries.Length];
+        var sum = 0L;
+
+        for (int i = 0; i < nums.Length; i++)
+        {
+            queue.Enqueue(i, nums[i] + i / 1_000_000f);
+            sum += nums[i];
+        }
+
+        for (int i = 0; i < queries.Length; i++)
+        {
+            var removed = queries[i][0];
+            var count = queries[i][1];
+
+            if (marked.Add(removed))
+            {
+                sum -= nums[removed];
+            }
+
+            while (count > 0 && queue.TryDequeue(out var indice, out var num))
+            {
+                if (marked.Add(indice))
+                {
+                    sum -= (long)num;
+                    count--;
+                }
+            }
+
+            answer[i] = sum;
+        }
+
+        return answer;
+    }
+}
