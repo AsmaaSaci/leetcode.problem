@@ -1,0 +1,11 @@
+public class Solution {
+    public int MinLengthAfterRemovals(IList<int> nums) {
+        int max = nums
+            .GroupBy(item => item) 
+            .Max(group => group.Count());
+
+        return max > nums.Count / 2
+            ? 2 * max - nums.Count
+            : nums.Count % 2;   
+    }
+}
