@@ -1,0 +1,28 @@
+public class Solution {
+    public long MaxSum(IList<int> nums, int m, int k) {
+        long maxSum = 0, sum = 0;
+        int len = nums.Count;
+        Dictionary<int, int> dict = new();
+
+        for(int i = 0; i < len; i++)
+        {
+            int n = nums[i];
+            sum += n;
+            dict.TryAdd(n, 0);
+            dict[n]++;
+
+            if(i >= k-1)
+            {
+                if(dict.Count >= m)
+                    maxSum = Math.Max(maxSum, sum);
+
+                int pre = nums[i-k+1];
+                sum -= pre;
+                if(--dict[pre] == 0)
+                    dict.Remove(pre);
+            }
+        }
+
+        return maxSum;
+    }
+}
