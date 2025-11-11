@@ -1,0 +1,21 @@
+public class Solution {
+    public int MaximumCostSubstring(string s, string chars, int[] vals) {
+        // slide Window:
+        int preSum = 0, len = chars.Length;
+        int[] sample = Enumerable.Range(1, 26).ToArray();
+        for(int i = 0; i < len; i++)
+        {
+            int id = chars[i]-'a';
+            sample[id] = vals[i];
+        }
+        int maxScore = 0;
+        foreach(char c in s)
+        {
+            preSum += sample[c-'a'];
+            maxScore = Math.Max(preSum, maxScore);
+            preSum = Math.Max(preSum, 0);
+        }
+
+        return maxScore;
+    }
+}
