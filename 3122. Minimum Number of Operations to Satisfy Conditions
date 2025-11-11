@@ -1,0 +1,57 @@
+public class Solution {
+    private Dictionary<(int, int), int> minChange;
+    private int minChangeTimes = int.MaxValue;
+    private int[,] freq;
+    private int rows;
+    private int cols;
+    private int BackTrackingMinChange(int curV, int col)
+    {
+        if (col == freq.GetLength(1))
+            return 0;
+
+        (int, int) key = (curV, col);
+        if(minChange.ContainsKey(key))
+            return minChange[key];
+
+        int res = int.MaxValue;
+        for (int i = 0; i <= 9; i++)
+        {
+            if (curV == i)
+                continue;
+
+            res = Math.Min(res, rows - freq[curV,col] + BackTrackingMinChange(i, col+1));
+        }
+
+        minChange.Add(key, res);
+        return res;
+    }
+
+    public int MinimumOperations(int[][] grid) {
+      			rows = grid.Length;
+			cols = grid[0].Length;
+			if(rows == 0 || cols == 0)
+				return 0;
+
+			minChange = new Dictionary<(int, int), int>();
+
+			freq = new int[10, cols];
+
+			for (int i = 0; i < rows; i++)
+			{
+				for (int j = 0; j < cols; j++)
+				{
+					freq[grid[i][j], j]++;
+				}
+			}
+
+			for (int i = 0; i <= 9; i++)
+			{
+                if(freq[i,0] == 0)
+                    continue;
+
+				minChangeTimes = Math.Min(minChangeTimes,  BackTrackingMinChange(i, 0));
+			}
+
+			return minChangeTimes;  
+    }
+}
