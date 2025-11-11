@@ -1,0 +1,25 @@
+public class Solution {
+    public int CountPairs(IList<IList<int>> coordinates, int k) {
+        int res = 0, len = coordinates.Count;
+        Dictionary<(int, int), int> dict = new();
+        
+        foreach(List<int> id in coordinates)
+        {
+            int x1= id[0], y1 = id[1];
+            for(int x = 0; x <= k; x++)
+            {
+                int x2 = x1^x, y2 = (k-x)^y1;
+                var tmpKey = (x2, y2);
+                if(dict.ContainsKey(tmpKey))
+                    res += dict[tmpKey];
+            }
+            var key = (x1, y1);
+            if(dict.ContainsKey(key))
+                dict[key]++;
+            else
+                dict.Add(key, 1);
+        }
+
+        return res;
+    }
+}
