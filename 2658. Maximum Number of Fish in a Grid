@@ -1,0 +1,38 @@
+public class Solution
+{
+  private void TraverseGrid(int[][] grid, int i, int j, ref int curArea)
+  {
+    if (i < 0 || i >= grid.Length || j < 0 || j >= grid[0].Length || grid[i][j] == 0)
+    {
+      return;
+    }
+    if (grid[i][j] <= 0)
+    {
+      return;
+    }
+    curArea += grid[i][j];
+    grid[i][j] = 0;
+    TraverseGrid(grid, i + 1, j, ref curArea);
+    TraverseGrid(grid, i - 1, j, ref curArea);
+    TraverseGrid(grid, i, j + 1, ref curArea);
+    TraverseGrid(grid, i, j - 1, ref curArea);
+  }
+
+  public int FindMaxFish(int[][] grid)
+  {
+    int curArea, ans = 0;
+    for (int i = 0; i < grid.Length; i++)
+    {
+      for (int j = 0; j < grid[0].Length; j++)
+      {
+        if (grid[i][j] > 0)
+        {
+          curArea = 0;
+          TraverseGrid(grid, i, j, ref curArea);
+          ans = Math.Max(ans, curArea);
+        }
+      }
+    }
+    return ans;
+  }
+}
