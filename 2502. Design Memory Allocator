@@ -1,0 +1,51 @@
+public class Allocator {
+    int[] size;
+    int used;
+
+    public Allocator(int n) {
+        size=new int[n];
+        used=0;
+        for(int i=0;i<size.Length;i++){
+            size[i]=int.MinValue;
+        }
+    }
+    
+    public int Allocate(int size, int mID) {
+        if (size+used>this.size.Length) return -1;
+        int output=-1;
+        int index=0;
+        for(int i=0;i<this.size.Length;i++){
+            if (this.size[i]==int.MinValue){
+                if (i-index==size-1){
+                    for(int j=index;j<=i;j++){
+                        this.size[j]=mID;
+                    }
+                    return index;
+                }
+            }
+            else{
+                index=i+1; 
+            }
+        }
+        return -1;
+    }
+    
+    public int Free(int mID) {
+        int count=0;
+        for(int i=0;i<size.Length;i++){
+            if (size[i]==mID){
+                count++;
+                size[i]=int.MinValue;
+            }
+        }
+        used=used-count;
+        return count;
+    }
+}
+
+/**
+ * Your Allocator object will be instantiated and called as such:
+ * Allocator obj = new Allocator(n);
+ * int param_1 = obj.Allocate(size,mID);
+ * int param_2 = obj.Free(mID);
+ */
