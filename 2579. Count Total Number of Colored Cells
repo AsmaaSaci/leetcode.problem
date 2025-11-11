@@ -1,0 +1,7 @@
+public class Solution {
+    public long ColoredCells(int n) {
+        n--; // don't count the n=1 single cell yet
+        long triangle=(n+1L)*n/2;
+        return triangle*4+1; // 4 triangles and 1 center cell
+    }
+}
