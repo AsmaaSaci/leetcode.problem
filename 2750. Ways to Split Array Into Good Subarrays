@@ -1,0 +1,27 @@
+public class Solution
+{
+    public int NumberOfGoodSubarraySplits(int[] nums)
+    {
+        int MOD = 1000000007,
+            index = 0,
+            last1Index = 0;
+        while (index < nums.Length && nums[index] == 0)
+        {
+            index++;
+        }
+        if (index == nums.Length)
+            return 0;
+
+        long ans = 1;
+        last1Index = index - 1;
+        for (; index < nums.Length; index++)
+        {
+            if (nums[index] == 1)
+            {
+                ans = (ans * (index - last1Index)) % MOD;
+                last1Index = index;
+            }
+        }
+        return (int)ans;
+    }
+}
