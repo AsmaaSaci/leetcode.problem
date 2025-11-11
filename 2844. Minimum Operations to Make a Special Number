@@ -1,0 +1,98 @@
+public class Solution {
+    public int MinimumOperations(string num) {
+        int n = num.Length;
+        if(n == 1)
+        {
+            return num[0] == '0' ? 0 : 1;
+        }
+
+        int a1 = -1, a2 = -1; // ..0..0..
+        int b1 = -1, b2 = -1; // ..2..5..
+        int c1 = -1, c2 = -1; // ..5..0..
+        int d1 = -1, d2 = -1; // ..7..5..
+
+        for(int i = n - 1; i >= 0; i--)
+        {
+           if(num[i] == '0')
+           {
+             if(a2 == -1)
+             {
+                 a2 = i;
+             }else if(a1 == -1)
+             {
+                 a1 = i;
+             }
+
+             if(c2 == -1)
+             {
+                 c2 = i;
+             }
+           }else if(num[i] == '2')
+           {
+             if(b2 != -1 && b1 == -1)
+             {
+                 b1 = i;
+             }
+           }else if(num[i] == '5')
+           {
+             if(b2 == -1)
+             {
+                 b2 = i;
+             }
+
+             if(c2 != -1 && c1 == -1)
+             {
+                c1 = i;
+             }
+
+             if(d2 == -1)
+             {
+                 d2 = i;
+             }
+           }else if(num[i] == '7')
+           {
+              if(d2 != -1 && d1 == -1)
+              {
+                 d1 = i;
+              }
+           }
+        }
+        
+        int min1 = n, min2 = n, min3 = n, min4 = n;
+        bool check = false;
+        if(Check(a1, a2))
+        {
+            check = true;
+           min1 = Diff(a2 + 1, n - 1) + Diff(a1 + 1, a2 - 1);
+        }
+        if(Check(b1, b2))
+        {
+            check = true;
+           min2 = Diff(b2 + 1, n - 1) + Diff(b1 + 1, b2 - 1);
+        }
+        if(Check(c1, c2))
+        {
+            check = true;
+           min3 = Diff(c2 + 1, n - 1) + Diff(c1 + 1, c2 - 1);
+        }
+        if(Check(d1, d2))
+        {
+            check = true;
+           min4 = Diff(d2 + 1, n - 1) + Diff(d1 + 1, d2 - 1);
+        }
+
+        return check 
+               ? Math.Min(Math.Min(min1, min2), Math.Min(min3, min4)) 
+               : ((a2 != -1) ? (n - 1) : n); // ....0....
+    }
+
+    public bool Check(int x1, int x2)
+    {
+        return ((x1 > -1) && (x2 > -1));
+    }
+
+    public int Diff(int i, int j)
+    {
+        return Math.Max(j - i + 1, 0);
+    }
+}
