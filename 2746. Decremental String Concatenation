@@ -1,0 +1,63 @@
+public class Solution {
+    public int MinimizeConcatenatedLength(string[] words) {
+        // DP:
+        int[,] dp = new int[26, 26];
+        HashSet<int> firstCh = new();
+        int res = int.MaxValue;
+
+        foreach (string s in words)
+        {
+            int curLen = s.Length;
+            int start = s[0] - 'a', end = s[curLen - 1] - 'a';
+            int[,] tmp = new int[26, 26];
+            int minLen = int.MaxValue;
+
+            HashSet<int> newFirst = new();
+            if (firstCh.Count == 0)
+            {
+                tmp[start, end] = curLen;
+                firstCh.Add(start);
+                minLen = Math.Min(minLen, curLen);
+            }
+            else
+            {
+                foreach (int preBg in firstCh)
+                {
+                    for (int preEnd = 0; preEnd < 26; preEnd++)
+                    {
+                        int preLen = dp[preBg, preEnd];
+                        if (preLen > 0)
+                        {
+                            // append:
+                            newFirst.Add(preBg);
+                            int nextLen = curLen + preLen - (preEnd == start ? 1 : 0);
+                            int tmpLen = tmp[preBg, end];
+                            if (tmpLen == 0 || tmpLen > 0 && tmpLen > nextLen)
+                            {
+                                tmp[preBg, end] = nextLen;
+                                minLen = Math.Min(minLen, nextLen);
+                            }
+
+                            // PreAdd:
+                            newFirst.Add(start);
+                            nextLen = curLen + preLen - (end == preBg ? 1 : 0);
+                            tmpLen = tmp[start, preEnd];
+                            if (tmpLen == 0 || tmpLen > 0 && tmpLen > nextLen)
+                            {
+                                tmp[start, preEnd] = nextLen;
+                                minLen = Math.Min(minLen, nextLen);
+                            }
+                        }
+                    }
+                }
+
+                firstCh = new HashSet<int>(newFirst.ToArray());
+            }
+            res = minLen;
+            dp = tmp;
+            
+        }
+
+        return res;
+    }
+}
