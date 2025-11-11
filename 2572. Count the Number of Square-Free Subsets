@@ -1,0 +1,85 @@
+public class Solution {
+
+    private const int MAXIMUM = 30;
+    private const int MOD_NUM = 1_000_000_007;
+
+    private readonly Dictionary<int, int> d = [];
+
+    public Solution(){
+        // Compute all primes
+        List<int> primes = [];
+        for(int i = 2; i <= MAXIMUM; i++)
+        {
+            if (!primes.Any(p => i % p == 0)){
+                primes.Add(i);
+            }
+        }
+
+        // Calculate their masks containing all their primes
+        // If number contains the same prime twice or more times, it should be excluded, because it would make any product contain square
+        for(int i = 1; i <= MAXIMUM; i++)
+        {
+            int p = 0;
+            int n = i;
+            int q = 0;
+            while(n > 1 && q < primes.Count){
+                if (n % primes[q] != 0){
+                    q++;
+                    continue;
+                }
+                else if ((p & (1 << primes[q])) != 0){
+                    p = -1;
+                    break;
+                }
+                else{
+                    n /= primes[q];
+                    p |= 1 << primes[q];
+                }
+            }
+
+            if (p != -1) d[i] = p;
+        }
+    }
+
+    public int SquareFreeSubsets(int[] nums) {
+        int onesMult = 1;
+        Dictionary<int, int> counts = [];
+
+        // Loop over numbers, exclude 1s and square containing numbers
+        foreach(int n in nums){
+            if (n == 1){
+                // 1s do not effect the final product, so count all combinations
+                onesMult *= 2; // Can be very near overflow, but it'll never overflow
+                onesMult %= MOD_NUM;
+            }
+            else if (counts.ContainsKey(n)){
+                counts[n]++;
+            }
+            else if(d.ContainsKey(n)){
+                counts[n] = 1;
+            }
+        }
+
+        // -1 because empty subset should be excluded
+        long res = Helper(counts) * onesMult - 1;
+
+        // Handle negative MODULO
+        if (res <= 0) res += MOD_NUM;
+
+        return (int)(res % MOD_NUM);
+    }
+
+    // DP Recursion
+    private long Helper(Dictionary<int, int> nums, int mask = 0, int start = 2)
+    {
+        long res = 1;
+        for(int i = start; i <= MAXIMUM; i++){
+            if (!nums.ContainsKey(i)) continue;
+            else if ((mask & d[i]) != 0) continue;
+
+            int newMask = mask | d[i];
+            res += (nums[i] * Helper(nums, newMask, i+1)) % MOD_NUM;
+        }
+        return res % MOD_NUM;
+    }
+}
