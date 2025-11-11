@@ -1,0 +1,35 @@
+using System.Runtime.InteropServices;
+using System.Runtime.Intrinsics.X86;
+
+public unsafe class Solution {
+    private const ulong LETTER_MASK = 0x20822200208223;
+    private static readonly int* idxQ = (int*)NativeMemory.Alloc(100_000 << 2);
+    private static readonly int* counts = (int*)NativeMemory.AllocZeroed(11 << 2);
+
+    public string SortVowels(string s) {
+        fixed (char* ptr = s) {
+            var (n, visited) = (s.Length, 0UL);
+            var top = idxQ;
+            for (var i = 0; i < n; ++i) {
+                var bit = 1UL << (ptr[i] & 0x3F);
+                visited |= bit;
+                var vowelBit = Bmi2.X64.ParallelBitExtract(bit, LETTER_MASK);
+                var tzc = (int)Bmi1.X64.TrailingZeroCount(vowelBit);
+                ++counts[tzc & 0xF];
+                *top = i;
+                top += vowelBit >>> tzc;
+            }
+
+            var vowelIdx = idxQ;
+            for (var vowelBits = visited & LETTER_MASK; vowelBits != 0; vowelBits = Bmi1.X64.ResetLowestSetBit(vowelBits)) {
+                var packedBits = Bmi2.X64.ParallelBitExtract(vowelBits, LETTER_MASK);
+                var countsIdx = Bmi1.X64.TrailingZeroCount(packedBits);
+                var nextVowel = (char)(0x40 | Bmi1.X64.TrailingZeroCount(vowelBits));
+                for (var count = counts + countsIdx; *count > 0; --*count)
+                    ptr[*vowelIdx++] = nextVowel;
+            }
+
+            return s;
+        }
+    }
+}
