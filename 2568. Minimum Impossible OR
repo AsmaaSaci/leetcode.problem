@@ -1,0 +1,10 @@
+public class Solution {
+    public int MinImpossibleOR(int[] nums) {
+        int res = 1;
+        
+        while (nums.Contains(res))
+            res <<= 1;
+        
+        return res;
+    }
+}
