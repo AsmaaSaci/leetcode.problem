@@ -1,0 +1,29 @@
+public class Solution {
+    public long MinOperations(int[] nums1, int[] nums2, int k) {
+        long posSum = 0, totalSum = 0;
+        int len = nums1.Length;
+
+        for(int i = 0; i < len; i++)
+        {
+            int diff = nums1[i] - nums2[i];
+            if(k == 0)
+            {
+                if(diff != 0)
+                    return -1;
+            }
+            else
+            {
+                if(Math.Abs(diff)%k != 0)
+                    return -1;
+                    
+                int ops = Math.Abs(diff)/k;
+                totalSum += diff > 0 ? ops : -ops;
+
+                if(diff > 0)
+                    posSum += ops;
+            }
+        }
+
+        return totalSum == 0 ? posSum : -1;
+    }
+}
