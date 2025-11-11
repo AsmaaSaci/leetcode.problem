@@ -1,0 +1,33 @@
+public class Solution {
+    public IList<IList<int>> FindPrimePairs(int n) {
+        // Handle edge case where no pairs are possible
+        if (n < 3) return new List<IList<int>>();
+
+        // Step 1: Prepare Sieve of Eratosthenes
+        bool[] prime = new bool[n + 1];
+        Array.Fill(prime, true);
+        prime[0] = false; // 0 is not prime
+        prime[1] = false; // 1 is not prime
+
+        for (int i = 2; i * i <= n; i++) {
+            if (prime[i]) {
+                for (int j = i * i; j <= n; j += i) {
+                    prime[j] = false;
+                }
+            }
+        }
+
+        // Step 2: Find all prime pairs (x, y) such that x + y = n
+        IList<IList<int>> ans = new List<IList<int>>();
+        for (int i = 2; i <= n / 2; i++) {
+            int complement = n - i;
+            if (prime[i] && prime[complement]) {
+                ans.Add(new List<int> { i, complement });
+                prime[i] = false;         // Mark as used
+                prime[complement] = false; // Avoid duplicates
+            }
+        }
+
+        return ans;
+    }
+}
