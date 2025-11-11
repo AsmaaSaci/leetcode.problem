@@ -1,0 +1,38 @@
+public class Solution {
+    public int[] MinimumTime(int n, int[][] edges, int[] disappear) {
+        Dictionary<int, List<int[]>> graph = new();
+        foreach(var edge in edges) {
+            int nf = edge[0], nt = edge[1], time = edge[2];
+            if(!graph.ContainsKey(nf))
+                graph[nf] = new List<int[]>();
+            if(!graph.ContainsKey(nt))
+                graph[nt] = new List<int[]>();
+            graph[nf].Add(new int[] {nt, time});
+            graph[nt].Add(new int[] {nf, time});
+        }
+
+        var set = new SortedSet<int[]>(Comparer<int[]>.Create((a, b) => a[1] != b[1] ? a[1] - b[1] : a[0] - b[0]));
+        set.Add(new int[] {0, 0});
+
+        int[] ans = new int[n];
+        Array.Fill(ans, -1);
+
+        while(set.Count > 0) {
+            int[] cur = set.Min;
+            set.Remove(set.Min);
+            int node = cur[0], time = cur[1];
+            if(ans[node] != -1)
+                continue;
+            
+            ans[node] = time;
+            if(graph.ContainsKey(node)) {
+                foreach(var it in graph[node]) {
+                    if(ans[it[0]] == -1 && time + it[1] < disappear[it[0]])
+                        set.Add(new int[] {it[0], time + it[1]});
+                }
+            }
+        }
+
+        return ans;
+    }
+}
