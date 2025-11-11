@@ -1,0 +1,31 @@
+public class Solution {
+    public long RepairCars(int[] ranks, int cars) {
+        long low = 1;
+        long high = (long)cars * cars * GetMinRank(ranks);
+
+        while (low < high) {
+            long mid = low + (high - low) / 2;
+            if (CanRepairAll(ranks, cars, mid)) {
+                high = mid; 
+            } else {
+                low = mid + 1; 
+            }
+        }
+        return low;
+    }
+    private bool CanRepairAll(int[] ranks, int cars, long timeLimit) {
+        long carsRepaired = 0;
+        foreach (int rank in ranks) {
+            carsRepaired += (long)Math.Sqrt(timeLimit / rank);
+            if (carsRepaired >= cars) return true; 
+        }
+        return false;
+    }
+    private int GetMinRank(int[] ranks) {
+        int minRank = ranks[0];
+        foreach (int rank in ranks) {
+            if (rank < minRank) minRank = rank;
+        }
+        return minRank;
+    }
+}
