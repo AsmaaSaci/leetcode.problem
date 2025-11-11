@@ -1,0 +1,26 @@
+public class Solution {
+    public int AddMinimum(string word) {
+        int ans = 0;
+int ptrAbc = 0;
+int ptrWord = 0;
+const string ABC = "abc";
+while (ptrWord < word.Length)
+{
+    if (word[ptrWord] == ABC[ptrAbc])
+    {
+        ptrWord++;
+        ptrAbc = (ptrAbc + 1) % 3;
+    }
+    else
+    {
+        ans++;
+        ptrAbc = (ptrAbc + 1) % 3;
+    }
+}
+
+if (ptrAbc != 0)            
+    ans += 3 - ptrAbc; 
+
+return ans;
+    }
+}
