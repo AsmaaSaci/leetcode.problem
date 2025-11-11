@@ -1,0 +1,26 @@
+public class Solution {
+    public int MinimumPossibleSum(int n, int target) {
+        int cnt = n, mod = 1000000007;
+        long sum = 0;
+        
+        // First part: item < target: smaller + larger = target, we pick smaller one;
+        int p1 = target/2;
+        p1 = Math.Min(n, p1);
+        if(p1>=1)
+         {
+            sum += (long)(1+p1)*p1/2;
+            sum %= mod;
+         }
+
+         n -= p1;
+
+        // Second part, still need number which >= target
+        if(n > 0)
+        {
+            long part2 = ((long)(target-1)*n +(long)n*(n+1)/2)%mod;
+            sum = (sum + part2)%mod;
+        }
+        
+        return (int)sum;
+    }
+}
