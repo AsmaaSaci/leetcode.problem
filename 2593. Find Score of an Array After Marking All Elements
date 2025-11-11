@@ -1,0 +1,14 @@
+public class Solution {
+    public long FindScore(int[] nums) {
+        uint n = (uint)nums.Length;
+        ulong s = 0;
+        for (uint j = 0; j < n; j += 2) {
+            ulong odd = 0, even = 0;
+            uint v = (uint)nums[j];
+            for (uint w; j + 1u < n && nums[j] > (w = (uint)nums[j + 1u]); j++, v = w)
+                if ((j & 1u) == 1u) odd += v; else even += v;
+            s += ((j & 1u) == 1u ? odd : even) + v;
+        }
+        return (long)s;
+    }
+}
