@@ -1,0 +1,18 @@
+public int CountCompleteSubarrays(int[] nums) {
+    var total = new HashSet<int>(nums).Count;
+    var freq = new Dictionary<int, int>();
+    int l = 0, res = 0;
+
+    for (int r = 0; r < nums.Length; r++) {
+        if (!freq.ContainsKey(nums[r])) freq[nums[r]] = 0;
+        freq[nums[r]]++;
+
+        while (freq.Count == total) {
+            res += nums.Length - r;
+            freq[nums[l]]--;
+            if (freq[nums[l]] == 0) freq.Remove(nums[l]);
+            l++;
+        }
+    }
+    return res;
+}
