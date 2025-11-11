@@ -1,0 +1,41 @@
+public class Solution {
+    public string MinimizeStringValue(string s) {
+        int[] charCounts = new int[26];
+        int replaceCount = 0;
+        for(int i=0; i<s.Length; i++) {
+            if(s[i] != '?')
+                charCounts[s[i] - 'a']++;
+            else
+                replaceCount++;
+        }
+
+        PriorityQueue<char, (int, int)> pq = new (Comparer<(int, int)>.Create((a,b)=>a.Item1==b.Item1?a.Item2-b.Item2:a.Item1-b.Item1));
+        for(int i=0; i<charCounts.Length; i++) {
+            char ch = (char)('a' + i);
+            pq.Enqueue(ch, (charCounts[i], ch));
+        }
+
+        List<char> replacements = new ();
+        for(int i=0; i<replaceCount; i++) {
+            var ch = pq.Dequeue();
+            charCounts[ch-'a']++;
+            pq.Enqueue(ch, (charCounts[ch-'a'], ch));
+            replacements.Add(ch);
+        }
+        replacements.Sort();
+
+        StringBuilder sb = new ();
+        int r=0;
+        for(int i=0; i<s.Length; i++) {
+            var ch = s[i];
+            if(ch == '?') {
+                ch = replacements[r];
+                r++;
+            }
+
+            sb.Append(ch);
+        }
+
+        return sb.ToString();
+    }
+}
