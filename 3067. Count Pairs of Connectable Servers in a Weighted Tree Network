@@ -1,0 +1,48 @@
+public class Solution {
+    public int[] CountPairsOfConnectableServers(int[][] e, int s) {
+        Dictionary<int, List<int[]>> d= new Dictionary<int, List<int[]>>();
+        for (int i=0; i< e.Length; i++){
+            if(d.ContainsKey(e[i][0]))d[e[i][0]].Add(new int[]{e[i][1],e[i][2]});
+            else d.Add(e[i][0], new List<int[]>(){new int[]{e[i][1],e[i][2]}});
+               if(d.ContainsKey(e[i][1]))d[e[i][1]].Add(new int[]{e[i][0],e[i][2]});
+            else d.Add(e[i][1], new List<int[]>(){new int[]{e[i][0],e[i][2]}});
+        }
+        int n=e.Length+1;
+        SortedDictionary<int,int> sd= new SortedDictionary<int,int>();
+        foreach (int k in d.Keys){
+              List<int> help= new List<int>();
+           
+              bool[] seen= new bool[n];
+              seen[k]=true;
+              Queue<int[]> q= new Queue<int[]>();
+              for (int i=0; i< d[k].Count; i++){
+                   int h=0;
+                  q.Enqueue(d[k][i]);
+              
+              while(q.Count>0){
+                  int []a=q.Dequeue();
+                  int x=a[0];
+                  int c=a[1];
+                  seen[x]=true;
+                  if(c%s==0) h++;
+                  for(int j=0; j<d[x].Count; j++){
+                      if(!seen[d[x][j][0]])q.Enqueue(new int []{d[x][j][0], c+d[x][j][1]});
+                  }
+              }
+   help.Add(h);
+        }
+        int ans=0;
+        for (int i=0; i< help.Count; i++){
+            for (int j=i+1; j< help.Count; j++){
+                ans+=(help[i]*help[j]);
+            }
+        }
+        sd.Add(k,ans);
+        }
+  int[] ans1= new int[n];
+  foreach (int k in sd.Keys){
+      ans1[k]=sd[k];
+  }
+  return ans1;
+    }
+}
