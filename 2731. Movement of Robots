@@ -1,0 +1,23 @@
+public class Solution {
+    public int SumDistance(int[] nums, string s, int d) {
+        int N = nums.Length;
+        int mod = 1000000007;
+        long res = 0;
+        long pref = 0;
+        long[] numsL = new long[N];
+
+        for (int i = 0; i < N; i++) {
+            numsL[i] = nums[i] + (s[i] == 'L' ? -d : d);
+        }
+
+        Array.Sort(numsL);
+
+        for (long i = 0; i < N; i++) {
+            res += i * numsL[i] - pref;
+            res = res % mod;
+            pref += numsL[i];
+        }
+
+        return (int)res;
+    }
+}
