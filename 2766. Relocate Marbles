@@ -1,0 +1,14 @@
+public class Solution 
+{
+    public IList<int> RelocateMarbles(int[] nums, int[] moveFrom, int[] moveTo) 
+    {
+        var hash = new HashSet<int>(nums); 
+        
+        for(var i=0; i<moveFrom.Length;i++)
+        {
+            hash.Remove(moveFrom[i]);
+            hash.Add(moveTo[i]);
+        } 
+        return hash.OrderBy(x=>x).ToList();
+    }
+}
