@@ -1,0 +1,22 @@
+public class Solution {
+    public string SmallestString(string s) {
+        char[] result = s.ToCharArray();
+        int index = 0;
+        for (; index < s.Length; index++) {
+            if (s[index] != 'a') {
+                break;
+            }
+        }
+        if (index == s.Length) {
+            result[index - 1] = 'z';
+            return new string(result);
+        }
+        for (; index < s.Length; index++) {
+            if (s[index] == 'a') {
+                break;
+            }
+            result[index]--;
+        }
+        return new string(result);
+    }
+}
