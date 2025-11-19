@@ -1,0 +1,36 @@
+public class Solution {
+    public string ShortestBeautifulSubstring(string s, int k) {
+        var list = GetIndexesOfOnes(s);
+        if (list.Count < k) return "";
+        var min = list[k - 1] - list[0] + 1;
+        var candidates = new List<string> { s.Substring(list[0], min) };
+        for (int i = 0; i < list.Count - (k - 1); i++)
+        {
+            var min2 = list[i + k - 1] - list[i] + 1;
+            if (min > min2)
+            {
+                min = min2;
+                candidates = new List<string> { s.Substring(list[i], min) };
+            }
+            else
+            {
+                if (min == min2)
+                {
+                    candidates.Add(s.Substring(list[i], min));
+                }
+            }
+        }
+        candidates.Sort();
+        var rs = candidates[0];
+        return rs;
+    }
+    private List<int> GetIndexesOfOnes(string s)
+    {
+        var rs = new List<int>();
+        for (int i = 0; i < s.Length; i++)
+        {
+            if (s[i] == '1') rs.Add(i);
+        }
+        return rs;
+    }
+}
