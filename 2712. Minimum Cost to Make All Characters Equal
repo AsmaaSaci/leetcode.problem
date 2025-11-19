@@ -1,0 +1,47 @@
+public class Solution {
+    private long[] CalOpt(string s)
+    {
+        int len = s.Length;
+        List<int> ids = new();
+
+        for(int i = 1; i < len; i++)
+        {
+            if(s[i] != s[i-1])
+                ids.Add(i);
+        }
+
+        long[] res = [0, 0];
+        int idNoChg = s[len-1] - '0';
+
+        long sum = 0;
+        foreach(int cur in ids)
+        {
+            sum += cur;
+        }
+
+        res[idNoChg] = sum;
+        res[(idNoChg+1)%2] = sum+len;
+        return res;
+    }
+    public long MinimumCost(string s) {
+        int len = s.Length;
+        if(len < 2)
+            return 0;
+            
+        int firstHalf = len/2 + (len%2);
+        int secondHalf = len - firstHalf;
+
+        long[] headChanges = CalOpt(s.Substring(0, firstHalf));
+        StringBuilder res = new StringBuilder(s.Substring(firstHalf));
+        int low = 0, high = res.Length-1;
+        while(low < high)
+        {
+            char c = res[low];
+            res[low++] = res[high];
+            res[high--] = c;
+        }
+
+        long[] secChanges = CalOpt(res.ToString());
+        return Math.Min(headChanges[0]+secChanges[0], headChanges[1]+secChanges[1]);
+    }
+}
