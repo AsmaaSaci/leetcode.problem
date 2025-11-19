@@ -1,0 +1,32 @@
+public class Solution {
+    public int[] FindIndices(int[] nums, int indexDifference, int valueDifference) {
+        var min = nums[nums.Length - 1];
+        var max = nums[nums.Length - 1];
+        for (int i = nums.Length - 1; i >= indexDifference; i--)
+        {
+            min = Math.Min(min, nums[i]);
+            max = Math.Max(max, nums[i]);
+            if (Math.Abs(nums[i - indexDifference] - min) >= valueDifference)
+            {
+                for (int j = i; j < nums.Length; j++)
+                {
+                    if (Math.Abs(nums[i - indexDifference] - nums[j]) >= valueDifference)
+                    {
+                        return new[]{i - indexDifference, j};
+                    }
+                }
+            }
+            if (Math.Abs(nums[i - indexDifference] - max) >= valueDifference)
+            {
+                for (int j = i; j < nums.Length; j++)
+                {
+                    if (Math.Abs(nums[i - indexDifference] - nums[j]) >= valueDifference)
+                    {
+                        return new[]{i - indexDifference, j};
+                    }
+                }
+            }
+        }
+        return new[]{-1, -1};
+    }
+}
