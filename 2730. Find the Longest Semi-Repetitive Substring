@@ -1,0 +1,22 @@
+public class Solution {
+    public int LongestSemiRepetitiveSubstring(string s) {
+        int start = 0, preDup = -1, len = s.Length, maxSubLen = 2;
+        if(len < 3)
+            return len;
+
+        for(int i = 1; i < len; i++)
+        {
+            if(s[i] == s[i-1])
+            {
+                if(preDup >= 0)
+                    start = preDup+1;
+                
+                preDup = i-1;
+            }
+
+            maxSubLen = Math.Max(maxSubLen, (i-start+1));
+        }
+
+        return maxSubLen;
+    }
+}
