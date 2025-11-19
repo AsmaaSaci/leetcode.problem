@@ -1,0 +1,28 @@
+public class Solution {
+    public long MaxStrength(int[] nums) {
+        return MaxStrength(nums, 0, 1, 0, int.MinValue, false, false, nums.Length);
+    }
+
+    public long MaxStrength(int[] arr, int index, long currentProduct, int numNeg, int minNeg, bool hasZero, bool usedAny, int totalNums) {
+        if (index == arr.Length) {
+            if(arr.Length == 1) return arr[0];
+            if (!usedAny) return (totalNums == 1) ? arr[0] : 0; 
+            if (numNeg % 2 == 1) return currentProduct / minNeg; 
+            return currentProduct;
+        }
+
+        int num = arr[index];
+
+        if (num == 0) {
+            return MaxStrength(arr, index + 1, currentProduct, numNeg, minNeg, true, usedAny, totalNums);
+        }
+        else if (num > 0) {
+            return MaxStrength(arr, index + 1, currentProduct * num, numNeg, minNeg, hasZero, true, totalNums);
+        }
+        else {
+            long withNeg = MaxStrength(arr, index + 1, currentProduct * num, numNeg + 1, Math.Min(minNeg, num), hasZero, true, totalNums);
+            long noNeg = MaxStrength(arr, index + 1, currentProduct, numNeg, minNeg, hasZero, usedAny, totalNums);
+            return Math.Max(withNeg, noNeg);
+        }
+    }
+}
