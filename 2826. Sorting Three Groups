@@ -1,0 +1,31 @@
+public class Solution {
+    public int MinimumOperations(IList<int> nums) {
+        List<int> subse = new List<int>();
+        for(int i = 0; i < nums.Count; i++)
+        {
+            int l = 0;
+            int r = subse.Count;
+            while(l != r)
+            {
+                int m = l + (r - l) / 2;
+                if(subse[m] <= nums[i])
+                {
+                    l = m + 1;
+                }
+                else
+                {
+                    r = m;
+                }
+            }
+            if(l == subse.Count)
+            {
+                subse.Add(nums[i]);
+            }
+            else
+            {
+                subse[l] = nums[i];
+            }
+        }
+        return nums.Count - subse.Count;
+    }
+}
