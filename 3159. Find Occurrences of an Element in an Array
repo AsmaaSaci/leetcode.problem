@@ -1,0 +1,23 @@
+public class Solution {
+    public int[] OccurrencesOfElement(int[] nums, int[] queries, int x) {
+        List<int> indices = new List<int>();
+        int[] result = new int[queries.Length];
+
+        for(int i = 0; i < nums.Length; i++) {
+            if(nums[i] == x) {
+                indices.Add(i);
+            }
+        }
+
+        for(int i = 0; i < queries.Length; i++) {
+            int query = queries[i];
+            if(query-1 < indices.Count) {
+                result[i] = indices[query-1];
+            } else {
+                result[i] = -1;
+            }
+        }
+
+        return result;
+    }
+}
