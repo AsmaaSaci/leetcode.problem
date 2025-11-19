@@ -1,0 +1,70 @@
+public class Solution {
+    private int[][] res;
+    private void CalDiag(int r, int c, int[][] grid)
+    {
+        int m = grid.Length, n = grid[0].Length;
+
+        HashSet<int> topL = new(); // top left distinct items
+        int x = r, y = c;
+        Dictionary<int, int> freq = new();
+        for(int offset = 1; offset < m; offset++) // count bottom right items' frequencies
+        {
+            int newX = x+offset, newY = y+offset;
+            if(newX >= m || newY >= n)
+                break;
+
+          //  Console.WriteLine($"cur idx : {newX}, {newY}");
+            int cur = grid[newX][newY];
+            freq.TryAdd(cur, 0);
+            freq[cur]++;
+        }
+
+        res[x][y] = freq.Count;
+
+        for(int offset = 1; offset < m; offset++)
+        {
+            int newX = x+offset, newY = y+offset;
+            if(newX >= m || newY >= n)
+                break;
+
+            int cur = grid[newX][newY], pre = grid[newX-1][newY-1];
+            if(--freq[cur] == 0)
+                freq.Remove(cur);
+
+            topL.Add(pre);
+            res[newX][newY] = Math.Abs(freq.Count-topL.Count);
+        }
+    }
+    public int[][] DifferenceOfDistinctValues(int[][] grid) {
+        int m = grid.Length, n = grid[0].Length;
+       // Console.WriteLine($"row : {m}, col : {n}");
+        res = new int[m][];
+        for(int i = 0; i < m; i++)
+        {
+            res[i] = new int[n];
+        }
+
+        // Init corner case:
+        if(m == 1 || n == 1)
+            return res;
+
+        res[m-2][0] = 1;
+        res[m-1][1] = 1;
+        res[0][n-2] = 1;
+        res[1][n-1] = 1;
+
+        // row 0 ~ m-3
+        for(int i = 0; i < m-2; i++)
+        {
+            CalDiag(i, 0, grid);
+        }
+
+        // col: 1 ~n-3;
+        for(int j = 1; j < n-2; j++)
+        {
+            CalDiag(0, j, grid);
+        }
+
+        return res;
+    }
+}
