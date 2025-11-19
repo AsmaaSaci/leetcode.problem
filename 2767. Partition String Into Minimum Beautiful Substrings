@@ -1,0 +1,51 @@
+public class Solution {
+    private bool IsBeatiful(string s, int start, int end) // power of 5?
+    {
+        int res = 0;
+        if(s[start] == '0')
+            return false;
+
+        for(int i = start; i <= end; i++)
+        {
+            res *= 2;
+            res += (s[i]-'0');
+        }
+
+        while(res > 1)
+        {
+            if(res%5 != 0)
+                return false;
+
+            res /= 5;
+        }
+
+        return res == 1;
+    }
+
+    private int BackTracking(string s, int idx)
+    {
+        int len = s.Length;
+        if(idx >= len)
+            return 0;
+        
+        int minSteps = len+1;
+        for(int j = idx; j < len; j++)
+        {
+            if(IsBeatiful(s, idx, j))
+            {
+                minSteps = Math.Min(minSteps, 1+ BackTracking(s, j+1));
+            }
+        }
+
+        return minSteps;
+    }
+
+    public int MinimumBeautifulSubstrings(string s) {
+            if (s.Length == 0 || s[0] == '0')
+				return -1;
+
+			int res = BackTracking(s, 0);
+
+			return res > s.Length ? -1 : res;
+    }
+}
