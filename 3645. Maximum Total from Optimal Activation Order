@@ -1,0 +1,34 @@
+using System;
+using System.Collections.Generic;
+
+public class Solution {
+    public long MaxTotal(int[] value, int[] limit) {
+        int n = value.Length;
+        if (n == 0) return 0;
+
+        // Map: limit L -> list of values with that limit
+        var buckets = new Dictionary<int, List<int>>();
+
+        for (int i = 0; i < n; i++) {
+            int L = limit[i];
+            if (L <= 0) continue;          // never activatable
+            if (L > n + 1) L = n + 1;      // optional clamp
+            if (!buckets.TryGetValue(L, out var list)) {
+                list = new List<int>();
+                buckets[L] = list;
+            }
+            list.Add(value[i]);
+        }
+
+        long ans = 0;
+        foreach (var kv in buckets) {
+            int L = kv.Key;
+            var list = kv.Value;
+            list.Sort((a, b) => b.CompareTo(a)); // descending
+            int take = Math.Min(L, list.Count);
+            for (int i = 0; i < take; i++) ans += list[i];
+        }
+
+        return ans;
+    }
+}
