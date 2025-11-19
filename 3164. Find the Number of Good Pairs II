@@ -1,0 +1,40 @@
+public class Solution {
+    public long NumberOfPairs(int[] nums1, int[] nums2, int k) {
+        Dictionary<int, int> map1 = new Dictionary<int, int>();
+        Dictionary<int, int> map2 = new Dictionary<int, int>();
+
+        foreach (int x in nums1) {
+            if (x % k == 0) {
+                int f = x / k;
+                if (map1.ContainsKey(f))
+                    map1[f]++;
+                else
+                    map1[f] = 1;
+            }
+        }
+
+        foreach (int x in nums2) {
+            if (map2.ContainsKey(x))
+                map2[x]++;
+            else
+                map2[x] = 1;
+        }
+
+        long res = 0;
+        foreach (var entry in map1) {
+            int x = entry.Key;
+            int y = entry.Value;
+            for (int i = 1; i <= Math.Sqrt(x); ++i) {
+                if (x % i == 0) {
+                    int cur = x / i;
+                    if (map2.ContainsKey(i))
+                        res += (long)map2[i] * y;
+                    if (cur != i && map2.ContainsKey(cur))
+                        res += (long)map2[cur] * y;
+                }
+            }
+        }
+
+        return res;
+    }
+}
