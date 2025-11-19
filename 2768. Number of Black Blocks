@@ -1,0 +1,28 @@
+public class Solution {
+    public long[] CountBlackBlocks(int m, int n, int[][] coordinates) {
+        //https ://www.youtube.com/watch?v=QmTnrAKcWrI
+        long[] black = new long[5];
+        int[][] directions = new int[][] { new int[] { 0, 0 }, new int[] { 0, -1 }, new int[] { -1, 0 }, new int[] { -1, -1 } };
+        var dict = new Dictionary<(int, int), int>();
+
+        foreach (var c in coordinates)
+        {
+            foreach (var d in directions)
+            {
+                int newi = c[0] + d[0];
+                int newj = c[1] + d[1];
+                if (newi >= 0 && newi < m - 1 && newj >= 0 && newj < n - 1) //valid block then increase the frequency
+                {
+                    if (dict.ContainsKey((newi, newj))) dict[(newi, newj)]++;
+                    else dict.Add((newi, newj), 1);
+                }
+            }
+        }
+        foreach (var kv in dict) //now count the frequency(how many time 1/2/3/4)
+        {
+            black[kv.Value]++;
+        }
+        black[0] = (long)(m - 1) * (n - 1) - dict.Count; //calculate empty cells
+        return black;
+    }
+}
