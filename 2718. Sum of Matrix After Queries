@@ -1,0 +1,32 @@
+public class Solution {
+    public long MatrixSumQueries(int n, int[][] queries) {
+        var rows = new HashSet<int>();
+        var cols = new HashSet<int>();
+
+        var sum = 0L;
+        for(var i = queries.Length - 1; i >= 0; i --) {
+            var q = queries[i];
+
+            if (q[0] == 0) {
+                // row
+                var r = q[1];
+                if (!rows.Add(r)) {
+                    continue;
+                }
+
+                sum += q[2] * (n - cols.Count);
+            }
+            else {
+                // column
+                var c = q[1];
+                if (!cols.Add(c)) {
+                    continue;
+                }
+
+                sum += q[2] * (n - rows.Count);
+            }
+        }
+
+        return sum;
+    }
+}
