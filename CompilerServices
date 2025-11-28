@@ -1,0 +1,56 @@
+using System.Runtime.CompilerServices;
+
+public class Solution {
+    [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
+    public int MaxKDivisibleComponents(int n, int[][] rawEdges, int[] values, int k)
+    {
+        Span<int> edges = stackalloc int[n * 3];
+        int ceil = n * 2;
+
+        for (int i = 0; i < n - 1; i++)
+        {
+            int a = rawEdges[i][0], b = rawEdges[i][1];
+            edges[a + ceil]++;
+            edges[b + ceil]++;
+        }
+
+        for (int i = ceil; i < 3 * n; i++)
+        {
+            edges[i] += edges[i - 1];
+        }
+        
+        for (int i = 0; i < n - 1; i++)
+        {
+            int a = rawEdges[i][0], b = rawEdges[i][1];
+            edges[edges[a + ceil - 1]++] = b;
+            edges[edges[b + ceil - 1]++] = a;
+        }
+        
+        int count = 0;
+        
+        Helper(0, edges, 0);
+
+        return count;
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
+        int Helper(int node, Span<int> edges, int parent)
+        {
+            int mod = values[node] % k;
+
+            for (int i = edges[node + ceil - 1] - 1; i >= edges[node + ceil - 2]; i--)
+            {
+                int destination = edges[i];
+                
+                if (destination == parent)
+                    continue;
+                
+                mod = (mod + Helper(destination, edges, node)) % k;
+            }
+
+            if (mod == 0)
+                count++;
+
+            return mod;
+        }
+    }
+}
