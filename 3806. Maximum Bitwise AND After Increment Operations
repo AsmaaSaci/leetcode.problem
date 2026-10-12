@@ -1,0 +1,42 @@
+public class Solution {
+    public int MaximumAND(int[] nums, int k, int m) {
+        Array.Sort(nums);
+        int n = nums.Length;
+        long answer = 0;
+        long[] costs = new long[n];
+
+        for (int bit = 30; bit >= 0; bit--) {
+            long target = answer | (1L << bit);
+
+            for (int i = 0; i < n; i++) {
+                long x = nums[i];
+                long cost = 0;
+
+                for (int b = 30; b >= 0; b--) {
+                    if (((target >> b) & 1) == 0) continue;
+
+                    long block = 1L << b;
+                    long remainder = (x + cost) % (block << 1);
+
+                    if (remainder < block)
+                        cost += block - remainder;
+                }
+
+                costs[i] = cost;
+            }
+
+            Array.Sort(costs);
+
+            long total = 0;
+            for (int i = 0; i < m; i++) {
+                total += costs[i];
+                if (total > k) break;
+            }
+
+            if (total <= k)
+                answer = target;
+        }
+
+        return (int)answer;
+    }
+}
