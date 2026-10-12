@@ -1,0 +1,25 @@
+public class Solution {
+    public long LastInteger(long n) {
+        long low = 1, high = n, len = n, layers =1;
+        bool toRight = true;
+        while(low < high)
+        {
+            if(toRight)
+            {
+                if(len%2 == 0)
+                    high -= layers;
+            }
+            else
+            {
+                if(len%2 == 0)
+                    low += layers;
+            }
+            
+            len = (len/2) + (len%2);
+            layers *= 2;
+            toRight = !toRight;
+        }
+
+        return low;
+    }
+}
