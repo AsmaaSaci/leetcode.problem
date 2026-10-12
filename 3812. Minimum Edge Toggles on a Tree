@@ -1,0 +1,68 @@
+public class Solution {
+    static string start;
+    static string target;
+    static List<int[]>[] ee;
+    static int[] counts;
+
+    public IList<int> MinimumFlips(int n, int[][] edges, string start, string target) {
+        if (!CanTransform(start, target)) {
+            return new int[] {-1};
+        }
+        counts = new int[edges.Length];
+        Solution.start = start;
+        Solution.target = target;
+        ee = new List<int[]>[n];
+        for (int ei = 0; ei < edges.Length; ei++) {
+            var a = edges[ei][0];
+            var b = edges[ei][1];
+            if (ee[a] == null) {
+                ee[a] = new ();
+            }
+            if (ee[b] == null) {
+                ee[b] = new ();
+            }
+            ee[a].Add(new int[] {b, ei});
+            ee[b].Add(new int[] {a, ei});
+        }
+
+        Walk(0, -1);
+        
+        List<int> result = new ();
+        for (int i = 0; i < edges.Length; i++) {
+            if (counts[i] % 2 == 1) {
+                result.Add(i);
+            }
+        }
+        return result;
+    }
+
+    static int Walk(int current, int parent) {
+        int result = 0;
+        foreach(var edge in ee[current]) {
+            var eTarget = edge[0];
+            var eIndex = edge[1];
+            if (eTarget == parent) {
+                continue;
+            }
+            var edgeResult = Walk(eTarget, current);
+            counts[eIndex] = edgeResult;
+            result += edgeResult;
+        }
+        if (start[current] != target[current]) {
+            result++;
+        }
+        return result;
+    }
+
+    static bool CanTransform(string start, string target) {
+        var startOnes = 0;
+        var targetOnes = 0;
+        foreach(var s in start) {
+            startOnes += s - '0';
+        }
+        foreach(var t in target) {
+            targetOnes += t - '0';
+        }
+        return Math.Abs(startOnes - targetOnes) % 2 == 0;
+    }
+}
