@@ -1,0 +1,76 @@
+public class Solution {
+    private int GetDigSum(int n)
+    {
+        int res = 0;
+        while(n > 0)
+        {
+            res += (n%10);
+            n /= 10;
+        }
+
+        return res;
+    }
+
+    public int CountArrays(int[] digitSum) {
+        List<int>[] digs = new List<int>[51]; // max digSum : 50
+        for (int i = 0; i <= 50; i++)
+        {
+            digs[i] = new List<int>();
+        }
+
+        for (int i = 5000; i >= 0; i--)
+        {
+            int curDSum = GetDigSum(i);
+            if (curDSum <= 50)
+                digs[curDSum].Add(i);
+        }
+
+        List<long[]> right = new List<long[]>();
+        int len = digitSum.Length;
+
+        // Invalid case (missing required digSum):
+        for (int i = 0; i < len; i++)
+        {
+            int d = digitSum[i];
+            if (digs[d].Count == 0)
+                return 0;
+        }
+
+        int cnt = 0, mod = (int)Math.Pow(10, 9) + 7;
+        
+        // init last digitSum item's count
+        foreach (int cur in digs[digitSum[len - 1]])
+        {
+            right.Add([cur, ++cnt]);
+        }
+
+        for (int i = len - 2; i >= 0; i--)
+        {
+            List<long[]> tmp = new();
+            int curId = digitSum[i], rId = 0, rSize = right.Count;
+
+            foreach (int cur in digs[curId])
+            {
+                // if cur > right[rId][0];
+                if (rId < rSize && cur > (int)right[rId][0])
+                    continue;
+
+                while (rId < rSize - 1 && cur <= (int)right[rId + 1][0])
+                {
+                    rId++;
+                }
+
+                long sum = right[rId][1] + (tmp.Count == 0 ? 0 : tmp.Last()[1]);
+                sum %= mod;
+                tmp.Add([cur, sum]);
+            }
+
+            if (tmp.Count == 0)
+                return 0;
+
+            right = new List<long[]>(tmp.ToArray());
+        }
+
+        return (int)right.Last()[1];
+    }
+}
