@@ -1,0 +1,68 @@
+
+public class Solution {
+    public long CountBalanced(long low, long high) {
+        return Count(high) - Count(low - 1);
+    }
+
+    private long Count(long n) {
+        if (n < 10) return 0;
+
+        string s = n.ToString();
+        int len = s.Length;
+        long result = 0;
+
+        for (int l = 2; l < len; l++) {
+            result += CountLength(l);
+        }
+
+        int[] digits = s.Select(c => c - '0').ToArray();
+        var memo = new Dictionary<(int, int, bool), long>();
+
+        long Dp(int pos, int diff, bool tight) {
+            if (pos == len) return diff == 0 ? 1 : 0;
+
+            var key = (pos, diff, tight);
+            if (memo.TryGetValue(key, out long cached))
+                return cached;
+
+            int limit = tight ? digits[pos] : 9;
+            long count = 0;
+
+            for (int d = 0; d <= limit; d++) {
+                if (pos == 0 && d == 0) continue;
+
+                int nextDiff = diff + (pos % 2 == 0 ? d : -d);
+                count += Dp(pos + 1, nextDiff, tight && d == digits[pos]);
+            }
+
+            memo[key] = count;
+            return count;
+        }
+
+        return result + Dp(0, 0, true);
+    }
+
+    private long CountLength(int len) {
+        long count = 0;
+        var memo = new Dictionary<(int, int), long>();
+
+        long Dp(int pos, int diff) {
+            if (pos == len) return diff == 0 ? 1 : 0;
+
+            var key = (pos, diff);
+            if (memo.TryGetValue(key, out long cached))
+                return cached;
+
+            long result = 0;
+            int start = pos == 0 ? 1 : 0;
+
+            for (int d = start; d <= 9; d++) {
+                result += Dp(pos + 1, diff + (pos % 2 == 0 ? d : -d));
+            }
+
+            return memo[key] = result;
+        }
+
+        return Dp(0, 0);
+    }
+}
