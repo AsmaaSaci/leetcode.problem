@@ -1,0 +1,26 @@
+public class Solution {
+    public long MinimumCost(int cost1, int cost2, int costBoth, int need1, int need2) {
+        long res = 0;
+        if(costBoth < cost1+cost2)
+        {
+            int comm = Math.Min(need1, need2);
+            res += (long)comm*costBoth;
+            need1 -= comm;
+            need2 -= comm;
+        }
+
+        if(need1 > 0)
+        {
+            int curCost = Math.Min(cost1, costBoth);
+            res += (long)need1*curCost;
+        }
+
+        if(need2 > 0)
+        {
+            int curCost = Math.Min(cost2, costBoth);
+            res += (long)need2*curCost;
+        }
+
+        return res;
+    }
+}
