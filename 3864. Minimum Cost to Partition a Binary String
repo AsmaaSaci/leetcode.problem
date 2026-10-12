@@ -1,0 +1,47 @@
+public class Solution {
+    private Dictionary<(int, int), long> dp = new();
+    private int[] onesSum;
+
+    private long BackTracking(int start, int end, int eC, int fC)
+    {
+        var key = (start, end);
+        if(dp.ContainsKey(key))
+            return dp[key];
+
+        int subLen = end-start+1, subOnes = onesSum[end+1]-onesSum[start];
+        long sum = 0;
+        if(subOnes == 0)
+            sum = fC;
+        else
+            sum = (long)subLen*subOnes*eC;
+
+        if(end == start) // single item
+            return sum;
+
+        if(subLen%2 == 0)
+        {
+            int mid = start+ subLen/2-1;
+           
+            long p1 = BackTracking(start, mid, eC, fC);
+            long p2 = BackTracking(mid+1, end, eC, fC);
+            sum = Math.Min(sum, p1+p2);
+        }
+
+        dp.Add(key, sum);
+        return sum;
+    }
+
+    public long MinCost(string s, int encCost, int flatCost) {
+        int len = s.Length;
+        onesSum = new int[len+1];
+        for(int i = 0; i < len; i++)
+        {
+            onesSum[i+1] = (s[i]-'0')+onesSum[i];
+        }
+
+        if(onesSum[len] == 0) // all characters in the string are '0';
+            return flatCost;
+
+        return BackTracking(0, len-1, encCost, flatCost);
+    }
+}
