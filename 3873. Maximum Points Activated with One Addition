@@ -1,0 +1,67 @@
+public class Solution {
+    private int[] pars;
+    private Dictionary<int, int> xs = new(), ys = new();
+    private int[] rank;
+    private int FindPar(int x)
+    {
+        if(pars[x] != x)
+        {
+            pars[x] = FindPar(pars[x]);
+        }
+
+        return pars[x];
+    }
+
+    private void Union(int x, int y)
+    {
+        int parX = FindPar(x), parY = FindPar(y);
+        if(parX != parY)
+        {
+            if(rank[parX] >= rank[parY])
+            {
+                pars[parY] = parX;
+                rank[parX] += rank[parY];
+            }
+            else
+            {
+                pars[parX] = parY;
+                rank[parY] += rank[parX];
+            }
+        }
+    }
+
+    public int MaxActivated(int[][] points) {
+        // union find
+        int len = points.Length;
+        pars = Enumerable.Range(0, len).ToArray();
+        rank = Enumerable.Repeat(1, len).ToArray();
+
+        for(int i = 0; i < len; i++)
+        {
+            int x = points[i][0], y = points[i][1];
+            if(!xs.ContainsKey(x))
+                xs.Add(x, i);
+            else
+                Union(i, xs[x]);
+
+            if(!ys.ContainsKey(y))
+                ys.Add(y, i);
+            else
+                Union(i, ys[y]);
+        }
+
+        int[] freq = new int[len];
+        for(int i = 0; i < len; i++)
+        {
+            int pI = FindPar(i);
+            freq[pI]++;
+        }
+
+        Array.Sort(freq);
+        int res = freq[len-1]+1;
+        if(len >= 2)
+            res += freq[len-2];
+
+        return res;
+    }
+}
