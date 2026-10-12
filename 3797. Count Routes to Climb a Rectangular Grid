@@ -1,0 +1,127 @@
+public class Solution {
+    public int NumberOfRoutes(string[] grid, int d) {
+ 			int m = grid.Length, n = grid[0].Length;
+			int d2 = (int)Math.Sqrt(d * d - 1);
+			int mod = (int)Math.Pow(10, 9) + 7;
+			long[] dp = new long[n], dp2 = new long[n];
+
+			for (int j = 0; j < n; j++)
+			{
+				if (grid[m - 1][j] == '.')
+					dp[j] = 1;
+			}
+
+			for (int i = m - 1; i >= 0; i--)
+			{
+				long sum = 0;
+				Array.Clear(dp2, 0, n);
+
+				Queue<(int, long)> que = new();
+				for (int j = 0; j < n; j++) // from left to right
+				{
+					if (que.Count > 0 && que.Peek().Item1 <= j)
+					{
+						(int preId, long preSum) = que.Dequeue();
+						sum -= preSum;
+						if (sum <= 0)
+							sum += mod;
+					}
+
+					if (grid[i][j] == '.')
+					{
+						if (j + d + 1 < n)
+							que.Enqueue((j + d + 1, dp[j]));
+
+						dp2[j] = sum%mod;
+						sum = (sum + dp[j]) % mod;
+					}
+				}
+
+				que.Clear();
+				sum = 0;
+				for (int j = n - 1; j >= 0; j--) // from right to left
+				{
+					if (que.Count > 0 && que.Peek().Item1 >= j)
+					{
+						(int preId, long preSum) = que.Dequeue();
+						sum -= preSum;
+						if (sum <= 0)
+							sum += mod;
+					}
+
+					if (grid[i][j] == '.')
+					{
+						if (j - d - 1 >= 0)
+							que.Enqueue((j - d - 1, dp[j]));
+
+						dp2[j] = ((dp2[j] + sum) % mod);
+						sum += dp[j];
+					}
+				}
+
+				if (i > 0)
+				{
+					sum = 0;
+					que.Clear();
+
+					long[] dpUp = new long[n];
+					for (int j = 0; j < n; j++)
+					{
+						if (que.Count > 0 && que.Peek().Item1 <= j)
+						{
+							(int preId, long preSum) = que.Dequeue();
+							sum -= preSum;
+							if (sum <= 0)
+								sum += mod;
+						}
+
+						long curSum = dp[j] + dp2[j];
+						if (curSum > 0 && j + d2 + 1 < n)
+						{
+							que.Enqueue((j + d2 + 1, curSum % mod));
+						}
+
+						sum = (curSum + sum) % mod;
+						if (grid[i - 1][j] == '.')
+							dpUp[j] = (dpUp[j] + sum) %mod;
+					}
+
+					sum = 0;
+					que.Clear();
+					for (int j = n - 1; j >= 0; j--)
+					{
+						if (que.Count > 0 && que.Peek().Item1 >= j)
+						{
+							(int tailId, long tailSum) = que.Dequeue();
+							sum -= tailSum;
+							if (sum <= 0)
+								sum += mod;
+						}
+
+						long curSum = dp[j] + dp2[j];
+						if (curSum > 0 && j - d2 - 1 >= 0)
+						{
+							que.Enqueue((j - d2 - 1, curSum % mod));
+						}
+
+						if (grid[i - 1][j] == '.')
+							dpUp[j] = (dpUp[j] + sum) % mod;
+
+						sum = (sum + curSum) % mod;
+					}
+
+					Array.Copy(dpUp, 0, dp, 0, n);
+				}
+			}
+
+			long res = 0;
+			for (int j = 0; j < n; j++)
+			{
+				res += (dp[j] + dp2[j]);
+				res %= mod;
+			}
+
+			return (int)res;
+
+    }
+}
