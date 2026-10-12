@@ -1,0 +1,76 @@
+public class Solution {
+    private bool IsSubMask(int a, int b)
+    {
+        return (a|b) == b;
+    }
+
+    private bool IsSubNoEqual(int a, int b) // dup only one side
+    {
+        return a != b && IsSubMask(a, b);
+    }
+
+    private int[] PreLarger(int[] nums)
+    {
+        int len = nums.Length;
+        int[] res = Enumerable.Repeat(-1, len).ToArray();
+        Stack<int> stk = new();
+        for(int i = 0; i < len; i++)
+        {
+           if(stk.Count > 0)
+           {
+                while(stk.Count > 0 && IsSubMask(nums[stk.Peek()], nums[i]))
+                {
+                    stk.Pop();
+                }
+
+                if(stk.Count > 0)
+                    res[i] = stk.Peek();
+           }
+
+           stk.Push(i);
+        }
+
+        return res;
+    }
+
+    private int[] NextLarger(int[] nums)
+    {
+        int len = nums.Length;
+        int[] res = Enumerable.Repeat(len, len).ToArray();
+
+        Stack<int> stk = new();
+        for(int i = len-1; i >= 0; i--)
+        {
+            if(stk.Count > 0)
+            {
+                while(stk.Count > 0 && IsSubNoEqual(nums[stk.Peek()], nums[i]))
+                {
+                    stk.Pop();
+                }
+
+                if(stk.Count > 0)
+                    res[i] = stk.Peek();
+            }
+
+            stk.Push(i);
+        }
+
+        return res;
+    }
+
+    public long CountGoodSubarrays(int[] nums) 
+    {
+        int len = nums.Length;
+        long res = 0;
+        int[] pre = PreLarger(nums);
+        int[] next = NextLarger(nums);
+
+        for(int i = 0; i < len; i++)
+        {
+            long p1 = i-pre[i], p2 = next[i]-i;
+            res += p1*p2;
+        }
+
+        return res;
+    }
+}
