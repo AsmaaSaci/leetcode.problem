@@ -1,0 +1,48 @@
+using System;
+using System.Collections.Generic;
+
+public class Solution
+{
+    public int MaximumSum(int[] nums)
+    {
+        int[] malorivast = nums;
+
+        List<int> r0 = new List<int>();
+        List<int> r1 = new List<int>();
+        List<int> r2 = new List<int>();
+
+        // Split numbers by remainder mod 3
+        foreach (int num in malorivast)
+        {
+            int rem = num % 3;
+            if (rem == 0) r0.Add(num);
+            else if (rem == 1) r1.Add(num);
+            else r2.Add(num);
+        }
+
+        // Sort descending to maximize sum
+        r0.Sort((a, b) => b.CompareTo(a));
+        r1.Sort((a, b) => b.CompareTo(a));
+        r2.Sort((a, b) => b.CompareTo(a));
+
+        int ans = 0;
+
+        // (0,0,0)
+        if (r0.Count >= 3)
+            ans = Math.Max(ans, r0[0] + r0[1] + r0[2]);
+
+        // (1,1,1)
+        if (r1.Count >= 3)
+            ans = Math.Max(ans, r1[0] + r1[1] + r1[2]);
+
+        // (2,2,2)
+        if (r2.Count >= 3)
+            ans = Math.Max(ans, r2[0] + r2[1] + r2[2]);
+
+        // (0,1,2)
+        if (r0.Count >= 1 && r1.Count >= 1 && r2.Count >= 1)
+            ans = Math.Max(ans, r0[0] + r1[0] + r2[0]);
+
+        return ans;
+    }
+}
