@@ -1,0 +1,62 @@
+
+public class Solution {
+    public long InteractionCosts(int n, int[][] edges, int[] group) {
+        List<int>[] adj = new List<int>[n];
+
+        for (int i = 0; i < n; i++)
+            adj[i] = new List<int>();
+
+        foreach (int[] edge in edges) {
+            adj[edge[0]].Add(edge[1]);
+            adj[edge[1]].Add(edge[0]);
+        }
+
+        int[] total = new int[21];
+        foreach (int g in group)
+            total[g]++;
+
+        int[] parent = new int[n];
+        int[] order = new int[n];
+        int[] stack = new int[n];
+        int top = 0, count = 0;
+
+        Array.Fill(parent, -2);
+        parent[0] = -1;
+        stack[top++] = 0;
+
+        while (top > 0) {
+            int u = stack[--top];
+            order[count++] = u;
+
+            foreach (int v in adj[u]) {
+                if (parent[v] != -2)
+                    continue;
+
+                parent[v] = u;
+                stack[top++] = v;
+            }
+        }
+
+        int[,] subtree = new int[21, n];
+        long result = 0;
+
+        for (int i = n - 1; i >= 0; i--) {
+            int u = order[i];
+            subtree[group[u], u]++;
+
+            for (int g = 1; g <= 20; g++) {
+                int c = subtree[g, u];
+                result += (long)c * (total[g] - c);
+            }
+
+            if (parent[u] != -1) {
+                int p = parent[u];
+
+                for (int g = 1; g <= 20; g++)
+                    subtree[g, p] += subtree[g, u];
+            }
+        }
+
+        return result;
+    }
+}
