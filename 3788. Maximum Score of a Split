@@ -1,0 +1,21 @@
+
+public class Solution {
+    public long MaximumScore(int[] nums) {
+        int n = nums.Length;
+        int[] suffixMin = new int[n];
+        suffixMin[n - 1] = nums[n - 1];
+
+        for (int i = n - 2; i >= 0; i--)
+            suffixMin[i] = Math.Min(nums[i], suffixMin[i + 1]);
+
+        long prefixSum = 0;
+        long maxScore = long.MinValue;
+
+        for (int i = 0; i < n - 1; i++) {
+            prefixSum += nums[i];
+            maxScore = Math.Max(maxScore, prefixSum - suffixMin[i + 1]);
+        }
+
+        return maxScore;
+    }
+}
